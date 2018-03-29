@@ -1,4 +1,4 @@
 .gradle/
 .idea/
-*/build/
+build/
 !project\app\build\outputs\apk\debug
