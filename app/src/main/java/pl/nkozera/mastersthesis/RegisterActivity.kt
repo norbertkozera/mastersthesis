@@ -12,24 +12,12 @@
 
 package pl.nkozera.mastersthesis
 
-import android.app.LoaderManager
-import android.content.Loader
-import android.database.Cursor
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
-class RegisterActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
-    override fun onLoaderReset(loader: Loader<Cursor>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class RegisterActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_register)
     }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-
 }
