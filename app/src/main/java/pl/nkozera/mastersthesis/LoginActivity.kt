@@ -1,19 +1,24 @@
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 package pl.nkozera.mastersthesis
 
-import android.app.LoaderManager
+import android.app.LoaderManager.LoaderCallbacks
 import android.content.Loader
 import android.database.Cursor
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
-/**
- * A login screen that offers login via email/password.
- */
-class AddRestaurantActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
-    override fun onLoaderReset(loader: Loader<Cursor>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
+class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -22,6 +27,8 @@ class AddRestaurantActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-
+    override fun onLoaderReset(loader: Loader<Cursor>?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 }

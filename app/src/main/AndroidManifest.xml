@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Master Thiesis project
+  ~ All rights reserved
+  ~ Created by Norbert Kozera <nkozera@gmail.com>
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.nkozera.mastersthesis">
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -29,6 +35,42 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddRestaurantActivity"
+            android:label="@string/activity_register_title">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".FindCityActivity"
+            android:label="@string/activity_register_title">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".InfoAboutRestaurantActivity"
+            android:label="@string/activity_register_title">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RestaurantListActivity"
+            android:label="@string/activity_register_title">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RestaurantManagerActivity"
+            android:label="@string/activity_register_title">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
