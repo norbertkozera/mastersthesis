@@ -20,4 +20,6 @@
         completions."
     </string>
     <string name="register_email">Email</string>
+    <string name="activity_add_your_rating">Dodaj opinię</string>
+    <string name="checkbox_restaurant_owner">Jestem właścicielem restauracji</string>
 </resources>

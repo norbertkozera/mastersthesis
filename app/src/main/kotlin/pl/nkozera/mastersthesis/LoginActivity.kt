@@ -27,7 +27,9 @@ import android.Manifest.permission.READ_CONTACTS
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
- * A login screen that offers login via email/password.
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
  */
 class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     /**

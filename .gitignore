@@ -1,4 +1,12 @@
 .gradle/
 .idea/
 build/
+gradle/
+projectFilesBackup/
 !project\app\build\outputs\apk\debug
+*.iml
+/local.properties
+.DS_Store
+/build
+/captures
+.externalNativeBuild
