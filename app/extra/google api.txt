@@ -1,0 +1,4 @@
+https://developers.google.com/places/web-service/search
+
+https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJG_RpsVdcFkcR7wiSvfYTin0&key=AIzaSyB9RA4U-oDzaTxzOAPYXNbPZWyeNQudpnQ
+https://maps.googleapis.com/maps/api/place/textsearch/xml?query=trzy-kaczki-krak%C3%B3w&key=AIzaSyB9RA4U-oDzaTxzOAPYXNbPZWyeNQudpnQ
