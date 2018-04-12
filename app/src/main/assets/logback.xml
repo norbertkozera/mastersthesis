@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
-  ~ Master Thiesis project
-  ~ All rights reserved
-  ~ Created by Norbert Kozera <nkozera@gmail.com>
-  -->
-
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
         <tagEncoder>
@@ -14,7 +9,7 @@
         </encoder>
     </appender>
 
-    <root level="TRACE">
+    <root level="INFO">
         <appender-ref ref="logcat" />
     </root>
 </configuration>
