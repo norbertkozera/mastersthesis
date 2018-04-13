@@ -12,6 +12,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
+    <string name="prompt_retypr_password">Wpisz hasło ponownie</string>
     <string name="action_sign_in">Zaloguj się</string>
     <string name="action_sign_in_google">Zaloguj się używając konta Google</string>
     <string name="action_continue_without_signing_in">Kontynuuj bez logowania</string>
@@ -20,4 +21,13 @@
     <string name="register_email">Email</string>
     <string name="activity_add_your_rating">Dodaj opinię</string>
     <string name="checkbox_restaurant_owner">Jestem właścicielem restauracji</string>
+    <string name="cancel">Anuluj</string>
+
+
+    <string name="error_invalid_email">Proszę podać poprawny adres email</string>
+    <string name="error_invalid_password">Hasło jest za krótkie</string>
+    <string name="error_incorrect_password">Hasło nie spełnia wymagań</string>
+    <string name="error_different_passwords">Hasła różnią się</string>
+    <string name="error_field_is_required">Pole jest wymagane</string>
+
 </resources>

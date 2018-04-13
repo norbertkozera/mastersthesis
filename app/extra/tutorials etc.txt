@@ -28,6 +28,13 @@ https://www.youtube.com/watch?v=i18IGN3MAbw
 logowanie telefonem
 https://firebase.google.com/docs/auth/android/phone-auth
 
+login/email
+https://firebase.google.com/docs/auth/android/password-auth
+
+
+roddzaje baz danych
+https://firebase.google.com/docs/firestore/rtdb-vs-firestore?authuser=0
+
 
 Log levels
 

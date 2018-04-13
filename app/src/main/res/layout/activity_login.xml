@@ -24,67 +24,97 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/email_login_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+
+            <AutoCompleteTextView
+                android:id="@+id/email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
 
-                <AutoCompleteTextView
-                    android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
+            <EditText
+                android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/email"
+                android:hint="@string/prompt_password"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1" />
 
-                <EditText
-                    android:id="@+id/password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
-                    android:imeActionId="6"
-                    android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:singleLine="true" />
+            <EditText
+                android:id="@+id/retype_new_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/password"
+                android:hint="@string/prompt_retypr_password"
+                android:imeActionId="6"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:visibility="invisible" />
 
-            </android.support.design.widget.TextInputLayout>
+
+            <CheckBox
+                android:id="@+id/checkboxRestaurantOwner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/retype_new_password"
+                android:text="@string/checkbox_restaurant_owner"
+                android:visibility="invisible" />
+
+            <Button
+                android:id="@+id/email_register_account_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/checkboxRestaurantOwner"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_confirm_registration"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                android:onClick="confirmSignUp"/>
 
             <Button
                 android:id="@+id/email_sign_in_button"
                 style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_below="@+id/password"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
                 android:onClick="emailSignInOnClick"
+                android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
             <com.google.android.gms.common.SignInButton
+                android:id="@+id/google_sign_in_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/google_sign_in_button"
-                />
+                android:layout_below="@+id/email_sign_in_button"
+                android:layout_marginTop="16dp" />
 
             <Button
                 android:id="@+id/email_register_button"
                 style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
+                android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/password"
                 android:layout_marginTop="16dp"
+                android:onClick="emailRegisterOnClick"
                 android:text="@string/action_register"
                 android:textStyle="bold" />
 
@@ -93,10 +123,14 @@
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/google_sign_in_button"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_continue_without_signing_in"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="firebaseAuthAnonymusly"/>
 
-        </LinearLayout>
+
+        </RelativeLayout>
     </ScrollView>
 </LinearLayout>
