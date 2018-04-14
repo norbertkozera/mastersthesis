@@ -1,4 +1,8 @@
 <resources>
+    <string name="facebook_app_id">315142325680843</string>
+    <string name="fb_login_protocol_scheme">fb315142325680843</string>
+    <string name="facebook_client_token">10f17b21fc4b3a40561f66a94b0c68ef</string>
+
     <string name="app_label">Restauracje</string>
     <string name="app_name">Praca magisterska</string>
     <string name="activity_register_title">Zarejestruj</string>
@@ -13,6 +17,7 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
     <string name="prompt_retypr_password">Wpisz hasło ponownie</string>
+    <string name="prompt_user_name">Nazwa użytkownika</string>
     <string name="action_sign_in">Zaloguj się</string>
     <string name="action_sign_in_google">Zaloguj się używając konta Google</string>
     <string name="action_continue_without_signing_in">Kontynuuj bez logowania</string>
@@ -29,5 +34,7 @@
     <string name="error_incorrect_password">Hasło nie spełnia wymagań</string>
     <string name="error_different_passwords">Hasła różnią się</string>
     <string name="error_field_is_required">Pole jest wymagane</string>
+    <string name="action_sign_in_short">Sign in</string>
+
 
 </resources>

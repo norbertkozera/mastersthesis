@@ -1,7 +1,38 @@
 <resources>
 
+    <!--<string name="app_label">Restauracje</string>-->
+    <!--<string name="app_name">mastersthesis</string>-->
+    <!--<string name="activity_register_title">Zarejestruj</string>-->
+    <!--<string name="activity_add_a_restaurant_title">Zarejestruj</string>-->
+    <!--<string name="activity_find_your_city_title">Zarejestruj</string>-->
+    <!--<string name="activity_info_about_restaurant_title">Zarejestruj</string>-->
+    <!--<string name="activity_login_title">Zarejestruj</string>-->
+    <!--<string name="activity_restaurant_list_title">Zarejestruj</string>-->
+    <!--<string name="activity_restaurant_manager_title">Zarejestruj</string>-->
+
+    <!--&lt;!&ndash; Strings related to login &ndash;&gt;-->
+    <!--<string name="prompt_email">Email</string>-->
+    <!--<string name="prompt_password">Password</string>-->
+    <!--<string name="action_sign_in">Sign in</string>-->
+    <!--<string name="action_sign_in_google">Sign in using Google account</string>-->
+    <!--<string name="action_continue_without_signing_in">Kontynuuj bez logowania</string>-->
+    <!--<string name="action_register">Zarejestruj się</string>-->
+    <!--<string name="action_confirm_registration">Potwierdź rejestrację</string>-->
+    <!--<string name="register_email">Email</string>-->
+    <!--<string name="activity_add_your_rating">Dodaj opinię</string>-->
+    <!--<string name="checkbox_restaurant_owner">Jestem właścicielem restauracji</string>-->
+    <!--<string name="cancel">Cancel</string>-->
+    <!--<string name="action_sign_in_short">Sign in</string>-->
+    <!--<string name="error_invalid_email">This email address is invalid</string>-->
+    <!--<string name="error_invalid_password">This password is too short</string>-->
+    <!--<string name="error_incorrect_password">This password is incorrect</string>-->
+    <!--<string name="error_different_passwords">Given Password are different</string>-->
+
+    <!--<string name="error_field_is_required">This field is required</string>-->
+
+
     <string name="app_label">Restauracje</string>
-    <string name="app_name">mastersthesis</string>
+    <string name="app_name">Praca magisterska</string>
     <string name="activity_register_title">Zarejestruj</string>
     <string name="activity_add_a_restaurant_title">Zarejestruj</string>
     <string name="activity_find_your_city_title">Zarejestruj</string>
@@ -11,24 +42,30 @@
     <string name="activity_restaurant_manager_title">Zarejestruj</string>
 
     <!-- Strings related to login -->
+    <string name="action_sign_in_short">Sign in</string>
+
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_google">Sign in using Google account</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="prompt_retypr_password">Wpisz hasło ponownie</string>
+    <string name="prompt_user_name">Nazwa użytkownika</string>
+    <string name="action_sign_in">Zaloguj się</string>
+    <string name="action_sign_in_google">Zaloguj się używając konta Google</string>
     <string name="action_continue_without_signing_in">Kontynuuj bez logowania</string>
     <string name="action_register">Zarejestruj się</string>
     <string name="action_confirm_registration">Potwierdź rejestrację</string>
     <string name="register_email">Email</string>
     <string name="activity_add_your_rating">Dodaj opinię</string>
     <string name="checkbox_restaurant_owner">Jestem właścicielem restauracji</string>
-    <string name="cancel">Cancel</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_different_passwords">Given Password are different</string>
+    <string name="cancel">Anuluj</string>
 
-    <string name="error_field_is_required">This field is required</string>
+
+    <string name="error_invalid_email">Proszę podać poprawny adres email</string>
+    <string name="error_invalid_password">Hasło jest za krótkie</string>
+    <string name="error_incorrect_password">Hasło nie spełnia wymagań</string>
+    <string name="error_different_passwords">Hasła różnią się</string>
+    <string name="error_field_is_required">Pole jest wymagane</string>
+    <!---->
+    <!---->
 
 
 </resources>

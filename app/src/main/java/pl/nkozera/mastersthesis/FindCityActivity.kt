@@ -41,10 +41,14 @@ class FindCityActivity : AppCompatActivity() {
         val currentUser = mAuth.currentUser
         val textVIew: TextView = findViewById<View>(R.id.textView) as TextView
         var username = currentUser?.displayName
-        if(username.isNullOrEmpty()) {
+        var useremail = currentUser?.email
+        if(!username.isNullOrEmpty()) {
+            textVIew.text = currentUser?.displayName
+        } else if(!useremail.isNullOrEmpty()){
             textVIew.text = currentUser?.email
         } else {
-            textVIew.text = currentUser?.displayName
+            textVIew.text = "Uzytkownik niezalogowany"
+
         }
 
 
@@ -53,8 +57,6 @@ class FindCityActivity : AppCompatActivity() {
 
     fun firebaseLogOut(view: View){
         mAuth.signOut()
-        Toast.makeText(this, mAuth.currentUser?.toString(), Toast.LENGTH_LONG).show()
-
         startActivity(Intent(this, LoginActivity::class.java))
     }
 
