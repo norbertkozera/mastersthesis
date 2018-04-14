@@ -1,7 +1,8 @@
+
 <resources>
-    <string name="facebook_app_id">315142325680843</string>
-    <string name="fb_login_protocol_scheme">fb315142325680843</string>
-    <string name="facebook_client_token">10f17b21fc4b3a40561f66a94b0c68ef</string>
+    <string name="facebook_app_id" translatable = "false">315142325680843</string>
+    <string name="fb_login_protocol_scheme" translatable = "false">fb315142325680843</string>
+    <string name="facebook_client_token" translatable = "false">10f17b21fc4b3a40561f66a94b0c68ef</string>
 
     <string name="app_label">Restauracje</string>
     <string name="app_name">Praca magisterska</string>
