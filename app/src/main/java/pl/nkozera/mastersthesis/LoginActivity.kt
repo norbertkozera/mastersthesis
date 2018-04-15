@@ -58,67 +58,51 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef: StorageReference
     private var avatarUrl: Uri = Uri.EMPTY
+    private lateinit var loginManager: LoginManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+//        Firebase
+
         mAuth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance()
         storageRef = storage.reference
 
+//        Google login
+
         val googleSignIn = findViewById<View>(R.id.google_sign_in_button) as SignInButton
-        googleSignIn.setOnClickListener { view: View? ->
+        googleSignIn.setOnClickListener {
             googleSignInOnClick()
         }
-        FacebookSdk.sdkInitialize(applicationContext)
+
+//        Facbook login
+
+        loginManager = LoginManager.getInstance()
         mCallbackManager = CallbackManager.Factory.create()
-        faceBookInitialize()
+        LoginManager.getInstance().registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
+            override fun onCancel() {
+               //TODO
+                print("")
+            }
 
+            override fun onError(error: FacebookException?) {
+               //TODO
+                print("Był error")
+            }
 
-//        val loginButton = findViewById<View>(R.id.facebook_register_button) as LoginButton
-//        loginButton.setReadPermissions("email", "public_profile")
-
-//        val info: PackageInfo
-//         try {
-//             info = packageManager.getPackageInfo("pl.nkozera.mastersthesis", PackageManager.GET_SIGNATURES)
-//             for (signature in info.signatures) {
-//                 val md = MessageDigest.getInstance("SHA")
-//                 md.update(signature.toByteArray())
-//                 Log.d("KeyHash:", encodeToString(md.digest(), DEFAULT))
-//             }
-//         } catch (e: PackageManager.NameNotFoundException) {
-//             e.printStackTrace()
-//         } catch (e: Exception) {
-//             e.printStackTrace()
-//         }
-
-        facebook_register_button.setOnClickListener {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"))
-        }
+            override fun onSuccess(result: LoginResult) {
+                handleFacebookAccessToken(result.accessToken)
+            }
+        })
     }
 
 
-    fun faceBookInitialize() {
-
-
-        println("yess on fcbk")
-        LoginManager.getInstance().registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(result: LoginResult) {
-                handleFacebookAccessToken(result.accessToken)
-
-            }
-
-            override fun onCancel() {
-                //TODO Auto-generated method stub
-
-            }
-
-            override fun onError(error: FacebookException) {
-                //TODO Auto-generated method stub
-
-            }
-        })
+    fun facebookLogin(view: View) {
+        showProgressBar()
+        loginManager.logInWithReadPermissions(this, listOf("email", "public_profile"))
     }
 
 

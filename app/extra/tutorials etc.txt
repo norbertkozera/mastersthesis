@@ -43,6 +43,22 @@ http://www.bsttutorial.com/kotlin-android-facebook-login-tutorial/
 storage (do uploadowania zdjec)
 https://firebase.google.com/docs/storage/android/start
 
+
+        Facebook login - getting keyhash for app
+
+        val info: PackageInfo
+        try {
+            info = packageManager.getPackageInfo("pl.nkozera.mastersthesis", PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                encodeToString(md.digest(), DEFAULT) /// KeyHash
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+
 Log levels
 
 error:

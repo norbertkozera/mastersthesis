@@ -166,7 +166,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/google_sign_in_button"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="16dp"
+                android:onClick="facebookLogin"/>
 
 
             <Button
