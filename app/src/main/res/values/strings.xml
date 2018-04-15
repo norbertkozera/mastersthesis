@@ -14,6 +14,7 @@
     <string name="activity_restaurant_list_title">Zarejestruj</string>
     <string name="activity_restaurant_manager_title">Zarejestruj</string>
     <string name="error_invalid_credentials">Błędne dane logowania</string>
+    <string name="error_upload_avatar">Problem z ładowaniem zdjęcia profilowego</string>
     <string name="error_accounts_duplicated">Konto o podanym adresie email już istnieje</string>
     <string name="error_firebase_auth_other">Wystąpił problem z logowaniem, prosimy spróbować później</string>
     <string name="error_firebase_other">Wystąpił problem z bazą danych, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>

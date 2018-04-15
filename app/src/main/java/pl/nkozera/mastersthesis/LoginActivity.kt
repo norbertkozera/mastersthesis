@@ -9,42 +9,37 @@ package pl.nkozera.mastersthesis
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.google.android.gms.auth.api.signin.*
-import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
-import android.widget.*
-import com.facebook.*
-import com.facebook.login.LoginManager
-import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import kotlinx.android.synthetic.main.activity_login.*
-import java.util.*
+import android.widget.RelativeLayout
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.facebook.AccessToken
-import com.google.android.gms.common.util.ArrayUtils.contains
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import com.facebook.login.widget.LoginButton
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.activity_login.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.io.InputStream
 import java.lang.Exception
-import java.net.HttpURLConnection
-import java.net.URI
-import java.net.URL
-import java.security.AccessController.getContext
 import java.security.SecureRandom
 
 
@@ -58,7 +53,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef: StorageReference
     private var avatarUrl: Uri = Uri.EMPTY
-    private lateinit var loginManager: LoginManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,17 +74,17 @@ class LoginActivity : AppCompatActivity() {
 
 //        Facbook login
 
-        loginManager = LoginManager.getInstance()
         mCallbackManager = CallbackManager.Factory.create()
-        LoginManager.getInstance().registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
+        val facebookButton = findViewById<View>(R.id.facebook_register_button) as LoginButton
+
+        facebookButton.setReadPermissions("email", "public_profile")
+        facebookButton.registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
             override fun onCancel() {
-               //TODO
-                print("")
+                updateUI(mAuth.currentUser)
             }
 
             override fun onError(error: FacebookException?) {
-               //TODO
-                print("Był error")
+                updateUI(error)
             }
 
             override fun onSuccess(result: LoginResult) {
@@ -99,66 +93,50 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-
-    fun facebookLogin(view: View) {
-        showProgressBar()
-        loginManager.logInWithReadPermissions(this, listOf("email", "public_profile"))
-    }
-
-
     public override fun onStart() {
         super.onStart()
         val currentUser = mAuth.currentUser
         updateUI(currentUser)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            RC_SIGN_IN -> handleResult(GoogleSignIn.getSignedInAccountFromIntent(data))
+            GET_FROM_GALLERY -> when (resultCode) {
+                Activity.RESULT_OK -> {
+                    handleUploadAvatar(data)
+                }
+            }
+        }
+    }
+
+    private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
+            startActivity(Intent(this, FindCityActivity::class.java))
+            finish()
+        } else {
+            hideProgressBar()
+        }
+    }
+
+    private fun updateUI(exception: Exception?) {
+        hideProgressBar()
+        handleAuthException(exception)
+    }
+
+    @Suppress("UNUSED_PARAMETER") //param is needed
     fun emailSignInOnClick(view: View) {
         val userEmail: String = email.text.toString()
         val passwd: String = password.text.toString()
-
 
         if (validateEmailAndPasswd(userEmail, passwd)) {
             firebaseAuthWithPassword(userEmail, passwd)
         }
     }
 
-    fun confirmSignUp(view: View) {
-        val userDisplayName: String = displayName.text.toString()
-        val userEmail: String = email.text.toString()
-        val passwd: String = password.text.toString()
-        val retypePasswd: String = retype_new_password.text.toString()
-        if (validateEmailAndPass(userDisplayName, userEmail, passwd, retypePasswd)) {
-            firebaseRegisteWithPassword(userDisplayName, userEmail, passwd)
-        }
-    }
-
-    private fun validateEmailAndPasswd(userEmail: String, passwd: String): Boolean {
-        return if (userEmail.isEmpty()) {
-            email.requestFocus()
-            email.error = getString(R.string.error_field_is_required)
-            false
-        } else if (passwd.isEmpty()) {
-            password.requestFocus()
-            password.error = getString(R.string.error_field_is_required)
-            false
-        } else if (!userEmail.contains("@") ||
-                !userEmail.substring(userEmail.indexOf("@")).contains(".")) {
-            email.requestFocus()
-            email.error = getString(R.string.error_invalid_email)
-            false
-        } else {
-            true
-        }
-    }
-
-    fun loadPhotoFromGallery(view: View) {
-        email_register_account_button.isClickable = false
-        startActivityForResult(Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY)
-    }
-
-
     fun emailRegisterOnClick(view: View) {
-
         val emailSignUpButtonParams = email_register_button.layoutParams as RelativeLayout.LayoutParams
         val emailTextViewParams = email.layoutParams as RelativeLayout.LayoutParams
 
@@ -178,13 +156,44 @@ class LoginActivity : AppCompatActivity() {
         continue_withou_signing_in_button.visibility = View.GONE
         facebook_register_button.visibility = View.GONE
         displayName.requestFocus()
-
-
     }
 
+    private fun googleSignInOnClick() {
+        googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .requestId()
+                .build()
+        mGoogleSignInCLient = GoogleSignIn.getClient(this, googleSignInOptions)
+        mGoogleSignInCLient.signOut()
+        val signInIntent: Intent = mGoogleSignInCLient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    @Suppress("UNUSED_PARAMETER") //param is needed
+    fun firebaseAuthAnonymusly(view: View) {
+        showProgressBar()
+        mAuth.signInAnonymously()
+                .addOnCompleteListener(this) {
+                    when {
+                        it.isSuccessful -> updateUI(mAuth.currentUser)
+                        else -> updateUI(it.exception)
+                    }
+                }
+    }
+
+    @Suppress("UNUSED_PARAMETER") //param is needed
+    fun confirmSignUp(view: View) {
+        val userDisplayName: String = displayName.text.toString()
+        val userEmail: String = email.text.toString()
+        val passwd: String = password.text.toString()
+        val retypePasswd: String = retype_new_password.text.toString()
+        if (validateEmailAndPass(userDisplayName, userEmail, passwd, retypePasswd)) {
+            firebaseRegisteWithPassword(userDisplayName, userEmail, passwd)
+        }
+    }
 
     private fun cancelRegistration(view: View, emailSignUp: RelativeLayout.LayoutParams, emailTextView: RelativeLayout.LayoutParams) {
-
         retype_new_password.visibility = View.GONE
         email_register_account_button.visibility = View.GONE
         displayName.visibility = View.GONE
@@ -201,7 +210,45 @@ class LoginActivity : AppCompatActivity() {
         view.layoutParams = emailSignUp
         email_register_button.text = getString(R.string.action_register)
         email_register_button.setOnClickListener { emailRegisterOnClick(view) }
+    }
 
+    @Suppress("UNUSED_PARAMETER") //param is needed
+    fun loadPhotoFromGallery(view: View) {
+        startActivityForResult(Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY)
+    }
+
+    private fun handleFacebookAccessToken(token: AccessToken) {
+        showProgressBar()
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this) {
+                    when {
+                        it.isSuccessful -> updateUI(mAuth.currentUser)
+                        else -> {
+                            LoginManager.getInstance().logOut()
+                            updateUI(it.exception)
+                        }
+                    }
+                }
+    }
+
+    private fun validateEmailAndPasswd(userEmail: String, passwd: String): Boolean {
+        return if (userEmail.isEmpty()) {
+            email.requestFocus()
+            email.error = getString(R.string.error_field_is_required)
+            false
+        } else if (passwd.isEmpty()) {
+            password.requestFocus()
+            password.error = getString(R.string.error_field_is_required)
+            false
+        } else if (!userEmail.contains("@") ||
+                !userEmail.substring(userEmail.indexOf("@")).contains(".")) {
+            email.requestFocus()
+            email.error = getString(R.string.error_invalid_email)
+            false
+        } else {
+            true
+        }
     }
 
     private fun validateEmailAndPass(userDisplayName: String, userEmail: String, passwd: String, retypePasswd: String): Boolean {
@@ -235,36 +282,8 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-
-    fun googleSignInOnClick() {
-        googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .requestId()
-                .build()
-        mGoogleSignInCLient = GoogleSignIn.getClient(this, googleSignInOptions)
-        mGoogleSignInCLient.signOut()
-        val signInIntent: Intent = mGoogleSignInCLient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        mCallbackManager.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            RC_SIGN_IN -> handleResult(GoogleSignIn.getSignedInAccountFromIntent(data))
-            GET_FROM_GALLERY -> when (resultCode) {
-                Activity.RESULT_OK -> {
-                    handleUploadAvatar(data)
-                }
-            }
-        }
-    }
-
     private fun handleUploadAvatar(data: Intent?) {
-        avatar_progress.visibility = View.VISIBLE
-        avatar_button.visibility = View.INVISIBLE
-        loaded_avatar.visibility = View.INVISIBLE
+        showAvatarProgrssBar()
         val selectedImageUri: Uri = data?.data as Uri
         val bitmap: Bitmap
         try {
@@ -276,15 +295,12 @@ class LoginActivity : AppCompatActivity() {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             val bytes = baos.toByteArray()
             imageRef.putBytes(bytes).addOnFailureListener {
-                //TODO handler
+                hideAvatarProgressBar(false)
             }.addOnSuccessListener {
                 val url: Uri = it?.downloadUrl as Uri
                 Glide.with(this).load(url).into(loaded_avatar)
-                avatar_progress.visibility = View.GONE
-                loaded_avatar.visibility = View.VISIBLE
-                email_register_account_button.isClickable = true
                 avatarUrl = url
-
+                hideAvatarProgressBar(true)
             }
         } catch (e: Exception) {
             when (e) {
@@ -294,22 +310,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun updateUI(user: FirebaseUser?) {
-        if (user != null) {
-            startActivity(Intent(this, FindCityActivity::class.java))
-            finish()
-        } else {
-            hideProgressBar()
-        }
-    }
-
     private fun handleResult(task: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
             firebaseAuthWithGoogle(account)
         } catch (e: ApiException) {
-            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
+            updateUI(e)
         }
     }
 
@@ -323,21 +329,6 @@ class LoginActivity : AppCompatActivity() {
                     when {
                         it.isSuccessful -> updateUI(mAuth.currentUser)
                         else -> updateUI(it.exception)
-                    }
-                }
-    }
-
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        showProgressBar()
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this) {
-                    when {
-                        it.isSuccessful -> updateUI(mAuth.currentUser)
-                        else -> {
-                            LoginManager.getInstance().logOut()
-                            updateUI(it.exception)
-                        }
                     }
                 }
     }
@@ -362,23 +353,6 @@ class LoginActivity : AppCompatActivity() {
                 }
     }
 
-    private fun updateUI(exception: Exception?) {
-        hideProgressBar()
-        handleAuthException(exception)
-
-    }
-
-    private fun hideProgressBar() {
-        login_progress.visibility = View.GONE
-        email_login_form.visibility = View.VISIBLE
-    }
-
-
-    private fun showProgressBar() {
-        login_progress.visibility = View.VISIBLE
-        email_login_form.visibility = View.GONE
-    }
-
 
     private fun firebaseAuthWithPassword(email: String, password: String) {
         showProgressBar()
@@ -399,18 +373,47 @@ class LoginActivity : AppCompatActivity() {
             else -> getString(R.string.error_firebase_other)
         }
 
+        makeToast(toastMsg)
+    }
+
+    private fun hideAvatarProgressBar(isSuccessful: Boolean) {
+        when {
+            isSuccessful -> {
+                avatar_progress.visibility = View.GONE
+                loaded_avatar.visibility = View.VISIBLE
+                email_register_account_button.isClickable = true
+            }
+            else -> {
+                avatar_progress.visibility = View.GONE
+                loaded_avatar.visibility = View.INVISIBLE
+                avatar_button.visibility = View.VISIBLE
+                email_register_account_button.isClickable = true
+                makeToast(getString(R.string.error_invalid_credentials))
+            }
+        }
+
+    }
+
+    private fun showAvatarProgrssBar() {
+        avatar_progress.visibility = View.VISIBLE
+        avatar_button.visibility = View.INVISIBLE
+        loaded_avatar.visibility = View.INVISIBLE
+        email_register_account_button.isClickable = false
+    }
+
+    private fun hideProgressBar() {
+        login_progress.visibility = View.GONE
+        email_login_form.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar() {
+        login_progress.visibility = View.VISIBLE
+        email_login_form.visibility = View.GONE
+    }
+
+    private fun makeToast(toastMsg: String) {
         Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
     }
 
-    fun firebaseAuthAnonymusly(view: View) {
-        showProgressBar()
-        mAuth.signInAnonymously()
-                .addOnCompleteListener(this) {
-                    when {
-                        it.isSuccessful -> updateUI(mAuth.currentUser)
-                        else -> updateUI(it.exception)
-                    }
-                }
-    }
 }
 
