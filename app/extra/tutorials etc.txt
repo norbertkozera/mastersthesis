@@ -36,6 +36,13 @@ roddzaje baz danych
 https://firebase.google.com/docs/firestore/rtdb-vs-firestore?authuser=0
 
 
+facebook login
+http://www.bsttutorial.com/kotlin-android-facebook-login-tutorial/
+
+
+storage (do uploadowania zdjec)
+https://firebase.google.com/docs/storage/android/start
+
 Log levels
 
 error:

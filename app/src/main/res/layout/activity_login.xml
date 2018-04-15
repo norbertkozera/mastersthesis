@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -42,7 +43,7 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:visibility="invisible" />
+                android:visibility="gone" />
 
             <AutoCompleteTextView
                 android:id="@+id/email"
@@ -80,28 +81,53 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:visibility="invisible" />
+                android:visibility="gone" />
 
-
-            <CheckBox
-                android:id="@+id/checkboxRestaurantOwner"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/avatar_button"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/retype_new_password"
-                android:text="@string/checkbox_restaurant_owner"
-                android:visibility="invisible" />
+                android:drawableStart="@drawable/profile_placeholder"
+                android:lines="3"
+                android:text="@string/prompt_avatar"
+                android:textAlignment="center"
+                android:visibility="gone"
+                android:onClick="loadPhotoFromGallery"/>
+
+            <ImageView
+                android:id="@+id/loaded_avatar"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                app:srcCompat="@drawable/com_facebook_auth_dialog_cancel_background"
+                android:layout_below="@+id/retype_new_password"
+                android:onClick="loadPhotoFromGallery"
+                android:visibility="gone"
+                android:contentDescription="@string/prompt_avatar" />
+
+            <ProgressBar
+                android:id="@+id/avatar_progress"
+                style="@android:style/Widget.ProgressBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="false"
+                android:layout_centerVertical="false"
+                android:visibility="gone"
+                android:layout_marginTop="16dp"
+                android:layout_below="@+id/retype_new_password"/>
+
 
             <Button
                 android:id="@+id/email_register_account_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/checkboxRestaurantOwner"
+                android:layout_below="@+id/avatar_button"
                 android:layout_marginTop="16dp"
                 android:onClick="confirmSignUp"
                 android:text="@string/action_confirm_registration"
                 android:textStyle="bold"
-                android:visibility="invisible" />
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/email_sign_in_button"
@@ -140,8 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/google_sign_in_button"
-                android:layout_marginTop="16dp"
-                />
+                android:layout_marginTop="16dp" />
 
 
             <Button
@@ -157,6 +182,12 @@
                 android:textStyle="bold" />
 
 
+
+
+
         </RelativeLayout>
     </ScrollView>
+
+
+
 </RelativeLayout>

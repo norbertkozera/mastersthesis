@@ -13,15 +13,23 @@
     <string name="activity_login_title">Zarejestruj</string>
     <string name="activity_restaurant_list_title">Zarejestruj</string>
     <string name="activity_restaurant_manager_title">Zarejestruj</string>
+    <string name="error_invalid_credentials">Błędne dane logowania</string>
+    <string name="error_accounts_duplicated">Konto o podanym adresie email już istnieje</string>
+    <string name="error_firebase_auth_other">Wystąpił problem z logowaniem, prosimy spróbować później</string>
+    <string name="error_firebase_other">Wystąpił problem z bazą danych, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
+    <string name="error_other">Wystąpił niezidentyfikowany problem, spróbuj ponownie</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
     <string name="prompt_retypr_password">Wpisz hasło ponownie</string>
     <string name="prompt_user_name">Nazwa użytkownika</string>
+    <string name="prompt_avatar">Zdjęcie\nprofilowe\n*nie wymagane</string>
+    <string name="avatar">Avatar</string>
     <string name="action_sign_in">Zaloguj się</string>
     <string name="action_sign_in_google">Zaloguj się używając konta Google</string>
     <string name="action_continue_without_signing_in">Kontynuuj bez logowania</string>
+    <string name="action_upload_image">Załącz avatar</string>
     <string name="action_register">Zarejestruj się</string>
     <string name="action_confirm_registration">Potwierdź rejestrację</string>
     <string name="register_email">Email</string>

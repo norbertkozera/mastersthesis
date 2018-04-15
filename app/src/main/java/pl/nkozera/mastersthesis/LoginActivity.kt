@@ -6,56 +6,66 @@
 
 package pl.nkozera.mastersthesis
 
+import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import android.content.pm.Signature
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.google.android.gms.auth.api.signin.*
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import org.slf4j.LoggerFactory
-import com.google.firebase.auth.FirebaseUser
-import android.util.Log
-import com.facebook.appevents.AppEventsLogger;
 import android.widget.*
 import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.facebook.login.widget.LoginButton
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import kotlinx.android.synthetic.main.activity_login.*
-import com.google.firebase.auth.UserProfileChangeRequest
 import java.util.*
 import android.widget.Toast
-import com.google.firebase.auth.AuthResult
-import android.support.annotation.NonNull
-import android.support.v4.app.FragmentActivity
-import android.util.Base64.DEFAULT
-import android.util.Base64.encodeToString
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.AuthCredential
+import com.bumptech.glide.Glide
 import com.facebook.AccessToken
-import com.google.android.gms.tasks.OnCompleteListener
-import java.security.MessageDigest
+import com.google.android.gms.common.util.ArrayUtils.contains
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
+import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.URI
+import java.net.URL
+import java.security.AccessController.getContext
+import java.security.SecureRandom
 
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInCLient: GoogleSignInClient
     private lateinit var googleSignInOptions: GoogleSignInOptions
     private val RC_SIGN_IN: Int = 1
+    private val GET_FROM_GALLERY: Int = 2
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mCallbackManager: CallbackManager
+    private lateinit var storage: FirebaseStorage
+    private lateinit var storageRef: StorageReference
+    private lateinit var avatarUrl: Uri
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         mAuth = FirebaseAuth.getInstance()
+        storage = FirebaseStorage.getInstance()
+        storageRef = storage.reference
 
         val googleSignIn = findViewById<View>(R.id.google_sign_in_button) as SignInButton
         googleSignIn.setOnClickListener { view: View? ->
@@ -157,13 +167,18 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    fun loadPhotoFromGallery(view: View) {
+        email_register_account_button.isClickable = false
+        startActivityForResult(Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY)
+    }
+
 
     fun emailRegisterOnClick(view: View) {
 
         val emailSignUpButtonParams = email_register_button.layoutParams as RelativeLayout.LayoutParams
         val emailTextViewParams = email.layoutParams as RelativeLayout.LayoutParams
 
-        emailSignUpButtonParams.addRule(RelativeLayout.BELOW, R.id.checkboxRestaurantOwner)
+        emailSignUpButtonParams.addRule(RelativeLayout.BELOW, R.id.avatar_button)
         emailTextViewParams.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
 
         view.layoutParams = emailSignUpButtonParams
@@ -171,12 +186,13 @@ class LoginActivity : AppCompatActivity() {
         email_register_button.setOnClickListener { cancelRegistration(view, emailSignUpButtonParams, emailTextViewParams) }
 
         retype_new_password.visibility = View.VISIBLE
-        checkboxRestaurantOwner.visibility = View.VISIBLE
         email_register_account_button.visibility = View.VISIBLE
         displayName.visibility = View.VISIBLE
-        email_sign_in_button.visibility = View.INVISIBLE
-        google_sign_in_button.visibility = View.INVISIBLE
-        continue_withou_signing_in_button.visibility = View.INVISIBLE
+        avatar_button.visibility = View.VISIBLE
+        email_sign_in_button.visibility = View.GONE
+        google_sign_in_button.visibility = View.GONE
+        continue_withou_signing_in_button.visibility = View.GONE
+        facebook_register_button.visibility = View.GONE
         displayName.requestFocus()
 
 
@@ -185,14 +201,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun cancelRegistration(view: View, emailSignUp: RelativeLayout.LayoutParams, emailTextView: RelativeLayout.LayoutParams) {
 
-        retype_new_password.visibility = View.INVISIBLE
-        checkboxRestaurantOwner.visibility = View.INVISIBLE
-        email_register_account_button.visibility = View.INVISIBLE
-        displayName.visibility = View.INVISIBLE
+        retype_new_password.visibility = View.GONE
+        email_register_account_button.visibility = View.GONE
+        displayName.visibility = View.GONE
+        avatar_button.visibility = View.GONE
 
         email_sign_in_button.visibility = View.VISIBLE
         google_sign_in_button.visibility = View.VISIBLE
         continue_withou_signing_in_button.visibility = View.VISIBLE
+        facebook_register_button.visibility = View.VISIBLE
 
         emailSignUp.addRule(RelativeLayout.BELOW, R.id.password)
         emailTextView.addRule(RelativeLayout.ALIGN_PARENT_TOP)
@@ -249,10 +266,52 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        showProgressBar()
         mCallbackManager.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleResult(task)
+
+
+        when (requestCode) {
+            RC_SIGN_IN -> handleResult(GoogleSignIn.getSignedInAccountFromIntent(data))
+            GET_FROM_GALLERY -> when (resultCode) {Activity.RESULT_OK -> {
+
+                handleUploadAvatar(data)
+                hideProgressBar()
+            }
+            }
+        }
+        hideProgressBar()
+    }
+
+    private fun handleUploadAvatar(data: Intent?) {
+        avatar_progress.visibility = View.VISIBLE
+        avatar_button.visibility = View.INVISIBLE
+        loaded_avatar.visibility = View.INVISIBLE
+        val selectedImageUri: Uri = data?.data as Uri
+        val bitmap: Bitmap
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
+            val imgName = SecureRandom().nextLong()
+            val imageRef = storageRef.child("avatars/$imgName")
+
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val bytes = baos.toByteArray()
+            imageRef.putBytes(bytes).addOnFailureListener {
+                //TODO handler
+            }.addOnSuccessListener {
+                val url: Uri = it?.downloadUrl as Uri
+                Glide.with(this).load(url).into(loaded_avatar)
+                avatar_progress.visibility = View.GONE
+                loaded_avatar.visibility = View.VISIBLE
+                email_register_account_button.isClickable = true
+                avatarUrl = url
+
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is FileNotFoundException -> print("")
+                is IOException -> print("")
+            }
         }
     }
 
@@ -260,12 +319,9 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI(user: FirebaseUser?) {
         if (user != null) {
             startActivity(Intent(this, FindCityActivity::class.java))
-            login_progress.visibility = View.GONE
+            finish()
         } else {
-            email_login_form.requestFocus()
-            login_progress.visibility = View.GONE
-            email_login_form.visibility = View.VISIBLE
-
+            hideProgressBar()
         }
     }
 
@@ -281,96 +337,100 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        email_login_form.visibility = View.GONE
-        login_progress.visibility = View.VISIBLE
+        showProgressBar()
+//      TODO  => if user sign in as Facebook user, then sign in as Google user Firebase will overwrite user account, otherwise not
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val user = mAuth.currentUser
-                        login_progress.visibility = View.GONE
-                        updateUI(user)
-                    } else {
-                        Toast.makeText(this, "Problem while logging in 2", Toast.LENGTH_LONG).show()
+                .addOnCompleteListener(this) {
+                    when {
+                        it.isSuccessful -> updateUI(mAuth.currentUser)
+                        else -> updateUI(it.exception)
                     }
                 }
     }
 
     private fun handleFacebookAccessToken(token: AccessToken) {
-        email_login_form.visibility = View.GONE
-        login_progress.visibility = View.VISIBLE
+        showProgressBar()
         val credential = FacebookAuthProvider.getCredential(token.token)
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val user = mAuth.currentUser
-                        updateUI(user)
-                    } else {
-                        Toast.makeText(this, "FB Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
-                        updateUI(null)
+                .addOnCompleteListener(this) {
+                    when {
+                        it.isSuccessful -> updateUI(mAuth.currentUser)
+                        else -> {
+                            LoginManager.getInstance().logOut()
+                            updateUI(it.exception)
+                        }
                     }
-
                 }
-
     }
 
     private fun firebaseRegisteWithPassword(userName: String, email: String, password: String) {
-        email_login_form.visibility = View.GONE
-        login_progress.visibility = View.VISIBLE
+        showProgressBar()
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { createUser ->
-
-                    if (createUser.isSuccessful) {
-                        val user = mAuth.currentUser
-                        val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(userName).build()
-                        user!!.updateProfile(profileUpdates).addOnCompleteListener(this) { updateProf ->
-                            if (updateProf.isSuccessful) {
-                                
-                                updateUI(user)
-                            } else {
-                                Toast.makeText(this, "Problem while registrating", Toast.LENGTH_LONG).show()
+                .addOnCompleteListener(this) {
+                    when {
+                        it.isSuccessful -> {
+                            val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(userName).setPhotoUri(avatarUrl).build()
+                            mAuth.currentUser!!.updateProfile(profileUpdates).addOnCompleteListener(this) {
+                                when {
+                                    it.isSuccessful -> updateUI(mAuth.currentUser)
+                                    else -> updateUI(it.exception)
+                                }
                             }
                         }
-                    } else {
-                        Toast.makeText(this, "Problem while registrating", Toast.LENGTH_LONG).show()
+                        else -> updateUI(it.exception)
                     }
-
                 }
     }
 
-    private fun firebaseAuthWithPassword(email: String, password: String) {
-        email_login_form.visibility = View.GONE
+    private fun updateUI(exception: Exception?) {
+        hideProgressBar()
+        handleAuthException(exception)
+
+    }
+
+    private fun hideProgressBar() {
+        login_progress.visibility = View.GONE
+        email_login_form.visibility = View.VISIBLE
+    }
+
+
+    private fun showProgressBar() {
         login_progress.visibility = View.VISIBLE
+        email_login_form.visibility = View.GONE
+    }
+
+
+    private fun firebaseAuthWithPassword(email: String, password: String) {
+        showProgressBar()
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-
-                    if (task.isSuccessful) {
-
-                        val user = mAuth.currentUser
-                        login_progress.visibility = View.GONE
-                        updateUI(user)
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(this, "Problem while logging", Toast.LENGTH_LONG).show()
+                .addOnCompleteListener(this) {
+                    when {
+                        it.isSuccessful -> updateUI(mAuth.currentUser)
+                        else -> updateUI(it.exception)
                     }
-
                 }
+    }
+
+    private fun handleAuthException(exception: Exception?) {
+        val toastMsg: String = when (exception) {
+            is FirebaseAuthInvalidCredentialsException -> getString(R.string.error_invalid_credentials)
+            is FirebaseAuthUserCollisionException -> getString(R.string.error_accounts_duplicated)
+            is FirebaseException -> getString(R.string.error_firebase_auth_other)
+            else -> getString(R.string.error_firebase_other)
+        }
+
+        Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
     }
 
     fun firebaseAuthAnonymusly(view: View) {
-        email_login_form.visibility = View.GONE
-        login_progress.visibility = View.VISIBLE
+        showProgressBar()
         mAuth.signInAnonymously()
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val user = mAuth.currentUser
-                        login_progress.visibility = View.GONE
-                        updateUI(user)
-                    } else {
-                        Toast.makeText(this, "Problem while logging", Toast.LENGTH_LONG).show()
+                .addOnCompleteListener(this) {
+                    when {
+                        it.isSuccessful -> updateUI(mAuth.currentUser)
+                        else -> updateUI(it.exception)
                     }
-
                 }
     }
 }

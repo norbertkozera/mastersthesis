@@ -16,10 +16,14 @@ import com.google.firebase.auth.FirebaseAuth
 import org.w3c.dom.Text
 import android.support.annotation.NonNull
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
+import kotlinx.android.synthetic.main.activity_find_your_city.*
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class FindCityActivity : AppCompatActivity() {
@@ -42,6 +46,11 @@ class FindCityActivity : AppCompatActivity() {
         val textVIew: TextView = findViewById<View>(R.id.textView) as TextView
         var username = currentUser?.displayName
         var useremail = currentUser?.email
+        var url = currentUser?.photoUrl
+
+        if(url !=null)
+            Glide.with(this).load(url).into(imageView2)
+
         if(!username.isNullOrEmpty()) {
             textVIew.text = currentUser?.displayName
         } else if(!useremail.isNullOrEmpty()){
@@ -51,12 +60,15 @@ class FindCityActivity : AppCompatActivity() {
 
         }
 
+        //LF4959GhtiYn4jWU3saqADhcOmn1
+        //LF4959GhtiYn4jWU3saqADhcOmn1
 
     }
 
 
     fun firebaseLogOut(view: View){
         mAuth.signOut()
+        LoginManager.getInstance().logOut()
         startActivity(Intent(this, LoginActivity::class.java))
     }
 
