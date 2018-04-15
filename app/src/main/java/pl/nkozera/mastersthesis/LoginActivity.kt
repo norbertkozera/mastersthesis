@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
 //        Facbook login
-
+//      TODO  => https://stackoverflow.com/questions/49845972/android-facebook-login-with-firebase-forces-authentication-via-facebook-com-devi
         mCallbackManager = CallbackManager.Factory.create()
         val facebookButton = findViewById<View>(R.id.facebook_register_button) as LoginButton
 
