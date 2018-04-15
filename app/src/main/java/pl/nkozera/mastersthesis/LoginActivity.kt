@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mCallbackManager: CallbackManager
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef: StorageReference
-    private lateinit var avatarUrl: Uri
+    private var avatarUrl: Uri = Uri.EMPTY
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -266,20 +266,15 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        showProgressBar()
         mCallbackManager.onActivityResult(requestCode, resultCode, data)
-
-
         when (requestCode) {
             RC_SIGN_IN -> handleResult(GoogleSignIn.getSignedInAccountFromIntent(data))
-            GET_FROM_GALLERY -> when (resultCode) {Activity.RESULT_OK -> {
-
-                handleUploadAvatar(data)
-                hideProgressBar()
-            }
+            GET_FROM_GALLERY -> when (resultCode) {
+                Activity.RESULT_OK -> {
+                    handleUploadAvatar(data)
+                }
             }
         }
-        hideProgressBar()
     }
 
     private fun handleUploadAvatar(data: Intent?) {
