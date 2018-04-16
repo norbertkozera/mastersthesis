@@ -52,12 +52,14 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mCallbackManager: CallbackManager
     private lateinit var storage: FirebaseStorage
     private lateinit var storageRef: StorageReference
+    private lateinit var loginManager: LoginManager
     private var avatarUrl: Uri = Uri.EMPTY
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        loginManager = LoginManager.getInstance()
 
 //        Firebase
 
@@ -80,10 +82,12 @@ class LoginActivity : AppCompatActivity() {
         facebookButton.setReadPermissions("email", "public_profile")
         facebookButton.registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
             override fun onCancel() {
+                loginManager.logOut()
                 updateUI(mAuth.currentUser)
             }
 
             override fun onError(error: FacebookException?) {
+                loginManager.logOut()
                 updateUI(error)
             }
 
@@ -225,7 +229,7 @@ class LoginActivity : AppCompatActivity() {
                     when {
                         it.isSuccessful -> updateUI(mAuth.currentUser)
                         else -> {
-                            LoginManager.getInstance().logOut()
+                            loginManager.logOut()
                             updateUI(it.exception)
                         }
                     }
