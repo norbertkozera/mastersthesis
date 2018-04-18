@@ -236,6 +236,8 @@ class LoginActivity : AppCompatActivity() {
                 }
     }
 
+    //===
+
     private fun validateEmailAndPasswd(userEmail: String, passwd: String): Boolean {
         return if (userEmail.isEmpty()) {
             email.requestFocus()
@@ -285,6 +287,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
+    //---
 
     private fun handleUploadAvatar(data: Intent?) {
         showAvatarProgrssBar()
@@ -415,9 +419,9 @@ class LoginActivity : AppCompatActivity() {
         email_login_form.visibility = View.GONE
     }
 
+
     private fun makeToast(toastMsg: String) {
         Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
     }
-
 }
 
