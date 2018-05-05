@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "368270362408",
+    "firebase_url": "https://restaurant-71323.firebaseio.com",
+    "project_id": "restaurant-71323",
+    "storage_bucket": "restaurant-71323.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368270362408:android:262a25f3bc9c80b1",
+        "android_client_info": {
+          "package_name": "pl.nkozera.mastersthesis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368270362408-oi6mbo7rrasodp01dc0f32r4f339ik5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.nkozera.mastersthesis",
+            "certificate_hash": "78a382f821aaeb4160bbb755b54ae0cd844b6254"
+          }
+        },
+        {
+          "client_id": "368270362408-o5h03sllf4kff7ms5pmnbsv0s58rj53l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYYGrfmFMd97cu34LYSt2Lg_sGmHo9AUU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368270362408-o5h03sllf4kff7ms5pmnbsv0s58rj53l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

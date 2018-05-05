@@ -10,6 +10,7 @@ https://maps.googleapis.com/maps/api/place/textsearch/xml?query=trzy-kaczki-krak
 Session management
 https://www.androidhive.info/2012/08/android-session-management-using-shared-preferences/
 https://www.tutorialspoint.com/android/android_session_management.htm
+https://www.youtube.com/watch?v=UXUCb2xZOuI
 
 jak dziala loadee
 https://www.androiddesignpatterns.com/2012/07/loaders-and-loadermanager-background.html
@@ -20,6 +21,42 @@ https://www.youtube.com/watch?v=sZWMPYIkNd8
 https://www.youtube.com/watch?v=H_oGi8uuDpA&t=3629s
 https://www.youtube.com/watch?v=NZUBcdNAuN0&vl=de
 
+google sign in
+https://firebase.google.com/docs/auth/android/google-signin
+https://www.youtube.com/watch?v=i18IGN3MAbw
+
+logowanie telefonem
+https://firebase.google.com/docs/auth/android/phone-auth
+
+login/email
+https://firebase.google.com/docs/auth/android/password-auth
+
+
+roddzaje baz danych
+https://firebase.google.com/docs/firestore/rtdb-vs-firestore?authuser=0
+
+
+facebook login
+http://www.bsttutorial.com/kotlin-android-facebook-login-tutorial/
+
+
+storage (do uploadowania zdjec)
+https://firebase.google.com/docs/storage/android/start
+
+
+        Facebook login - getting keyhash for app
+
+        val info: PackageInfo
+        try {
+            info = packageManager.getPackageInfo("pl.nkozera.mastersthesis", PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures) {
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                encodeToString(md.digest(), DEFAULT) /// KeyHash
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
 
 Log levels
