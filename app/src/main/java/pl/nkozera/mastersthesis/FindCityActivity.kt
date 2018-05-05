@@ -52,7 +52,6 @@ class FindCityActivity : BaseMenuActivity() {
         findRestaurants.putExtra("city", city)
         findRestaurants.putExtra("distance", distance.text.toString())
         startActivity(findRestaurants)
-        finish()
     }
 
     private fun initializeFragment() {
