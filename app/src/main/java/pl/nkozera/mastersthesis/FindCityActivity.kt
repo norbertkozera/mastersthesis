@@ -6,70 +6,85 @@
 
 package pl.nkozera.mastersthesis
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
-import android.service.carrier.CarrierMessagingService
-import android.support.v7.app.AppCompatActivity
+import android.support.annotation.IntDef
 import android.view.View
-import android.widget.TextView
-import com.google.firebase.auth.FirebaseAuth
-import org.w3c.dom.Text
-import android.support.annotation.NonNull
 import android.widget.Toast
-import com.bumptech.glide.Glide
-import com.facebook.login.LoginManager
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.Status
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.places.Place
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
+import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_find_your_city.*
-import kotlinx.android.synthetic.main.activity_login.*
+import pl.nkozera.mastersthesis.base.BaseMenuActivity
+import java.util.*
 
 
-class FindCityActivity : AppCompatActivity() {
-
-
+class FindCityActivity : BaseMenuActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_your_city)
-        mAuth = FirebaseAuth.getInstance()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        currentCity()
+        initializeFragment()
     }
 
-    private lateinit var mAuth: FirebaseAuth
-
-
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = mAuth.currentUser
-        val textVIew: TextView = findViewById<View>(R.id.textView) as TextView
-        var username = currentUser?.displayName
-        var useremail = currentUser?.email
-        var url = currentUser?.photoUrl
-
-        if(url !=null)
-            Glide.with(this).load(url).into(imageView2)
-
-        if(!username.isNullOrEmpty()) {
-            textVIew.text = currentUser?.displayName
-        } else if(!useremail.isNullOrEmpty()){
-            textVIew.text = currentUser?.email
+    override fun onBackPressed() {
+        flag++
+        if (flag < 2) {
+            makeToast(Toast.LENGTH_SHORT, getString(R.string.back_again_logout))
         } else {
-            textVIew.text = "Uzytkownik niezalogowany"
-
+            firebaseLogOut()
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
-
-        //LF4959GhtiYn4jWU3saqADhcOmn1
-        //LF4959GhtiYn4jWU3saqADhcOmn1
-
     }
 
-
-    fun firebaseLogOut(view: View){
-        mAuth.signOut()
-        LoginManager.getInstance().logOut()
-        startActivity(Intent(this, LoginActivity::class.java))
+    fun lookForRestaurants(@Suppress("UNUSED_PARAMETER") view: View) {
+        val findRestaurants = Intent(this, RestaurantListActivity::class.java)
+        findRestaurants.putExtra("city", city)
+        findRestaurants.putExtra("distance", distance.text.toString())
+        startActivity(findRestaurants)
+        finish()
     }
 
+    private fun initializeFragment() {
+        autocompleteFragment = fragmentManager.findFragmentById(R.id.place_autocomplete_fragment) as PlaceAutocompleteFragment
+        autocompleteFragment.setHint(getString(R.string.find_city))
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(p0: Place?) {
+                city = p0?.name.toString()
+            }
+
+            override fun onError(p0: Status?) {
+                //TODO LOG IT p0?.statusMessage
+            }
+
+        })
+    }
+
+    private fun currentCity() {
+        val gcd = Geocoder(this, Locale.getDefault())
+        @IntDef when (checkSelfPermission(ACCESS_COARSE_LOCATION)) {
+            PackageManager.PERMISSION_GRANTED -> fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        if (location != null) {
+                            city = gcd.getFromLocation(location.latitude, location.longitude, 1)[0].locality
+                            autocompleteFragment.setText(city)
+                        }
+                    }
+        }
+    }
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var autocompleteFragment: PlaceAutocompleteFragment
+    private lateinit var city: String
+    private var flag = 0;
 }

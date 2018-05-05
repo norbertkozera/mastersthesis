@@ -5,6 +5,19 @@ https://developers.google.com/places/web-service/search
 https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJG_RpsVdcFkcR7wiSvfYTin0&key=AIzaSyB9RA4U-oDzaTxzOAPYXNbPZWyeNQudpnQ
 https://maps.googleapis.com/maps/api/place/textsearch/xml?query=trzy-kaczki-krak%C3%B3w&key=AIzaSyB9RA4U-oDzaTxzOAPYXNbPZWyeNQudpnQ
 
+&pagetoken=CtQDxwEAAOOMM-SXJXqEZ0jjsVL80dkvhfoGqAGbV-yOqhgH4SlxnEmaqawJpaCqZpjBA93xAk8acmtS9AXCa7ohjoRia6y1puIINmL8_3ur8GKSi7PtdeTFihTvKIBbwrsoFD03xrM11qmWRq00qgAPDhLNQuaKJqgEKGNDXMp9J-F6eKK2clCuU0KveqH8A92IqixRFYKrkWnl9Q9rcWo8aOtHXIuuU6bKUF8_OVFNlriBdUYdIZj5MRj491o038KEtLv3x5XSdKmnqI5zlyXV4WWe5-xambc3GHp_6pCCZo_FxmHurv8Eh4BRWvigHedsZXc46xlg1BEHzPtnBWvyRkcTJCUKSz7Gc-J8coEEi3a2fqr2_tthm0DfrfaBT2dEEK-X14AtruGrscLVOFFKyHKeToaK3-URyEyiGYI1i2ikTw-luxUG0vcwgv74wyeXdfOif_IAzNIXgPW6sr3MKz6Mnb4fQziQ1GnxV46MP84ZQKFFpbHWUZ3PHixJe4YcXfBbPTlvlPpoOqXDY5rte0CnQ1GBAzx6onSale1GQwNz2Qr7cRAYez5ir7I9gdpm_olESbk6AZ3JVKZH-5ctq3p1c79IuODF-EtKAllylvQ9E5J3EhAvFpM-bRT499up5DtIGNn-GhQMU8qU1eDyGV5ep5fNC9ufMiXSew
+
+https://maps.googleapis.com/maps/api/place/textsearch/json?key=AIzaSyB9RA4U-oDzaTxzOAPYXNbPZWyeNQudpnQ&query=restaurant-jerzmanowice
+
+https://maps.googleapis.com/maps/api/place/autocomplete/json?input=jerzm&types=geocode&language=fr&key=YOUR_API_KEY
+                                                                            Locale.getDefault().getLanguage()
+https://maps.googleapis.com/maps/api/place/autocomplete/json?input=jerzm&types=geocode&key=AIzaSyB9RA4U-oDzaTxzOAPYXNbPZWyeNQudpnQ
+
+https://maps.googleapis.com/maps/api/place/autocomplete/json?input=jerzm&types=geocode&key=AIzaSyB9RA4U-oDzaTxzOAPYXNbPZWyeNQudpnQ
+
+
+menu jako fragment
+http://droidmentor.com/how-to-use-fragment-specific-menu-in-android/
 
 
 Session management

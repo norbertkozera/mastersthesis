@@ -12,16 +12,13 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
-import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.facebook.login.widget.LoginButton
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -33,9 +30,8 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.activity_login.*
+import pl.nkozera.mastersthesis.base.BaseActivity
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -43,27 +39,19 @@ import java.lang.Exception
 import java.security.SecureRandom
 
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
     private lateinit var mGoogleSignInCLient: GoogleSignInClient
     private lateinit var googleSignInOptions: GoogleSignInOptions
     private val RC_SIGN_IN: Int = 1
     private val GET_FROM_GALLERY: Int = 2
-    private lateinit var mAuth: FirebaseAuth
     private lateinit var mCallbackManager: CallbackManager
-    private lateinit var storage: FirebaseStorage
-    private lateinit var storageRef: StorageReference
     private var avatarUrl: Uri = Uri.EMPTY
+    val content = R.layout.activity_login
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-//        Firebase
-
-        mAuth = FirebaseAuth.getInstance()
-        storage = FirebaseStorage.getInstance()
-        storageRef = storage.reference
+        setContentView(content)
 
 //        Google login
 
@@ -80,10 +68,12 @@ class LoginActivity : AppCompatActivity() {
         facebookButton.setReadPermissions("email", "public_profile")
         facebookButton.registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
             override fun onCancel() {
+                loginManager.logOut()
                 updateUI(mAuth.currentUser)
             }
 
             override fun onError(error: FacebookException?) {
+                loginManager.logOut()
                 updateUI(error)
             }
 
@@ -116,13 +106,11 @@ class LoginActivity : AppCompatActivity() {
         if (user != null) {
             startActivity(Intent(this, FindCityActivity::class.java))
             finish()
-        } else {
-            hideProgressBar()
         }
     }
 
     private fun updateUI(exception: Exception?) {
-        hideProgressBar()
+        hideProgressBar(content)
         handleAuthException(exception)
     }
 
@@ -225,12 +213,14 @@ class LoginActivity : AppCompatActivity() {
                     when {
                         it.isSuccessful -> updateUI(mAuth.currentUser)
                         else -> {
-                            LoginManager.getInstance().logOut()
+                            loginManager.logOut()
                             updateUI(it.exception)
                         }
                     }
                 }
     }
+
+    //===
 
     private fun validateEmailAndPasswd(userEmail: String, passwd: String): Boolean {
         return if (userEmail.isEmpty()) {
@@ -281,6 +271,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
+    //---
 
     private fun handleUploadAvatar(data: Intent?) {
         showAvatarProgrssBar()
@@ -376,7 +368,16 @@ class LoginActivity : AppCompatActivity() {
         makeToast(toastMsg)
     }
 
-    private fun hideAvatarProgressBar(isSuccessful: Boolean) {
+
+
+    fun showAvatarProgrssBar() {
+        avatar_progress.visibility = View.VISIBLE
+        avatar_button.visibility = View.INVISIBLE
+        loaded_avatar.visibility = View.INVISIBLE
+        email_register_account_button.isClickable = false
+    }
+
+    fun hideAvatarProgressBar(isSuccessful: Boolean) {
         when {
             isSuccessful -> {
                 avatar_progress.visibility = View.GONE
@@ -392,27 +393,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun showAvatarProgrssBar() {
-        avatar_progress.visibility = View.VISIBLE
-        avatar_button.visibility = View.INVISIBLE
-        loaded_avatar.visibility = View.INVISIBLE
-        email_register_account_button.isClickable = false
-    }
-
-    private fun hideProgressBar() {
-        login_progress.visibility = View.GONE
-        email_login_form.visibility = View.VISIBLE
-    }
-
-    private fun showProgressBar() {
-        login_progress.visibility = View.VISIBLE
-        email_login_form.visibility = View.GONE
-    }
-
-    private fun makeToast(toastMsg: String) {
-        Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
     }
 
 }
