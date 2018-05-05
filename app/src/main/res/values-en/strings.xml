@@ -1,33 +1,6 @@
+
 <resources>
-    <!--<string name="app_label">Restauracje</string>-->
-    <!--<string name="app_name">mastersthesis</string>-->
-    <!--<string name="activity_register_title">Zarejestruj</string>-->
-    <!--<string name="activity_add_a_restaurant_title">Zarejestruj</string>-->
-    <!--<string name="activity_find_your_city_title">Zarejestruj</string>-->
-    <!--<string name="activity_info_about_restaurant_title">Zarejestruj</string>-->
-    <!--<string name="activity_login_title">Zarejestruj</string>-->
-    <!--<string name="activity_restaurant_list_title">Zarejestruj</string>-->
-    <!--<string name="activity_restaurant_manager_title">Zarejestruj</string>-->
 
-    <!--&lt;!&ndash; Strings related to login &ndash;&gt;-->
-    <!--<string name="prompt_email">Email</string>-->
-    <!--<string name="prompt_password">Password</string>-->
-    <!--<string name="action_sign_in">Sign in</string>-->
-    <!--<string name="action_sign_in_google">Sign in using Google account</string>-->
-    <!--<string name="action_continue_without_signing_in">Kontynuuj bez logowania</string>-->
-    <!--<string name="action_register">Zarejestruj się</string>-->
-    <!--<string name="action_confirm_registration">Potwierdź rejestrację</string>-->
-    <!--<string name="register_email">Email</string>-->
-    <!--<string name="activity_add_your_rating">Dodaj opinię</string>-->
-    <!--<string name="checkbox_restaurant_owner">Jestem właścicielem restauracji</string>-->
-    <!--<string name="cancel">Cancel</string>-->
-    <!--<string name="action_sign_in_short">Sign in</string>-->
-    <!--<string name="error_invalid_email">This email address is invalid</string>-->
-    <!--<string name="error_invalid_password">This password is too short</string>-->
-    <!--<string name="error_incorrect_password">This password is incorrect</string>-->
-    <!--<string name="error_different_passwords">Given Password are different</string>-->
-
-    <!--<string name="error_field_is_required">This field is required</string>-->
 
     <string name="app_label">Restauracje</string>
     <string name="app_name">Praca magisterska</string>
@@ -39,6 +12,7 @@
     <string name="activity_restaurant_list_title">Zarejestruj</string>
     <string name="activity_restaurant_manager_title">Zarejestruj</string>
     <string name="error_invalid_credentials">Błędne dane logowania</string>
+    <string name="error_upload_avatar">Problem z ładowaniem zdjęcia profilowego</string>
     <string name="error_accounts_duplicated">Konto o podanym adresie email już istnieje</string>
     <string name="error_firebase_auth_other">Wystąpił problem z logowaniem, prosimy spróbować później</string>
     <string name="error_firebase_other">Wystąpił problem z bazą danych, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
@@ -50,6 +24,11 @@
     <string name="prompt_retypr_password">Wpisz hasło ponownie</string>
     <string name="prompt_user_name">Nazwa użytkownika</string>
     <string name="prompt_avatar">Zdjęcie\nprofilowe\n*nie wymagane</string>
+    <string name="restaurants_in_city">Restauracje w mieście:</string>
+    <string name="type_address">Wprowadź adres</string>
+    <string name="or">Lub:</string>
+    <string name="search">Szukaj</string>
+    <string name="m_from_me">metrów ode mnie</string>
     <string name="avatar">Avatar</string>
     <string name="action_sign_in">Zaloguj się</string>
     <string name="action_sign_in_google">Zaloguj się używając konta Google</string>
