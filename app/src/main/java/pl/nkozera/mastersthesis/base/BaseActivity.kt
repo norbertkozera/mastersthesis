@@ -15,6 +15,7 @@ package pl.nkozera.mastersthesis.base;
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
@@ -29,7 +30,7 @@ open class BaseActivity : AppCompatActivity() {
 
     lateinit var mAuth: FirebaseAuth
     lateinit var firebase: FirebaseDatabase
-    lateinit var storage: FirebaseStorage
+    open lateinit var storage: FirebaseStorage
     lateinit var loginManager: LoginManager
     lateinit var storageRef: StorageReference
 
@@ -42,8 +43,6 @@ open class BaseActivity : AppCompatActivity() {
         storageRef = storage.reference
 
     }
-
-
 
     fun firebaseLogOut() {
         showProgressBar()
@@ -63,7 +62,7 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     fun showProgressBar() {
-        setContentView(R.layout.activity_progress)
+        setContentView(R.layout.progress)
     }
 
 
