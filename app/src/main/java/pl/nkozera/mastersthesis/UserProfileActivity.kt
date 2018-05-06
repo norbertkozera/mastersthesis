@@ -14,7 +14,6 @@ package pl.nkozera.mastersthesis
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -55,7 +54,7 @@ class UserProfileActivity : BaseMenuActivity() {
                 .addOnCompleteListener(this) {
                     when {
                         it.isSuccessful -> {
-                            currentUser.updatePassword(newPass).addOnCompleteListener(this ){
+                            currentUser.updatePassword(newPass).addOnCompleteListener(this) {
                                 when {
                                     it.isSuccessful -> {
                                         makeToast(getString(R.string.password_changed))
@@ -82,14 +81,12 @@ class UserProfileActivity : BaseMenuActivity() {
                 userEmail.visibility = View.GONE
                 logout_button.text = getString(R.string.login_or_register)
             }
-            mAuth.currentUser?.providers!!.contains("password") -> {
-                userName.text = name.toString()
-                userEmail.text = email.toString()
-                change_pass_button.visibility = View.VISIBLE
-            }
             else -> {
                 userName.text = name.toString()
                 userEmail.text = email.toString()
+                if (mAuth.currentUser?.providers!!.contains("password")) {
+                    change_pass_button.visibility = View.VISIBLE
+                }
             }
         }
     }

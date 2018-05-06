@@ -70,7 +70,7 @@
                 android:maxLines="1" />
 
             <EditText
-                android:id="@+id/retype_new_password"
+                android:id="@+id/retype_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/password"
@@ -87,7 +87,7 @@
                 android:id="@+id/avatar_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/retype_new_password"
+                android:layout_below="@+id/retype_password"
                 android:drawableStart="@drawable/profile_placeholder"
                 android:lines="3"
                 android:text="@string/prompt_avatar"
@@ -100,7 +100,7 @@
                 android:layout_width="95dp"
                 android:layout_height="95dp"
                 app:srcCompat="@drawable/com_facebook_auth_dialog_cancel_background"
-                android:layout_below="@+id/retype_new_password"
+                android:layout_below="@+id/retype_password"
                 android:onClick="loadPhotoFromGallery"
                 android:visibility="gone"
                 android:contentDescription="@string/prompt_avatar" />
@@ -114,7 +114,7 @@
                 android:layout_centerVertical="false"
                 android:visibility="gone"
                 android:layout_marginTop="16dp"
-                android:layout_below="@+id/retype_new_password"/>
+                android:layout_below="@+id/retype_password"/>
 
 
             <Button
@@ -150,7 +150,7 @@
 
 
             <Button
-                android:id="@+id/email_register_button"
+                android:id="@+id/email_register"
                 style="?android:textAppearanceSmall"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
