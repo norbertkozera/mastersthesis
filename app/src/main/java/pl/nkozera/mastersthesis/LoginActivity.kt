@@ -31,6 +31,10 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_user_profile.*
+import pl.nkozera.mastersthesis.auth.EmailValidator
+import pl.nkozera.mastersthesis.auth.FieldValidator
+import pl.nkozera.mastersthesis.auth.PasswordValidator
 import pl.nkozera.mastersthesis.base.BaseActivity
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
@@ -114,28 +118,19 @@ class LoginActivity : BaseActivity() {
         handleAuthException(exception)
     }
 
-    @Suppress("UNUSED_PARAMETER") //param is needed
-    fun emailSignInOnClick(view: View) {
-        val userEmail: String = email.text.toString()
-        val passwd: String = password.text.toString()
-
-        if (validateEmailAndPasswd(userEmail, passwd)) {
-            firebaseAuthWithPassword(userEmail, passwd)
-        }
-    }
 
     fun emailRegisterOnClick(view: View) {
-        val emailSignUpButtonParams = email_register_button.layoutParams as RelativeLayout.LayoutParams
+        val emailSignUpButtonParams = email_register.layoutParams as RelativeLayout.LayoutParams
         val emailTextViewParams = email.layoutParams as RelativeLayout.LayoutParams
 
         emailSignUpButtonParams.addRule(RelativeLayout.BELOW, R.id.avatar_button)
         emailTextViewParams.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
 
         view.layoutParams = emailSignUpButtonParams
-        email_register_button.text = getString(R.string.cancel)
-        email_register_button.setOnClickListener { cancelRegistration(view, emailSignUpButtonParams, emailTextViewParams) }
+        email_register.text = "Anuluj"
+        email_register.setOnClickListener { cancelRegistration(view, emailSignUpButtonParams, emailTextViewParams) }
 
-        retype_new_password.visibility = View.VISIBLE
+        retype_password.visibility = View.VISIBLE
         email_register_account_button.visibility = View.VISIBLE
         displayName.visibility = View.VISIBLE
         avatar_button.visibility = View.VISIBLE
@@ -158,8 +153,7 @@ class LoginActivity : BaseActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    @Suppress("UNUSED_PARAMETER") //param is needed
-    fun firebaseAuthAnonymusly(view: View) {
+    fun firebaseAuthAnonymusly(@Suppress("UNUSED_PARAMETER") view: View) {
         showProgressBar()
         mAuth.signInAnonymously()
                 .addOnCompleteListener(this) {
@@ -170,19 +164,26 @@ class LoginActivity : BaseActivity() {
                 }
     }
 
-    @Suppress("UNUSED_PARAMETER") //param is needed
-    fun confirmSignUp(view: View) {
-        val userDisplayName: String = displayName.text.toString()
-        val userEmail: String = email.text.toString()
-        val passwd: String = password.text.toString()
-        val retypePasswd: String = retype_new_password.text.toString()
-        if (validateEmailAndPass(userDisplayName, userEmail, passwd, retypePasswd)) {
-            firebaseRegisteWithPassword(userDisplayName, userEmail, passwd)
+    fun confirmSignUp(@Suppress("UNUSED_PARAMETER") view: View) {
+        val userNameNotEmpty = FieldValidator().checkIfFieldsAreNotEmpty(this, displayName)
+        val emailIsCorrect = EmailValidator(this, email).validate()
+        val passwordIsCorrect = PasswordValidator(this, password, retype_password).validate()
+        if (userNameNotEmpty && emailIsCorrect && passwordIsCorrect) {
+            firebaseRegisteWithPassword(displayName.text.toString(), email.text.toString(), password.text.toString())
+        }
+    }
+
+    fun emailSignInOnClick(@Suppress("UNUSED_PARAMETER") view: View) {
+        val emailIsCorrect = EmailValidator(this, email).validate()
+        val passwordIsCorrect = PasswordValidator(this, password).validate()
+
+        if (emailIsCorrect && passwordIsCorrect) {
+            firebaseAuthWithPassword(email.text.toString(), password.text.toString())
         }
     }
 
     private fun cancelRegistration(view: View, emailSignUp: RelativeLayout.LayoutParams, emailTextView: RelativeLayout.LayoutParams) {
-        retype_new_password.visibility = View.GONE
+        retype_password.visibility = View.GONE
         email_register_account_button.visibility = View.GONE
         displayName.visibility = View.GONE
         avatar_button.visibility = View.GONE
@@ -196,8 +197,8 @@ class LoginActivity : BaseActivity() {
         emailTextView.addRule(RelativeLayout.ALIGN_PARENT_TOP)
 
         view.layoutParams = emailSignUp
-        email_register_button.text = getString(R.string.action_register)
-        email_register_button.setOnClickListener { emailRegisterOnClick(view) }
+        email_register.text = getString(R.string.action_register)
+        email_register.setOnClickListener { emailRegisterOnClick(view) }
     }
 
     @Suppress("UNUSED_PARAMETER") //param is needed
@@ -219,60 +220,6 @@ class LoginActivity : BaseActivity() {
                     }
                 }
     }
-
-    //===
-
-    private fun validateEmailAndPasswd(userEmail: String, passwd: String): Boolean {
-        return if (userEmail.isEmpty()) {
-            email.requestFocus()
-            email.error = getString(R.string.error_field_is_required)
-            false
-        } else if (passwd.isEmpty()) {
-            password.requestFocus()
-            password.error = getString(R.string.error_field_is_required)
-            false
-        } else if (!userEmail.contains("@") ||
-                !userEmail.substring(userEmail.indexOf("@")).contains(".")) {
-            email.requestFocus()
-            email.error = getString(R.string.error_invalid_email)
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun validateEmailAndPass(userDisplayName: String, userEmail: String, passwd: String, retypePasswd: String): Boolean {
-        return if (validateEmailAndPasswd(userEmail, passwd)) {
-            when {
-                userDisplayName.isEmpty() -> {
-                    displayName.requestFocus()
-                    displayName.error = getString(R.string.error_field_is_required)
-                    false
-                }
-                passwd.length < 8 -> {
-                    displayName.requestFocus()
-                    password.error = getString(R.string.error_incorrect_password)
-                    false
-                }
-                retypePasswd.length < 8 -> {
-                    displayName.requestFocus()
-                    retype_new_password.error = getString(R.string.error_incorrect_password)
-                    false
-                }
-                retypePasswd != passwd -> {
-                    retype_new_password.requestFocus()
-                    retype_new_password.error = getString(R.string.error_different_passwords)
-                    false
-                }
-                else -> true
-            }
-        } else {
-            false
-        }
-
-    }
-
-    //---
 
     private fun handleUploadAvatar(data: Intent?) {
         showAvatarProgrssBar()
@@ -296,6 +243,7 @@ class LoginActivity : BaseActivity() {
             }
         } catch (e: Exception) {
             when (e) {
+                //TODO Log it
                 is FileNotFoundException -> print("")
                 is IOException -> print("")
             }
@@ -367,7 +315,6 @@ class LoginActivity : BaseActivity() {
 
         makeToast(toastMsg)
     }
-
 
 
     fun showAvatarProgrssBar() {

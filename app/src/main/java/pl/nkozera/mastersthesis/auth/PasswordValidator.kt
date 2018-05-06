@@ -11,16 +11,17 @@ import android.widget.EditText
 import pl.nkozera.mastersthesis.R
 
 
-class PasswordValidator(private val context: Context, vararg val fields: EditText) {
+class PasswordValidator(private val context: Context, vararg val fields: EditText) : FieldValidator() {
 
     private var returnFlag: Boolean = true
 
     fun validate(): Boolean {
-        checkIfFieldsAreNotEmpty()
-        checkPasswordLength()
         checkIfPasswordsAreTheSame()
+        checkPasswordLength()
+        checkIfFieldsAreNotEmpty(context, fields.toList())
         return returnFlag
     }
+
 
     private fun checkPasswordLength() {
         for (field in fields) {
@@ -32,21 +33,8 @@ class PasswordValidator(private val context: Context, vararg val fields: EditTex
         }
     }
 
-    private fun checkIfFieldsAreNotEmpty() {
-        for (field in fields) {
-            if (returnFlag && field.text.toString().isEmpty()) {
-                field.requestFocus()
-                field.error = context.getString(R.string.error_field_is_required)
-                returnFlag = false
-                break
-            }
-        }
-
-    }
-
     private fun checkIfPasswordsAreTheSame() {
-        var temp: String
-        for (i in 1..fields.size-1) {
+        for (i in 1..fields.size - 1) {
             if (returnFlag && !fields.get(i).text.toString().equals(fields.get(i - 1).text.toString())) {
                 fields.get(i).requestFocus()
                 fields.get(i).error = context.getString(R.string.error_different_passwords)
