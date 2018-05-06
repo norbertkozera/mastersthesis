@@ -51,6 +51,8 @@ class FindCityActivity : BaseMenuActivity() {
         val findRestaurants = Intent(this, RestaurantListActivity::class.java)
         findRestaurants.putExtra("city", city)
         findRestaurants.putExtra("distance", distance.text.toString())
+        findRestaurants.putExtra("latitude", latitude)
+        findRestaurants.putExtra("longitude", longitude)
         startActivity(findRestaurants)
         finish()
     }
@@ -76,7 +78,9 @@ class FindCityActivity : BaseMenuActivity() {
             PackageManager.PERMISSION_GRANTED -> fusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         if (location != null) {
-                            city = gcd.getFromLocation(location.latitude, location.longitude, 1)[0].locality
+                            latitude = location.latitude
+                            longitude = location.longitude
+                            city = gcd.getFromLocation(latitude, longitude, 1)[0].locality
                             autocompleteFragment.setText(city)
                         }
                     }
@@ -85,6 +89,8 @@ class FindCityActivity : BaseMenuActivity() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var autocompleteFragment: PlaceAutocompleteFragment
-    private lateinit var city: String
+    private var city: String = ""
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
     private var flag = 0;
 }

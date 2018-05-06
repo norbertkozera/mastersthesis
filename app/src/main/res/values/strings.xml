@@ -2,7 +2,7 @@
     <string name="facebook_app_id" translatable="false">315142325680843</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb315142325680843</string>
     <string name="facebook_client_token" translatable="false">10f17b21fc4b3a40561f66a94b0c68ef</string>
-    <!--<string name="google_api_key" translatable = "false">AIzaSyB9RA4U-oDzaTxzOAPYXNbPZWyeNQudpnQ</string>-->
+    <string name="google_places_api_key" translatable = "false">AIzaSyAny_oMpGWlwG0Mfwcieb0aWZQovIya7_0</string>
 
     <string name="app_label">Restauracje</string>
     <string name="app_name">Praca magisterska</string>
@@ -21,6 +21,8 @@
     <string name="error_accounts_duplicated">Konto o podanym adresie email już istnieje</string>
     <string name="error_firebase_auth_other">Wystąpił problem z logowaniem, prosimy spróbować później</string>
     <string name="error_firebase_other">Wystąpił problem z bazą danych, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
+    <string name="error_search">Wystąpił problem z wyszukiwaniem, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
+    <string name="error_no_search_data">Wprowadź dane wyszkiwania</string>
     <string name="error_other">Wystąpił niezidentyfikowany problem, spróbuj ponownie</string>
     <string name="back_again_logout">Wcisnij wstecz ponownie aby wylogować</string>
 
