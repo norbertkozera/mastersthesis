@@ -44,7 +44,9 @@ class ApiRequest(private val context: Context) {
 
     fun search(coordinates: LocationCoordinates, city: String): PlacesList {
         //url.append("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$API_KEY&query=restaurant")
-
+//https://developers.google.com/api-client-library/java/google-http-java-client/reference/1.20.0/com/google/api/client/http/HttpTransport
+        //https://www.programcreek.com/java-api-examples/?api=com.google.api.client.http.HttpRequestFactory
+        //https://stackoverflow.com/questions/26765423/not-regonize-the-createrequestfactory-method-for-the-type-httptransport/26786063#26786063
         try {
 //todo problem :(
             val transport = ApacheHttpTransport()
