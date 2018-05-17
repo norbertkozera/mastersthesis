@@ -4,6 +4,12 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 package pl.nkozera.mastersthesis
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -14,7 +20,6 @@ import android.location.Location
 import android.os.Bundle
 import android.support.annotation.IntDef
 import android.view.View
-import android.widget.Toast
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -34,17 +39,6 @@ class FindCityActivity : BaseMenuActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         currentCity()
         initializeFragment()
-    }
-
-    override fun onBackPressed() {
-        flag++
-        if (flag < 2) {
-            makeToast(Toast.LENGTH_SHORT, getString(R.string.back_again_logout))
-        } else {
-            firebaseLogOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
     }
 
     fun lookForRestaurants(@Suppress("UNUSED_PARAMETER") view: View) {
@@ -92,5 +86,4 @@ class FindCityActivity : BaseMenuActivity() {
     private var city: String = ""
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
-    private var flag = 0;
 }

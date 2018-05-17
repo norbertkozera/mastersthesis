@@ -10,6 +10,12 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 package pl.nkozera.mastersthesis.place
 
 import android.content.Context
@@ -18,7 +24,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 
 
-class PlacesList {
+class PlacesListsss {
 
 
     fun ceateNewLists(jsonString: String) {
@@ -43,7 +49,7 @@ class PlacesList {
                 val results = jobj.get("results").asJsonArray
                 addResults(results)
                 if (!nextPageToken.isNullOrEmpty()) {
-                    ApiRequest(context!!).request(context!!, getUrl(url, nextPageToken))
+                    // ApiRequest(context!!).request(context!!, getUrl(url, nextPageToken))
                 }
             }
         }

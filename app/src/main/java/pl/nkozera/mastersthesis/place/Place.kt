@@ -4,6 +4,12 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 package pl.nkozera.mastersthesis.place
 
 class Place(
@@ -12,7 +18,7 @@ class Place(
         private val placeName: String,
         private val address: String,
         private val iconUri: String,
-        private val openedNow: Boolean,
+        private val openedNow: String,
         private val rating: Double) {
 
 
@@ -36,7 +42,7 @@ class Place(
         return iconUri
     }
 
-    fun getOpenedNow(): Boolean {
+    fun getOpenedNow(): String {
         return openedNow
     }
 
