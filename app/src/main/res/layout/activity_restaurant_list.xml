@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Master Thiesis project
+  ~ All rights reserved
+  ~ Created by Norbert Kozera <nkozera@gmail.com>
+  -->
+
 <!--
   ~ Master Thiesis project
   ~ All rights reserved
@@ -6,13 +11,9 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!--<Spinner-->
-    <!--android:id="@+id/spinner"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content" />-->
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ProgressBar
         android:id="@+id/restaurantList_progress"
@@ -28,13 +29,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/restaurant_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible"></RelativeLayout>
+            android:visibility="visible" />
+
     </ScrollView>
+
 
 </RelativeLayout>
