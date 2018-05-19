@@ -83,6 +83,7 @@
         <activity android:name=".base.BaseActivity" />
         <activity android:name=".base.BaseMenuActivity" />
         <activity android:name=".UserProfileActivity" />
+        <activity android:name=".PlaceDetailsActivity" />
 
     </application>
 

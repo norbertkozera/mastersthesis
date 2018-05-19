@@ -16,6 +16,12 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 package pl.nkozera.mastersthesis
 
 import android.content.Intent
@@ -26,6 +32,7 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.activity_find_your_city.*
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
 import pl.nkozera.mastersthesis.place.Distance.Companion.getDistance
 import pl.nkozera.mastersthesis.place.LocationCoordinates
@@ -42,6 +49,10 @@ class RestaurantListActivity : BaseMenuActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showProgressBar()
+        places = Places(this)
+        API_KEY = getString(R.string.google_places_api_key)
+        distance = intent.getStringExtra("distance")
+        city = intent.getStringExtra("city")
         location = LocationCoordinates(intent.getDoubleExtra("latitude", 0.0), intent.getDoubleExtra("longitude", 0.0))
         findPlaces()
         hideProgressBar(R.layout.activity_restaurant_list)
@@ -141,14 +152,19 @@ class RestaurantListActivity : BaseMenuActivity() {
 
     private fun onClick(i: Int) {
         Toast.makeText(this, "Klikam w " + placesList[i].getPlaceName(), Toast.LENGTH_LONG).show()
+//        val findRestaurants =
+//        findRestaurants.putExtra("city", city)
+//        findRestaurants.putExtra("distance", distance.text.toString())
+//        findRestaurants.putExtra("latitude", latitude)
+//        findRestaurants.putExtra("longitude", longitude)
+//        showProgressBar()
+        startActivity(Intent(this, PlaceDetailsActivity::class.java))
+//        finish()
     }
 
     private fun findPlaces() {
 
-        places = Places(this)
-        API_KEY = getString(R.string.google_places_api_key)
-        distance = intent.getStringExtra("distance")
-        city = intent.getStringExtra("city")
+
 
         when {
             !distance.isEmpty() -> {
@@ -171,7 +187,6 @@ class RestaurantListActivity : BaseMenuActivity() {
         }
 
     }
-
 
 
     private lateinit var API_KEY: String

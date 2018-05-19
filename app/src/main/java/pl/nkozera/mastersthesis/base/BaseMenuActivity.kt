@@ -9,8 +9,8 @@ package pl.nkozera.mastersthesis.base
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import pl.nkozera.mastersthesis.LoginActivity
 import android.widget.Toast
+import pl.nkozera.mastersthesis.LoginActivity
 import pl.nkozera.mastersthesis.R
 import pl.nkozera.mastersthesis.UserProfileActivity
 

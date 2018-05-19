@@ -4,6 +4,7 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+
 package pl.nkozera.mastersthesis
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
