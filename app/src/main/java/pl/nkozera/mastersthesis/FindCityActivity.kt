@@ -14,7 +14,6 @@ import android.location.Location
 import android.os.Bundle
 import android.support.annotation.IntDef
 import android.view.View
-import android.widget.Toast
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -36,22 +35,17 @@ class FindCityActivity : BaseMenuActivity() {
         initializeFragment()
     }
 
-    override fun onBackPressed() {
-        flag++
-        if (flag < 2) {
-            makeToast(Toast.LENGTH_SHORT, getString(R.string.back_again_logout))
-        } else {
-            firebaseLogOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
-    }
-
     fun lookForRestaurants(@Suppress("UNUSED_PARAMETER") view: View) {
+
         val findRestaurants = Intent(this, RestaurantListActivity::class.java)
         findRestaurants.putExtra("city", city)
         findRestaurants.putExtra("distance", distance.text.toString())
+        findRestaurants.putExtra("latitude", latitude)
+        findRestaurants.putExtra("longitude", longitude)
+        showProgressBar()
         startActivity(findRestaurants)
+        finish()
+
     }
 
     private fun initializeFragment() {
@@ -75,7 +69,9 @@ class FindCityActivity : BaseMenuActivity() {
             PackageManager.PERMISSION_GRANTED -> fusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         if (location != null) {
-                            city = gcd.getFromLocation(location.latitude, location.longitude, 1)[0].locality
+                            latitude = location.latitude
+                            longitude = location.longitude
+                            city = gcd.getFromLocation(latitude, longitude, 1)[0].locality
                             autocompleteFragment.setText(city)
                         }
                     }
@@ -84,6 +80,7 @@ class FindCityActivity : BaseMenuActivity() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var autocompleteFragment: PlaceAutocompleteFragment
-    private lateinit var city: String
-    private var flag = 0;
+    private var city: String = ""
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
 }
