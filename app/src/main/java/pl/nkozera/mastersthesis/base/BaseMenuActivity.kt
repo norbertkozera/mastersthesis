@@ -4,32 +4,15 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
-/*
- * Master Thiesis project
- * All rights reserved
- * Created by Norbert Kozera <nkozera@gmail.com>
- */
-
-/*
- * Master Thiesis project
- * All rights reserved
- * Created by Norbert Kozera <nkozera@gmail.com>
- */
-
-/*
- * Master Thiesis project
- * All rights reserved
- * Created by Norbert Kozera <nkozera@gmail.com>
- */
-
 package pl.nkozera.mastersthesis.base
 
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import pl.nkozera.mastersthesis.LoginActivity
+import android.widget.Toast
 import pl.nkozera.mastersthesis.R
+import pl.nkozera.mastersthesis.UserProfileActivity
 
 
 open class BaseMenuActivity : BaseActivity() {
@@ -57,10 +40,13 @@ open class BaseMenuActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-        // R.id.avatar -> true
+            R.id.profile -> {
+                startActivity(Intent(this, UserProfileActivity::class.java))
+                true
+            }
             R.id.menu_item_logout -> {
                 firebaseLogOut()
-                false
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
