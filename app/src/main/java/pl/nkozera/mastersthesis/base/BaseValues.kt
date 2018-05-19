@@ -19,12 +19,14 @@
 package pl.nkozera.mastersthesis.base
 
 import pl.nkozera.mastersthesis.place.LocationCoordinates
+import pl.nkozera.mastersthesis.place.PlaceDetails
 
 class BaseValues {
     companion object {
-        val DEFAULT_DOUBLE = 0.0
-        val DEFAULT_STRING = ""
-        val DEFAULT_BOOLEAN = false
-        val DEFAULT_LOCATION_COORDINATES = LocationCoordinates(0.0, 0.0)
+        const val DEFAULT_DOUBLE = 0.0
+        const val DEFAULT_STRING = ""
+        const val DEFAULT_BOOLEAN = false
+        val EMPTY_LOCATION_COORDINATES = LocationCoordinates.emptyCoordinates()
+        val EMPTY_PLACE_DETAILS = PlaceDetails.emptyPlace()
     }
 }

@@ -32,24 +32,23 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_find_your_city.*
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
 import pl.nkozera.mastersthesis.place.Distance.Companion.getDistance
 import pl.nkozera.mastersthesis.place.LocationCoordinates
 import pl.nkozera.mastersthesis.place.Place
-import pl.nkozera.mastersthesis.place.Places
+import pl.nkozera.mastersthesis.place.PlacesList
 
 
 class RestaurantListActivity : BaseMenuActivity() {
 
 
-    private lateinit var places: Places
+    private lateinit var places: PlacesList
     private lateinit var placesList: List<Place>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showProgressBar()
-        places = Places(this)
+        places = PlacesList(this)
         API_KEY = getString(R.string.google_places_api_key)
         distance = intent.getStringExtra("distance")
         city = intent.getStringExtra("city")
@@ -151,19 +150,13 @@ class RestaurantListActivity : BaseMenuActivity() {
     }
 
     private fun onClick(i: Int) {
-        Toast.makeText(this, "Klikam w " + placesList[i].getPlaceName(), Toast.LENGTH_LONG).show()
-//        val findRestaurants =
-//        findRestaurants.putExtra("city", city)
-//        findRestaurants.putExtra("distance", distance.text.toString())
-//        findRestaurants.putExtra("latitude", latitude)
-//        findRestaurants.putExtra("longitude", longitude)
-//        showProgressBar()
-        startActivity(Intent(this, PlaceDetailsActivity::class.java))
-//        finish()
+        val placeDetailsActivity = Intent(this, PlaceDetailsActivity::class.java)
+        placeDetailsActivity.putExtra("placeId", placesList[i].getPlaceId())
+        showProgressBar()
+        startActivity(placeDetailsActivity)
     }
 
     private fun findPlaces() {
-
 
 
         when {

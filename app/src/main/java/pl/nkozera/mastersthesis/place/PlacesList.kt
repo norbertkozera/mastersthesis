@@ -29,15 +29,17 @@ import android.content.Context
 import com.google.gson.*
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_BOOLEAN
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_LOCATION_COORDINATES
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_STRING
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_LOCATION_COORDINATES
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_PLACE_DETAILS
 import pl.nkozera.mastersthesis.place.Distance.Companion.getDistance
 import java.util.*
 
 
-class Places(private val context: Context) {
+class PlacesList(private val context: Context) {
 
     private var placesList = LinkedList<Place>()
+    private var placeDetails = EMPTY_PLACE_DETAILS
 
     fun getPlaces(): LinkedList<Place> {
         return placesList
@@ -63,6 +65,31 @@ class Places(private val context: Context) {
 
         print("")
     }
+
+
+    fun findDetails(placeId: String) {//: List<Place>{
+        val response = ApiRequest(context).placeDetails(placeId)
+        val jsonObject = Gson().fromJson(response, JsonObject::class.java)
+        if ("OK".equals(jsonObject.get("status").asString)) {
+            createPlaceDetails(jsonObject.get("results").asJsonArray)
+        }
+    }
+
+    private fun createPlaceDetails(detailsJson: JsonArray) {
+        val jsonArray = Gson().fromJson(detailsJson, JsonArray::class.java)
+
+//        val placeId =
+//        val location: LocationCoordinates,
+//        val placeName =
+//        val photoRef =
+//        val formattedAddress = returnString(jsonArray)
+//        val phoneNumber =
+//        val email =
+//        val openedNow =
+//        val rating: Double,
+//        val comments: List<PlaceComment>
+    }
+
 
     private fun addToPlaceList(results: JsonArray) {
         val jsonArray = Gson().fromJson(results, JsonArray::class.java)
@@ -130,7 +157,7 @@ class Places(private val context: Context) {
         return try {
             LocationCoordinates(jObject.get("lat").asDouble, jObject.get("lng").asDouble)
         } catch (e: Exception) {
-            DEFAULT_LOCATION_COORDINATES
+            EMPTY_LOCATION_COORDINATES
         }
     }
 

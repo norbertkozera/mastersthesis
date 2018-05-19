@@ -158,17 +158,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="5.0"
-                    android:textSize="20sp"
-                    />
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/asfd"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="end"
+                    android:layout_marginLeft="200dp"
                     android:contentDescription="TODO"
-                    app:srcCompat="@drawable/star128"
-                    android:layout_marginLeft="200dp"/>
+                    app:srcCompat="@drawable/star128" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -181,9 +180,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/nameAndRating"
                 android:layout_gravity="end"
                 android:text="Miejsce niedostępne dla niepełnosprawnych z powodu stromych, wąskich schodów prowadzących do lokalu. Można trafić na niegrzeczną obsługę :-("
-                android:layout_below="@id/nameAndRating"
                 android:textSize="14sp" />
 
 

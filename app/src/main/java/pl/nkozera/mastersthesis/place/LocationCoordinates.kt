@@ -39,4 +39,10 @@ class LocationCoordinates(private val latitude: Double, private val longitude: D
         return DEFAULT_DOUBLE.equals(latitude) && DEFAULT_DOUBLE.equals(longitude)
     }
 
+    companion object {
+        fun emptyCoordinates(): LocationCoordinates {
+            return LocationCoordinates(DEFAULT_DOUBLE, DEFAULT_DOUBLE)
+        }
+    }
+
 }
