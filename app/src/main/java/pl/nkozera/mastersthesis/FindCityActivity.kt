@@ -10,6 +10,12 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 package pl.nkozera.mastersthesis
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -42,13 +48,16 @@ class FindCityActivity : BaseMenuActivity() {
     }
 
     fun lookForRestaurants(@Suppress("UNUSED_PARAMETER") view: View) {
+
         val findRestaurants = Intent(this, RestaurantListActivity::class.java)
         findRestaurants.putExtra("city", city)
         findRestaurants.putExtra("distance", distance.text.toString())
         findRestaurants.putExtra("latitude", latitude)
         findRestaurants.putExtra("longitude", longitude)
+        showProgressBar()
         startActivity(findRestaurants)
         finish()
+
     }
 
     private fun initializeFragment() {

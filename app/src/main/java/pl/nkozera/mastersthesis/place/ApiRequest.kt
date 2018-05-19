@@ -10,6 +10,12 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 package pl.nkozera.mastersthesis.place
 
 import android.content.Context
@@ -27,7 +33,7 @@ class ApiRequest(private val context: Context) {
 
     val API_KEY = context.getString(R.string.google_places_api_key)
 
-    fun search(city: String, nextPageToken: String): String {
+    fun findInCity(city: String, nextPageToken: String): String {
 
         try {
             val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
@@ -50,6 +56,38 @@ class ApiRequest(private val context: Context) {
         }
 
     }
+
+
+    fun findNear(location: LocationCoordinates, distance: String, nextPageToken: String): String {
+//https://maps.googleapis.com/maps/api/place/textsearch/json?
+// query=123+main+street&
+// location=42.3675294,-71.186966&
+// radius=10000&key=YOUR_API_KEY
+
+
+        try {
+            val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+            val httpRequestFactory: HttpRequestFactory = NetHttpTransport().createRequestFactory()
+            val request = httpRequestFactory
+                    .buildGetRequest(GenericUrl("https://maps.googleapis.com/maps/api/place/textsearch/json?"))
+            request.url.put("key", API_KEY)
+            request.url.put("location", location.toString())
+            request.url.put("radius", distance)
+            request.url.put("types", "restaurant")
+            if (!nextPageToken.isEmpty()) {
+                request.url.put("pagetoken", nextPageToken)
+            }
+
+            val response = request.execute()
+            return response.parseAsString()
+
+        } catch (e: HttpResponseException) {
+            return ""
+        }
+
+    }
+
 
     private fun cityReplacement(city: String): String {
         return city.replace(" ", "-")
@@ -96,7 +134,7 @@ class ApiRequest(private val context: Context) {
 //
 //
 //
-//    fun search(coordinates: LocationCoordinates, city: String):  PlaceList{
+//    fun findInCity(coordinates: LocationCoordinates, city: String):  PlaceList{
 //        //url.append("https://maps.googleapis.com/maps/api/place/textsearch/json?key=$API_KEY&query=restaurant")
 ////https://developers.google.com/api-client-library/java/google-http-java-client/reference/1.20.0/com/google/api/client/http/HttpTransport
 //        //https://www.programcreek.com/java-api-examples/?api=com.google.api.client.http.HttpRequestFactory

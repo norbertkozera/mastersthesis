@@ -10,6 +10,12 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 
 package pl.nkozera.mastersthesis.place
 
@@ -19,12 +25,13 @@ import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_BOOLEAN
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_LOCATION_COORDINATES
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_STRING
+import pl.nkozera.mastersthesis.place.Distance.Companion.getDistance
 import java.util.*
 
 
 class Places(private val context: Context) {
 
-    private lateinit var placesList: LinkedList<Place>
+    private var placesList = LinkedList<Place>()
 
     fun getPlaces(): LinkedList<Place> {
         return placesList
@@ -35,7 +42,7 @@ class Places(private val context: Context) {
         placesList = LinkedList<Place>()
         do {
             Thread.sleep(4000)
-            val response = ApiRequest(context).search(city, nextPageToken)
+            val response = ApiRequest(context).findInCity(city, nextPageToken)
             val jsonObject = Gson().fromJson(response, JsonObject::class.java)
             nextPageToken = when {
                 jsonObject.get("next_page_token") == null -> ""
@@ -72,6 +79,35 @@ class Places(private val context: Context) {
                     rating
             ))
         }
+    }
+
+
+    private fun addToPlaceList(userLocation: LocationCoordinates, distance: String, results: JsonArray) {
+        val jsonArray = Gson().fromJson(results, JsonArray::class.java)
+        for (i in 0 until jsonArray.size()) {
+
+            val restaurantLocation: LocationCoordinates = returnLocationCoordinates(jsonArray.get(i), "geometry", "location")
+            if (getDistance(userLocation, restaurantLocation) <= (distance.toDouble() / 1000)) {
+
+                val placeId = returnString(jsonArray.get(i), "place_id")
+                val placeName = returnString(jsonArray.get(i), "name")
+                val address = returnString(jsonArray.get(i), "formatted_address")
+                val iconUri = returnString(jsonArray.get(i), "icon")
+                val openedNow = returnString(jsonArray.get(i), "opening_hours", "open_now")
+                val rating = returnDouble(jsonArray.get(i), "rating")
+
+                placesList.add(Place(
+                        placeId,
+                        restaurantLocation,
+                        placeName,
+                        address,
+                        iconUri,
+                        openedNow,
+                        rating
+                ))
+            }
+        }
+        print("")
     }
 
     private fun returnBoolean(obj: JsonElement, vararg names: String): Boolean {
@@ -141,7 +177,24 @@ class Places(private val context: Context) {
 
 
     fun findPlaces(location: LocationCoordinates, distance: String) {//: List<Place>{
+        var nextPageToken = ""
+        placesList = LinkedList<Place>()
+        do {
+            Thread.sleep(4000)
+            val response = ApiRequest(context).findNear(location, distance, nextPageToken)
+            val jsonObject = Gson().fromJson(response, JsonObject::class.java)
+            nextPageToken = when {
+                jsonObject.get("next_page_token") == null -> ""
+                else -> jsonObject.get("next_page_token").asString
+            }
+            if ("OK".equals(jsonObject.get("status").asString)) {
+                addToPlaceList(location, distance, jsonObject.get("results").asJsonArray)
+            }
 
+
+        } while (!nextPageToken.isEmpty())
+
+        print("")
     }
 
 }
