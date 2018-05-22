@@ -1,8 +1,14 @@
+<!--
+  ~ Master Thiesis project
+  ~ All rights reserved
+  ~ Created by Norbert Kozera <nkozera@gmail.com>
+  -->
+
 <resources>
     <string name="facebook_app_id" translatable="false">315142325680843</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb315142325680843</string>
     <string name="facebook_client_token" translatable="false">10f17b21fc4b3a40561f66a94b0c68ef</string>
-    <string name="google_places_api_key" translatable = "false">AIzaSyAny_oMpGWlwG0Mfwcieb0aWZQovIya7_0</string>
+    <string name="google_places_api_key" translatable="false">AIzaSyAny_oMpGWlwG0Mfwcieb0aWZQovIya7_0</string>
 
     <string name="app_label">Restauracje</string>
     <string name="app_name">Praca magisterska</string>
@@ -58,7 +64,7 @@
     <string name="old_pass_incorrect">Stare hasło jest niepoprawne</string>
 
     <!--String related to FindCity-->
-    <string name="find_city">Znajdź miasto</string>
+    <string name="find_city">Znajdź lokalizację</string>
     <string name="nearest_me">Lub w odległości</string>
     <string name="restaurants_in_city">Znajdź restaurację w mieście:</string>
     <string name="action_settings">Ustawienia:</string>

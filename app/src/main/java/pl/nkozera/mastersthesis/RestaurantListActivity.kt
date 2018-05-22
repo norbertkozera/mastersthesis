@@ -4,18 +4,6 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
-/*
- * Master Thiesis project
- * All rights reserved
- * Created by Norbert Kozera <nkozera@gmail.com>
- */
-
-/*
- * Master Thiesis project
- * All rights reserved
- * Created by Norbert Kozera <nkozera@gmail.com>
- */
-
 package pl.nkozera.mastersthesis
 
 import android.content.Intent
@@ -27,25 +15,34 @@ import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import com.bumptech.glide.Glide
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
-import pl.nkozera.mastersthesis.place.Distance.Companion.getDistance
+import pl.nkozera.mastersthesis.place.Distance
 import pl.nkozera.mastersthesis.place.LocationCoordinates
 import pl.nkozera.mastersthesis.place.Place
-import pl.nkozera.mastersthesis.place.Places
+import pl.nkozera.mastersthesis.place.PlacesList
 
 
 class RestaurantListActivity : BaseMenuActivity() {
 
 
-    private lateinit var places: Places
+    private lateinit var places: PlacesList
     private lateinit var placesList: List<Place>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showProgressBar()
+        places = PlacesList(this)
+        API_KEY = getString(R.string.google_places_api_key)
+        distance = intent.getStringExtra("distance")
+        city = intent.getStringExtra("city")
         location = LocationCoordinates(intent.getDoubleExtra("latitude", 0.0), intent.getDoubleExtra("longitude", 0.0))
         findPlaces()
         hideProgressBar(R.layout.activity_restaurant_list)
         printPlaces()
+
+    }
+
+    public override fun onStart() {
+        super.onStart()
 
     }
 
@@ -83,7 +80,7 @@ class RestaurantListActivity : BaseMenuActivity() {
 
 
             val tvDistance = TextView(this)
-            tvDistance.text = "Około ${getDistance(location, place.getLocation())} kilometrów"
+            tvDistance.text = "Około ${Distance().getDistance(location, place.getLocation())} kilometrów"
             tvDistance.textSize = resources.getDimension(R.dimen.restaurant_list_others)
             tvDistance.id = View.generateViewId()
             val tvDistanceParams = RelativeLayout.LayoutParams(R.dimen.restaurant_list_width_location, RelativeLayout.LayoutParams.WRAP_CONTENT)
@@ -107,7 +104,7 @@ class RestaurantListActivity : BaseMenuActivity() {
             tvOpenedNow.id = View.generateViewId()
             val tvOpenedNowParams = RelativeLayout.LayoutParams(R.dimen.restaurant_list_width_location, RelativeLayout.LayoutParams.WRAP_CONTENT)
             tvOpenedNowParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
-//            tvOpenedNowParams.addRule(RelativeLayout.BELOW, tvDistance.id)
+            tvOpenedNowParams.addRule(RelativeLayout.BELOW, tvDistance.id)
             tvOpenedNow.layoutParams = tvOpenedNowParams
             rl.addView(tvOpenedNow)
 
@@ -140,15 +137,16 @@ class RestaurantListActivity : BaseMenuActivity() {
     }
 
     private fun onClick(i: Int) {
-        Toast.makeText(this, "Klikam w " + placesList[i].getPlaceName(), Toast.LENGTH_LONG).show()
+        val placeDetailsActivity = Intent(this, PlaceDetailsActivity::class.java)
+        placeDetailsActivity.putExtra("placeId", placesList[i].getPlaceId())
+        showProgressBar()
+        startActivity(placeDetailsActivity)
+        finish()
+        //flush
     }
 
     private fun findPlaces() {
-
-        places = Places(this)
-        API_KEY = getString(R.string.google_places_api_key)
-        distance = intent.getStringExtra("distance")
-        city = intent.getStringExtra("city")
+        places = PlacesList(this)
 
         when {
             !distance.isEmpty() -> {
@@ -171,7 +169,6 @@ class RestaurantListActivity : BaseMenuActivity() {
         }
 
     }
-
 
 
     private lateinit var API_KEY: String

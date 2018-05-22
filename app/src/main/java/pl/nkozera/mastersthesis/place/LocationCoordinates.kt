@@ -10,6 +10,12 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
+/*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
 package pl.nkozera.mastersthesis.place
 
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
@@ -31,6 +37,12 @@ class LocationCoordinates(private val latitude: Double, private val longitude: D
 
     fun isEmpty(): Boolean {
         return DEFAULT_DOUBLE.equals(latitude) && DEFAULT_DOUBLE.equals(longitude)
+    }
+
+    companion object {
+        fun emptyCoordinates(): LocationCoordinates {
+            return LocationCoordinates(DEFAULT_DOUBLE, DEFAULT_DOUBLE)
+        }
     }
 
 }
