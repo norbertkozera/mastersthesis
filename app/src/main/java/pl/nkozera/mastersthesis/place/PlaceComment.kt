@@ -10,6 +10,8 @@ package pl.nkozera.mastersthesis.place
 class PlaceComment(
         private val commentatorName: String,
         private val comment: String,
+        private val time: String,
+        private val avatar: String,
         private val rating: Double) {
 
 
@@ -19,6 +21,13 @@ class PlaceComment(
 
     fun getComment(): String {
         return comment
+    }
+    fun getTime(): String {
+        return time
+    }
+
+    fun getAvatar(): String {
+        return avatar
     }
 
     fun getRating(): Double {

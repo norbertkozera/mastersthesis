@@ -7,6 +7,7 @@
 
 package pl.nkozera.mastersthesis
 
+import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -31,9 +32,16 @@ class FindCityActivity : BaseMenuActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_your_city)
+        showDistanceLayout()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         currentCity()
         initializeFragment()
+    }
+
+    private fun showDistanceLayout() {
+        @IntDef when (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                PackageManager.PERMISSION_GRANTED -> distance_layout.visibility = View.VISIBLE
+            }
     }
 
     fun lookForRestaurants(@Suppress("UNUSED_PARAMETER") view: View) {

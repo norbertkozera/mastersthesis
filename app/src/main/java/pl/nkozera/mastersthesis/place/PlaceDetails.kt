@@ -6,9 +6,12 @@
 
 package pl.nkozera.mastersthesis.place
 
+import android.net.Uri
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_LOCATION_COORDINATES
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_STRING
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_STRING
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_URI
+import java.net.URI
 
 class PlaceDetails(
         private val placeId: String,
@@ -17,7 +20,7 @@ class PlaceDetails(
         private val photoRef: String,
         private val formattedAddress: String,
         private val phoneNumber: String,
-        private val email: String,
+        private val website: String,
         private val openedNow: String,
         private val rating: Double,
         private val comments: List<PlaceComment>) {
@@ -51,12 +54,12 @@ class PlaceDetails(
         return formattedAddress
     }
 
-    fun getPhoneNumber(): Int {
-        return phoneNumber.replace(" ", "").toInt()
+    fun getPhoneNumber(): String {
+        return phoneNumber.replace(" ", "")
     }
 
-    fun getEmail(): String {
-        return email
+    fun getWebsite(): String {
+        return website
     }
 
     fun getComments(): List<PlaceComment> {
@@ -65,7 +68,7 @@ class PlaceDetails(
 
     companion object {
         fun emptyPlace(): PlaceDetails {
-            return PlaceDetails(DEFAULT_STRING, EMPTY_LOCATION_COORDINATES, DEFAULT_STRING, DEFAULT_STRING, DEFAULT_STRING, DEFAULT_STRING, DEFAULT_STRING, DEFAULT_STRING, DEFAULT_DOUBLE, emptyList())
+            return PlaceDetails(EMPTY_STRING, EMPTY_LOCATION_COORDINATES, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, EMPTY_STRING, DEFAULT_DOUBLE, emptyList())
         }
     }
 

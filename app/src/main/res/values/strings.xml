@@ -64,7 +64,7 @@
     <string name="old_pass_incorrect">Stare hasło jest niepoprawne</string>
 
     <!--String related to FindCity-->
-    <string name="find_city">Znajdź miasto</string>
+    <string name="find_city">Znajdź lokalizację</string>
     <string name="nearest_me">Lub w odległości</string>
     <string name="restaurants_in_city">Znajdź restaurację w mieście:</string>
     <string name="action_settings">Ustawienia:</string>

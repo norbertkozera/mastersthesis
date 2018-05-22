@@ -6,14 +6,18 @@
 
 package pl.nkozera.mastersthesis
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
 import android.view.View
 import android.widget.RelativeLayout
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -48,6 +52,7 @@ class LoginActivity : BaseActivity() {
     private lateinit var googleSignInOptions: GoogleSignInOptions
     private val RC_SIGN_IN: Int = 1
     private val GET_FROM_GALLERY: Int = 2
+    private val ASK_FOR_PERMISSTIONS: Int = 3
     private lateinit var mCallbackManager: CallbackManager
     private var avatarUrl: Uri = Uri.EMPTY
     val content = R.layout.activity_login
@@ -56,6 +61,10 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(content)
+
+//        Ask for permission
+
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), ASK_FOR_PERMISSTIONS)
 
 //        Google login
 
@@ -104,6 +113,32 @@ class LoginActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            ASK_FOR_PERMISSTIONS -> {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+//                    finish()
+//                    startActivity(intent)
+//                    return
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show()
+                }
+//                return
+            }
+        }// other 'case' lines to check for other
+        // permissions this app might request
     }
 
     private fun updateUI(user: FirebaseUser?) {

@@ -6,8 +6,9 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/rl1">
 
 
         <TextView
@@ -33,8 +34,11 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/distance_layout"
+        android:layout_below="@id/rl1"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/textView2"
@@ -42,8 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="169dp"
-            android:text="@string/nearest_me" />
+            android:layout_marginTop="16dp"
+            android:text="@string/nearest_me"
+            />
 
         <EditText
             android:id="@+id/distance"
@@ -55,17 +60,21 @@
             android:ems="10"
             android:hint="@string/m_from_me"
             android:inputType="number"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            />
 
 
-        <Button
-            android:id="@+id/search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="184dp"
-            android:onClick="lookForRestaurants"
-            android:text="@string/search" />
+
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:onClick="lookForRestaurants"
+        android:text="@string/search"
+        android:layout_below="@+id/distance_layout"
+        android:layout_marginTop="16dp"
+        />
 </RelativeLayout>

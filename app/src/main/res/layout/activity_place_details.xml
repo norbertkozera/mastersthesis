@@ -35,12 +35,21 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/places_details_opened_now"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/place_name"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="OTWARTE"
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/restaurant_photo"
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:layout_below="@id/place_name"
+            android:layout_below="@id/places_details_opened_now"
             android:layout_centerHorizontal="true"
             android:contentDescription="TODO"
             app:srcCompat="@drawable/restaurant_placeholder" />
@@ -52,50 +61,51 @@
             android:layout_below="@id/restaurant_photo"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/star1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:contentDescription="TODO"
-                android:singleLine="true"
-                app:srcCompat="@drawable/star128" />
+            <!--<ImageView-->
+                <!--android:id="@+id/star1"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:contentDescription="TODO"-->
+                <!--android:singleLine="true"-->
+                <!--app:srcCompat="@drawable/star128" />-->
 
 
-            <ImageView
-                android:id="@+id/star2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:contentDescription="TODO"
-                android:singleLine="true"
-                app:srcCompat="@drawable/star128" />
+            <!--<ImageView-->
+                <!--android:id="@+id/star2"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:contentDescription="TODO"-->
+                <!--android:singleLine="true"-->
+                <!--app:srcCompat="@drawable/star128" />-->
 
-            <ImageView
-                android:id="@+id/star3"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:contentDescription="TODO"
-                app:srcCompat="@drawable/star128" />
+            <!--<ImageView-->
+                <!--android:id="@+id/star3"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:contentDescription="TODO"-->
+                <!--app:srcCompat="@drawable/star128" />-->
 
-            <ImageView
-                android:id="@+id/star4"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:contentDescription="TODO"
-                app:srcCompat="@drawable/star128" />
+            <!--<ImageView-->
+                <!--android:id="@+id/star4"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:contentDescription="TODO"-->
+                <!--app:srcCompat="@drawable/star128" />-->
 
-            <ImageView
-                android:id="@+id/star5"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:contentDescription="TODO"
-                app:srcCompat="@drawable/star128" />
+            <!--<ImageView-->
+                <!--android:id="@+id/star5"-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:contentDescription="TODO"-->
+                <!--app:srcCompat="@drawable/star128" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:text="5.0"
-                android:textSize="30sp" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="50dp"-->
+                <!--android:text="5.0"-->
+                <!--android:id="@+id/overall_rating"-->
+                <!--android:textSize="30sp" />-->
         </LinearLayout>
 
         <TextView
@@ -118,7 +128,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/places_details_email"
+            android:id="@+id/places_details_website"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/places_details_phone"
@@ -132,61 +142,70 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/places_details_email"
+            android:layout_below="@id/places_details_website"
             android:layout_marginTop="16dp"
             android:text="Komentarze"
             android:textAlignment="center"
             android:textSize="30sp" />
 
 
-        <RelativeLayout
-            android:id="@+id/place_details_comments_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/places_details_comments"
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/place_details_comments_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/places_details_comments"-->
 
-            android:orientation="vertical">
+            <!--android:orientation="vertical">-->
 
             <LinearLayout
-                android:id="@+id/nameAndRating"
-                android:layout_width="fill_parent"
+                android:id="@+id/place_details_comments_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:layout_below="@id/places_details_comments"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:text="5.0"
-                    android:textSize="20sp" />
+            <!--<LinearLayout-->
+                <!--android:id="@+id/nameAndRating"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="horizontal">-->
 
-                <ImageView
-                    android:id="@+id/asfd"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="end"
-                    android:layout_marginLeft="200dp"
-                    android:contentDescription="TODO"
-                    app:srcCompat="@drawable/star128" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="10dp"-->
+                    <!--android:text="5.0"-->
+                    <!--android:textSize="20sp" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:text="5.0"
-                    android:textSize="20sp" />
-            </LinearLayout>
+                <!--<ImageView-->
+                    <!--android:id="@+id/asfd"-->
+                    <!--android:layout_width="20dp"-->
+                    <!--android:layout_height="20dp"-->
+                    <!--android:layout_gravity="end"-->
+                    <!--android:layout_marginLeft="200dp"-->
+                    <!--android:contentDescription="TODO"-->
+                    <!--app:srcCompat="@drawable/star128" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/nameAndRating"
-                android:layout_gravity="end"
-                android:text="Miejsce niedostępne dla niepełnosprawnych z powodu stromych, wąskich schodów prowadzących do lokalu. Można trafić na niegrzeczną obsługę :-("
-                android:textSize="14sp" />
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="end"-->
+                    <!--android:text="5.0"-->
+                    <!--android:textSize="20sp" />-->
+            <!--</LinearLayout>-->
+
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/nameAndRating"-->
+                <!--android:layout_gravity="end"-->
+                <!--android:text="Miejsce niedostępne dla niepełnosprawnych z powodu stromych, wąskich schodów prowadzących do lokalu. Można trafić na niegrzeczną obsługę :-("-->
+                <!--android:textSize="14sp" />-->
 
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
     </RelativeLayout>
 </ScrollView>
