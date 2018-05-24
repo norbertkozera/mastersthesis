@@ -1,5 +1,5 @@
 <!--
-  ~ Master Thiesis project
+  ~ Master Thesis project
   ~ All rights reserved
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
@@ -62,12 +62,21 @@
     <string name="password_changed">Hasło zostało zmienione</string>
     <string name="password_not_changed">Hasło nie zostało zmienione, spróbuj ponownie</string>
     <string name="old_pass_incorrect">Stare hasło jest niepoprawne</string>
+    <string name="opened">Otwarte</string>
+    <string name="closed">Zamknięte</string>
+    <string name="show_in_google_maps">Pokaż w Mapach Google</string>
+    <string name="distance_about_kilometers">Około %d kilometrów</string>
+
 
     <!--String related to FindCity-->
     <string name="find_city">Znajdź lokalizację</string>
     <string name="nearest_me">Lub w odległości</string>
     <string name="restaurants_in_city">Znajdź restaurację w mieście:</string>
     <string name="action_settings">Ustawienia:</string>
+    <string name="permission_allowed">Uprawnienie przyznano</string>
+    <string name="location_denied">Localizacja zabroniona, aby to zmienić kliknij tutaj</string>
+    <string name="location_not_allowed">Nie pozwoliles na lokalizację</string>
+    <string name="photo">Zdjęcie</string>
 
 
     <string name="error_invalid_email">Proszę podać poprawny adres email</string>

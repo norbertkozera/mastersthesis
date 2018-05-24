@@ -1,5 +1,5 @@
 /*
- * Master Thiesis project
+ * Master Thesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
@@ -13,13 +13,35 @@ import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_LOCATION_COORDINATES
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_PLACE_DETAILS
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_STRING
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.FORMATTED_ADDRESS
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.OK
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_OPEN_NOW
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_AUTHOR_NAME
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_COMMENTS
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_GEOMETRY
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_ICON
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_LATITUDE_SHORT
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_LOCATION
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_LONGITUDE_SHORT
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_NAME
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_NEXT_PAGE_TOKEN
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_OPENING_HOURS
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PHONE_NUMBER
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PHOTOS
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PHOTO_REFERENCE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PHOTO_URL
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PLACE_ID_GOOGLE_API
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_RATING
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_RESULT
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_RESULTS
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_STATUS
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_TEXT
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_TIME
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_WEBPAGE
 import java.util.*
 
 
 class PlacesList(private val context: Context) {
-
-    private var placesList = LinkedList<Place>()
-    private var placeDetails = EMPTY_PLACE_DETAILS
 
     fun getPlaces(): LinkedList<Place> {
         return placesList
@@ -29,52 +51,43 @@ class PlacesList(private val context: Context) {
         return placeDetails
     }
 
-    fun findPlaces(city: String) {//: List<Place>{
-        var nextPageToken = ""
-        placesList = LinkedList<Place>()
+    fun findPlaces(city: String) {
+        var nextPageToken = EMPTY_STRING
+        placesList = LinkedList()
         do {
             Thread.sleep(4000)
             val response = ApiRequest(context).findInCity(city, nextPageToken)
             val jsonObject = Gson().fromJson(response, JsonObject::class.java)
             nextPageToken = when {
-                jsonObject.get("next_page_token") == null -> ""
-                else -> jsonObject.get("next_page_token").asString
+                jsonObject.get(PARAM_NEXT_PAGE_TOKEN) == null -> EMPTY_STRING
+                else -> jsonObject.get(PARAM_NEXT_PAGE_TOKEN).asString
             }
-            if ("OK".equals(jsonObject.get("status").asString)) {
-                addToPlaceList(jsonObject.get("results").asJsonArray)
+            if (OK == jsonObject.get(PARAM_STATUS).asString) {
+                addToPlaceList(jsonObject.get(PARAM_RESULTS).asJsonArray)
             }
-
-
         } while (!nextPageToken.isEmpty())
-
-        print("")
     }
 
-
-    fun findDetails(placeId: String) {//: List<Place>{
+    fun findDetails(placeId: String) {
         val response = ApiRequest(context).placeDetails(placeId)
         val jsonObject = Gson().fromJson(response, JsonObject::class.java)
-        if ("OK".equals(jsonObject.get("status").asString)) {
-            createPlaceDetails(jsonObject.get("result"))
+        if (OK == jsonObject.get(PARAM_STATUS).asString) {
+            createPlaceDetails(jsonObject.get(PARAM_RESULT))
         }
     }
 
     private fun createPlaceDetails(detailsJson: JsonElement) {
-        //  val jsonArray = Gson().fromJson(detailsJson, JsonArray::class.java)
-
-        print("")
-
-        returnJsonArray(detailsJson, arrayOf("photos"))
-        val placeId = returnString(detailsJson, "place_id")
-        val location = returnLocationCoordinates(detailsJson, "geometry", "location")
-        val placeName = returnString(detailsJson, "name")
-        val photoRef = returnString(returnJsonArray(detailsJson, arrayOf("photos")).get(0), "photo_reference")
-        val address = returnString(detailsJson, "formatted_address")
-        val phoneNumber = returnString(detailsJson, "international_phone_number")
-        val website = returnString(detailsJson, "website")
-        val openedNow = returnString(detailsJson, "opening_hours", "open_now")
-        val rating = returnDouble(detailsJson, "rating")
-        val comments = getComments(returnJsonArray(detailsJson, arrayOf("reviews")))
+        returnJsonArray(detailsJson, arrayOf(PARAM_PHOTOS))
+        val placeId = returnString(detailsJson, PARAM_PLACE_ID_GOOGLE_API)
+        val location = returnLocationCoordinates(detailsJson, PARAM_GEOMETRY, PARAM_LOCATION)
+        val placeName = returnString(detailsJson, PARAM_NAME)
+        val photoRef = returnString(returnJsonArray(detailsJson, arrayOf(PARAM_PHOTOS)).get(0), PARAM_PHOTO_REFERENCE)
+        val address = returnString(detailsJson, FORMATTED_ADDRESS)
+        val phoneNumber = returnString(detailsJson, PARAM_PHONE_NUMBER)
+        val website = returnString(detailsJson, PARAM_WEBPAGE)
+        val openedNow = returnString(detailsJson, PARAM_OPENING_HOURS, PARAM_OPEN_NOW)
+        val rating = returnDouble(detailsJson, PARAM_RATING)
+        val comments = getComments(returnJsonArray(detailsJson, arrayOf(PARAM_COMMENTS)))
 
         placeDetails = PlaceDetails(
                 placeId,
@@ -95,27 +108,26 @@ class PlacesList(private val context: Context) {
 
         for (comment in commentsJsonArray) {
             list.add(PlaceComment(
-                    returnString(comment, "author_name"),
-                    returnString(comment, "text"),
-                    returnString(comment, "relative_time_description"),
-                    returnString(comment, "profile_photo_url"),
-                    returnDouble(comment, "rating")
+                    returnString(comment, PARAM_AUTHOR_NAME),
+                    returnString(comment, PARAM_TEXT),
+                    returnString(comment, PARAM_TIME),
+                    returnString(comment, PARAM_PHOTO_URL),
+                    returnDouble(comment, PARAM_RATING)
             ))
         }
         return list
     }
 
-
     private fun addToPlaceList(results: JsonArray) {
         val jsonArray = Gson().fromJson(results, JsonArray::class.java)
         for (i in 0 until jsonArray.size()) {
-            val placeId = returnString(jsonArray.get(i), "place_id")
-            val location: LocationCoordinates = returnLocationCoordinates(jsonArray.get(i), "geometry", "location")
-            val placeName = returnString(jsonArray.get(i), "name")
-            val address = returnString(jsonArray.get(i), "formatted_address")
-            val iconUri = returnString(jsonArray.get(i), "icon")
-            val openedNow = returnString(jsonArray.get(i), "opening_hours", "open_now")
-            val rating = returnDouble(jsonArray.get(i), "rating")
+            val placeId = returnString(jsonArray.get(i), PARAM_PLACE_ID_GOOGLE_API)
+            val location: LocationCoordinates = returnLocationCoordinates(jsonArray.get(i), PARAM_GEOMETRY, PARAM_LOCATION)
+            val placeName = returnString(jsonArray.get(i), PARAM_NAME)
+            val address = returnString(jsonArray.get(i), FORMATTED_ADDRESS)
+            val iconUri = returnString(jsonArray.get(i), PARAM_ICON)
+            val openedNow = returnString(jsonArray.get(i), PARAM_OPENING_HOURS, PARAM_OPEN_NOW)
+            val rating = returnDouble(jsonArray.get(i), PARAM_RATING)
 
             placesList.add(Place(
                     placeId,
@@ -129,20 +141,19 @@ class PlacesList(private val context: Context) {
         }
     }
 
-
     private fun addToPlaceList(userLocation: LocationCoordinates, distance: String, results: JsonArray) {
         val jsonArray = Gson().fromJson(results, JsonArray::class.java)
         for (i in 0 until jsonArray.size()) {
 
-            val restaurantLocation: LocationCoordinates = returnLocationCoordinates(jsonArray.get(i), "geometry", "location")
+            val restaurantLocation: LocationCoordinates = returnLocationCoordinates(jsonArray.get(i), PARAM_GEOMETRY, PARAM_LOCATION)
             if (Distance().getDistance(userLocation, restaurantLocation) <= (distance.toDouble() / 1000)) {
 
-                val placeId = returnString(jsonArray.get(i), "place_id")
-                val placeName = returnString(jsonArray.get(i), "name")
-                val address = returnString(jsonArray.get(i), "formatted_address")
-                val iconUri = returnString(jsonArray.get(i), "icon")
-                val openedNow = returnString(jsonArray.get(i), "opening_hours", "open_now")
-                val rating = returnDouble(jsonArray.get(i), "rating")
+                val placeId = returnString(jsonArray.get(i), PARAM_PLACE_ID_GOOGLE_API)
+                val placeName = returnString(jsonArray.get(i), PARAM_NAME)
+                val address = returnString(jsonArray.get(i), FORMATTED_ADDRESS)
+                val iconUri = returnString(jsonArray.get(i), PARAM_ICON)
+                val openedNow = returnString(jsonArray.get(i), PARAM_OPENING_HOURS, PARAM_OPEN_NOW)
+                val rating = returnDouble(jsonArray.get(i), PARAM_RATING)
 
                 placesList.add(Place(
                         placeId,
@@ -155,7 +166,6 @@ class PlacesList(private val context: Context) {
                 ))
             }
         }
-        print("")
     }
 
     private fun returnBoolean(obj: JsonElement, vararg names: String): Boolean {
@@ -170,7 +180,7 @@ class PlacesList(private val context: Context) {
     private fun returnLocationCoordinates(obj: JsonElement, vararg elements: String): LocationCoordinates {
         val jObject = returnJsonObject(obj, elements)
         return try {
-            LocationCoordinates(jObject.get("lat").asDouble, jObject.get("lng").asDouble)
+            LocationCoordinates(jObject.get(PARAM_LATITUDE_SHORT).asDouble, jObject.get(PARAM_LONGITUDE_SHORT).asDouble)
         } catch (e: Exception) {
             EMPTY_LOCATION_COORDINATES
         }
@@ -196,14 +206,14 @@ class PlacesList(private val context: Context) {
 
     private fun returnJsonPrimitive(obj: JsonElement, names: Array<out String>): JsonPrimitive {
         var jObj = obj
-        for (name in names) {//TODO ERROR
+        for (name in names) {
             jObj = try {
                 jObj.asJsonObject.get(name)
             } catch (e: IllegalStateException) {
                 if (jObj.isJsonObject && jObj.asJsonObject.get(name) == null) {
-                    JsonPrimitive("")
+                    JsonPrimitive(EMPTY_STRING)
                 } else {
-                    JsonPrimitive("")
+                    JsonPrimitive(EMPTY_STRING)
                 }
 
             }
@@ -235,26 +245,24 @@ class PlacesList(private val context: Context) {
         return jArr.asJsonArray
     }
 
-
     fun findPlaces(location: LocationCoordinates, distance: String) {//: List<Place>{
-        var nextPageToken = ""
-        placesList = LinkedList<Place>()
+        var nextPageToken = EMPTY_STRING
+        placesList = LinkedList()
         do {
             Thread.sleep(4000)
             val response = ApiRequest(context).findNear(location, distance, nextPageToken)
             val jsonObject = Gson().fromJson(response, JsonObject::class.java)
             nextPageToken = when {
-                jsonObject.get("next_page_token") == null -> ""
-                else -> jsonObject.get("next_page_token").asString
+                jsonObject.get(PARAM_NEXT_PAGE_TOKEN) == null -> EMPTY_STRING
+                else -> jsonObject.get(PARAM_NEXT_PAGE_TOKEN).asString
             }
-            if ("OK".equals(jsonObject.get("status").asString)) {
-                addToPlaceList(location, distance, jsonObject.get("results").asJsonArray)
+            if (OK == jsonObject.get(PARAM_STATUS).asString) {
+                addToPlaceList(location, distance, jsonObject.get(PARAM_RESULTS).asJsonArray)
             }
-
-
         } while (!nextPageToken.isEmpty())
-
-        print("")
     }
+
+    private var placesList = LinkedList<Place>()
+    private var placeDetails = EMPTY_PLACE_DETAILS
 
 }

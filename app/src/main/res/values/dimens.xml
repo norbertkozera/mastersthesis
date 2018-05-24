@@ -1,11 +1,11 @@
 <!--
-  ~ Master Thiesis project
+  ~ Master Thesis project
   ~ All rights reserved
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
 
 <!--
-  ~ Master Thiesis project
+  ~ Master Thesis project
   ~ All rights reserved
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
@@ -20,6 +20,7 @@
     <dimen name="place_details_rating_text_margin">50dp</dimen>
     <dimen name="place_details_rating_comment_margin">50dp</dimen>
     <dimen name="restaurant_list_others">7sp</dimen>
+    <dimen name="text_20_sp">20sp</dimen>
     <dimen name="restaurant_list_width_location">190dp</dimen>
     <dimen name="restaurant_list_icon_size">50</dimen>
     <dimen name="restaurant_list_element_height">110dp</dimen>

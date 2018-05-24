@@ -1,9 +1,8 @@
 <!--
-  ~ Master Thiesis project
+  ~ Master Thesis project
   ~ All rights reserved
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
-
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,8 +26,8 @@
             android:id="@+id/user_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/avatar_image_view"
@@ -36,6 +35,7 @@
                 android:layout_height="250dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
+                android:contentDescription="@string/photo"
                 android:visibility="visible"
                 app:srcCompat="@drawable/profile_placeholder" />
 
@@ -66,10 +66,10 @@
                 android:layout_alignWithParentIfMissing="true"
                 android:layout_below="@+id/userEmail"
                 android:layout_marginTop="16dp"
+                android:onClick="changePass"
                 android:text="@string/change_pass"
                 android:textStyle="bold"
-                android:onClick="changePass"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/logout_button"
@@ -77,9 +77,9 @@
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/userEmail"
-                android:gravity="center"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
+                android:gravity="center"
                 android:onClick="logout"
                 android:text="@string/action_logout"
                 android:textStyle="bold" />
@@ -110,8 +110,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:hint="@string/prompt_password"
                 android:layout_below="@+id/old_password"
+                android:hint="@string/prompt_password"
                 android:imeActionLabel="@string/prompt_new_password"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"

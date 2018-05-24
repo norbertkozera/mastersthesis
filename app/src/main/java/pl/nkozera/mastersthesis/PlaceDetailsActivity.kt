@@ -1,5 +1,5 @@
 /*
- * Master Thiesis project
+ * Master Thesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
@@ -20,7 +20,13 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_place_details.*
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_INT
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_STRING
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.GOOGLE_MAPS_DIRECT_TO
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.GOOGLE_MAPS_URL
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.HTML_TEL
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PLACE_ID
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.SPACE
 import pl.nkozera.mastersthesis.place.ApiRequest
 import pl.nkozera.mastersthesis.place.PlaceDetails
 import pl.nkozera.mastersthesis.place.PlacesList
@@ -28,95 +34,84 @@ import pl.nkozera.mastersthesis.place.PlacesList
 
 class PlaceDetailsActivity : BaseMenuActivity() {
 
-
-    private lateinit var placeDetails: PlaceDetails
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_place_details)
-        val placeId = intent.getStringExtra("placeId")
+        val placeId = intent.getStringExtra(PARAM_PLACE_ID)
 
         val details = PlacesList(this)
         details.findDetails(placeId)
         placeDetails = details.getCurrentPlaceDetails()
         applyDetails()
-
     }
 
     private fun applyDetails() {
+        //setup average place rating view
         val inflater = LayoutInflater.from(this)
-        val v = inflater.inflate(R.layout.activity_place_details, null)
-        val linearLayout = v.findViewById(R.id.rating) as LinearLayout
+        val activityPlaceDetails = inflater.inflate(R.layout.activity_place_details, null) //FIXME Do not use null as ViewGroup
+        val ratingLinearLayout = activityPlaceDetails.findViewById(R.id.rating) as LinearLayout
         for (i in 1..5) {
-            val iwStar = ImageView(this)
-            iwStar.id = View.generateViewId()
+            val starsImageView = ImageView(this)
+            starsImageView.id = View.generateViewId()
             val iwIconParams = LinearLayout.LayoutParams(resources.getDimension(R.dimen.place_details_star).toInt(), resources.getDimension(R.dimen.place_details_star).toInt())
-            iwStar.layoutParams = iwIconParams
+            starsImageView.layoutParams = iwIconParams
 
             when {
-                i <= placeDetails.getRating() -> iwStar.setImageDrawable(getDrawable(R.drawable.star128))
-                i - 0.7 < placeDetails.getRating() && i - 0.3 > placeDetails.getRating() -> iwStar.setImageDrawable(getDrawable(R.drawable.star128_half))
-                else -> iwStar.setImageDrawable(getDrawable(R.drawable.star128_emptyf))
+                i <= placeDetails.getRating() -> starsImageView.setImageDrawable(getDrawable(R.drawable.star128))
+                i - 0.7 < placeDetails.getRating() && i - 0.3 > placeDetails.getRating() -> starsImageView.setImageDrawable(getDrawable(R.drawable.star128_half))
+                else -> starsImageView.setImageDrawable(getDrawable(R.drawable.star128_emptyf))
             }
 
-            linearLayout.addView(iwStar)
-
+            ratingLinearLayout.addView(starsImageView)
         }
 
-        val twRating = TextView(this)
-        twRating.text = placeDetails.getRating().toString()
-        twRating.textSize = resources.getDimension(R.dimen.place_details_rating_text)
-        twRating.id = View.generateViewId()
+        val ratingTextView = TextView(this)
+        ratingTextView.text = placeDetails.getRating().toString()
+        ratingTextView.textSize = resources.getDimension(R.dimen.place_details_rating_text)
+        ratingTextView.id = View.generateViewId()
         val twRatingParams = RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        twRatingParams.setMargins(resources.getDimension(R.dimen.place_details_rating_text_margin).toInt(), 0, 0, 0)
-        twRating.layoutParams = twRatingParams
+        twRatingParams.setMargins(resources.getDimension(R.dimen.place_details_rating_text_margin).toInt(), DEFAULT_INT, DEFAULT_INT, DEFAULT_INT)
+        ratingTextView.layoutParams = twRatingParams
 
-        linearLayout.addView(twRating)
+        ratingLinearLayout.addView(ratingTextView)
 
-        val ll = LinearLayout(this)
-        ll.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        ll.gravity = Gravity.CENTER
-
+        //setup place comments view
         val comments = placeDetails.getComments()
-
-        val commentsView = v.findViewById(R.id.place_details_comments_layout) as LinearLayout
-
-
+        val commentsLinearLayout = activityPlaceDetails.findViewById(R.id.place_details_comments_layout) as LinearLayout
         for (i in 0 until comments.size) {
             val comment = comments[i]
 
-            val rl = RelativeLayout(this)
-            rl.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            rl.background = resources.getDrawable(R.drawable.custom_background_top)
+            val commentatorNameAndRatingRelativeLayout = RelativeLayout(this)
+            commentatorNameAndRatingRelativeLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            commentatorNameAndRatingRelativeLayout.background = resources.getDrawable(R.drawable.custom_background_top, theme)
 
-            val ll = LinearLayout(this)
-            val llparams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            ll.gravity = Gravity.CENTER
+            val commentatorAndRatingCurrentCommentLinearLayout = LinearLayout(this)
+            val commentatorAndRatingCurrentCommentLinearLayoutParameters = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            commentatorAndRatingCurrentCommentLinearLayout.gravity = Gravity.CENTER
+            commentatorAndRatingCurrentCommentLinearLayout.id = View.generateViewId()
+            commentatorAndRatingCurrentCommentLinearLayout.layoutParams = commentatorAndRatingCurrentCommentLinearLayoutParameters
 
-            ll.id = View.generateViewId()
-            ll.layoutParams = llparams
+            val cmmentatorNameTextView = TextView(this)
+            cmmentatorNameTextView.text = comment.getCommentatorName()
+            cmmentatorNameTextView.textSize = resources.getDimension(R.dimen.place_details_rating_text)
 
-            val tvCommentatorName = TextView(this)
-            tvCommentatorName.text = comment.getCommentatorName()
-            tvCommentatorName.textSize = resources.getDimension(R.dimen.place_details_rating_text)
+            commentatorAndRatingCurrentCommentLinearLayout.addView(cmmentatorNameTextView)
 
-            ll.addView(tvCommentatorName)
+            val commentatorRatingStarTextView = ImageView(this)
+            val commentatorRatingStarTextViewParameters = LinearLayout.LayoutParams(resources.getDimension(R.dimen.place_details_star).toInt(), resources.getDimension(R.dimen.place_details_star).toInt())
+            commentatorRatingStarTextViewParameters.gravity = Gravity.END
+            commentatorRatingStarTextViewParameters.setMargins(resources.getDimension(R.dimen.place_details_rating_comment_margin).toInt(), DEFAULT_INT, DEFAULT_INT, DEFAULT_INT)
+            commentatorRatingStarTextView.layoutParams = commentatorRatingStarTextViewParameters
+            commentatorRatingStarTextView.setImageDrawable(getDrawable(R.drawable.star128))
 
-            val iwStar = ImageView(this)
+            commentatorAndRatingCurrentCommentLinearLayout.addView(commentatorRatingStarTextView)
 
-            val iwIconParams = LinearLayout.LayoutParams(resources.getDimension(R.dimen.place_details_star).toInt(), resources.getDimension(R.dimen.place_details_star).toInt())
-            iwIconParams.gravity = Gravity.END
-            iwIconParams.setMargins(resources.getDimension(R.dimen.place_details_rating_comment_margin).toInt(), 0, 0, 0)
-            iwStar.layoutParams = iwIconParams
-            iwStar.setImageDrawable(getDrawable(R.drawable.star128))
+            val commentatorRatingTextView = TextView(this)
+            commentatorRatingTextView.text = comment.getRating().toString()
+            commentatorRatingTextView.textSize = resources.getDimension(R.dimen.place_details_rating_text)
 
-            ll.addView(iwStar)
-
-            val tvUserRating = TextView(this)
-            tvUserRating.text = comment.getRating().toString()
-            tvUserRating.textSize = resources.getDimension(R.dimen.place_details_rating_text)
-
-            ll.addView(tvUserRating)
-            rl.addView(ll)
+            commentatorAndRatingCurrentCommentLinearLayout.addView(commentatorRatingTextView)
+            commentatorNameAndRatingRelativeLayout.addView(commentatorAndRatingCurrentCommentLinearLayout)
 
 
             val tvCommentText = TextView(this)
@@ -125,59 +120,59 @@ class PlaceDetailsActivity : BaseMenuActivity() {
 
             val tvDistanceParams = RelativeLayout.LayoutParams(R.dimen.restaurant_list_width_location, RelativeLayout.LayoutParams.WRAP_CONTENT)
             tvDistanceParams.addRule(RelativeLayout.ALIGN_PARENT_END)
-            tvDistanceParams.addRule(RelativeLayout.BELOW, ll.id)
+            tvDistanceParams.addRule(RelativeLayout.BELOW, commentatorAndRatingCurrentCommentLinearLayout.id)
             tvCommentText.layoutParams = tvDistanceParams
 
-            rl.addView(tvCommentText)
-            commentsView.addView(rl)
+            commentatorNameAndRatingRelativeLayout.addView(tvCommentText)
+            commentsLinearLayout.addView(commentatorNameAndRatingRelativeLayout)
 
         }
 
-        setContentView(v)
+        setContentView(activityPlaceDetails)
 
+        //setup place name
         place_name.text = placeDetails.getPlaceName()
 
-        places_details_opened_now.text = if (EMPTY_STRING.equals(placeDetails.getOpenedNow())) {
+        //setup info if place is now opened
+        places_details_opened_now.text = if (EMPTY_STRING == placeDetails.getOpenedNow()) {
             places_details_opened_now.visibility = View.INVISIBLE
             EMPTY_STRING
         } else {
             places_details_opened_now.visibility = View.VISIBLE
             when (placeDetails.getOpenedNow().toBoolean()) {
-                true -> "OTWARTE!"
-                false -> "ZAMKNIĘTE!"
+                true -> getString(R.string.opened).toUpperCase()
+                false -> getString(R.string.closed).toUpperCase()
             }
         }
 
+        //setup photo preseting restaurant
         val photoUrl = ApiRequest(this).placePhoto(restaurant_photo.layoutParams.width, restaurant_photo.layoutParams.height, placeDetails.getPhotoRef())
-        if (!EMPTY_STRING.equals(photoUrl)) {
+        if (EMPTY_STRING != photoUrl) {
             Glide.with(this).load(photoUrl).into(restaurant_photo)
         }
 
-
-
-        places_details_address.text = if (EMPTY_STRING.equals(placeDetails.getAddress())) {
+        //setup place address and click listener for opening google maps
+        places_details_address.text = if (EMPTY_STRING == placeDetails.getAddress()) {
             places_details_address.visibility = View.VISIBLE
-            "Wyznacz trasę"
+            getString(R.string.show_in_google_maps)
 
         } else {
             places_details_address.visibility = View.VISIBLE
             placeDetails.getAddress()
         }
 
-
         places_details_address.setOnClickListener {
-            val uri = "http://maps.google.com/maps?daddr=" + placeDetails.getLocation().toString()
+            val uri = GOOGLE_MAPS_URL + GOOGLE_MAPS_DIRECT_TO + placeDetails.getLocation().toString()
             val intent = Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri))
             startActivity(intent)
         }
 
-
-
-        places_details_phone.text = if (EMPTY_STRING.equals(placeDetails.getPhoneNumber())) {
+        //setup place phone number and click listener for opening calling interface
+        places_details_phone.text = if (EMPTY_STRING == placeDetails.getPhoneNumber()) {
             places_details_address.visibility = View.GONE
             EMPTY_STRING
         } else {
-//            @IntDef when (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+//            @IntDef when (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
 //                PackageManager.PERMISSION_GRANTED -> places_details_phone.setOnClickListener {
 //
 //                    val callIntent = Intent(Intent.ACTION_CALL)
@@ -186,9 +181,10 @@ class PlaceDetailsActivity : BaseMenuActivity() {
 //                }
 //            }
 
-            //WORKAROUND FOR NOT NEED OF CALL PERMISSION
+            //WORKAROUND FOR NO NEED OF CALL PERMISSION
+            //and for not starting call automatically
             places_details_phone.setOnClickListener {
-                val uri = "tel:${placeDetails.getPhoneNumber()}"
+                val uri = HTML_TEL + placeDetails.getPhoneNumber().replace(SPACE, EMPTY_STRING)
                 val intent = Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri))
                 startActivity(intent)
             }
@@ -197,8 +193,7 @@ class PlaceDetailsActivity : BaseMenuActivity() {
             placeDetails.getPhoneNumber()
         }
 
-
-
+        //setup place webpage and click listener for opening in browser
         places_details_website.text = if (EMPTY_STRING.equals(placeDetails.getWebsite())) {
             places_details_website.visibility = View.GONE
             EMPTY_STRING
@@ -210,7 +205,7 @@ class PlaceDetailsActivity : BaseMenuActivity() {
             places_details_website.visibility = View.VISIBLE
             placeDetails.getWebsite()
         }
-
-
     }
+
+    private lateinit var placeDetails: PlaceDetails
 }
