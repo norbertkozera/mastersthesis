@@ -1,7 +1,10 @@
+<!--
+  ~ Master Thesis project
+  ~ All rights reserved
+  ~ Created by Norbert Kozera <nkozera@gmail.com>
+  -->
 
 <resources>
-
-
     <string name="app_label">Restauracje</string>
     <string name="app_name">Praca magisterska</string>
     <string name="activity_register_title">Zarejestruj</string>
@@ -13,41 +16,61 @@
     <string name="activity_restaurant_manager_title">Zarejestruj</string>
     <string name="error_invalid_credentials">Błędne dane logowania</string>
     <string name="error_upload_avatar">Problem z ładowaniem zdjęcia profilowego</string>
+    <string name="could_not_logout">Opracja wylogowanie się nie powiodła, spróbuj ponownie</string>
+    <string name="anonymus_user">Niezalogowany</string>
+    <string name="user_profile">Profil użytkownika</string>
     <string name="error_accounts_duplicated">Konto o podanym adresie email już istnieje</string>
     <string name="error_firebase_auth_other">Wystąpił problem z logowaniem, prosimy spróbować później</string>
     <string name="error_firebase_other">Wystąpił problem z bazą danych, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
+    <string name="error_search">Wystąpił problem z wyszukiwaniem, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
+    <string name="error_no_search_data">Wprowadź dane wyszkiwania</string>
     <string name="error_other">Wystąpił niezidentyfikowany problem, spróbuj ponownie</string>
-
-    <!-- Strings related to login -->
+    <string name="back_again_logout">Wcisnij wstecz ponownie aby wylogować</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
+    <string name="prompt_old_password">Stare hasło</string>
+    <string name="prompt_new_password">Nowe hasło</string>
+    <string name="prompt_retype_new_password">Stare hasło</string>
     <string name="prompt_retypr_password">Wpisz hasło ponownie</string>
     <string name="prompt_user_name">Nazwa użytkownika</string>
     <string name="prompt_avatar">Zdjęcie\nprofilowe\n*nie wymagane</string>
-    <string name="restaurants_in_city">Restauracje w mieście:</string>
     <string name="type_address">Wprowadź adres</string>
+    <string name="action_logout">Wyloguj</string>
     <string name="or">Lub:</string>
     <string name="search">Szukaj</string>
     <string name="m_from_me">metrów ode mnie</string>
     <string name="avatar">Avatar</string>
     <string name="action_sign_in">Zaloguj się</string>
+    <string name="change_pass">Zmień hasło</string>
+    <string name="login_or_register">Zarejestruj się lub zaloguj</string>
     <string name="action_sign_in_google">Zaloguj się używając konta Google</string>
     <string name="action_continue_without_signing_in">Kontynuuj bez logowania</string>
     <string name="action_upload_image">Załącz avatar</string>
     <string name="action_register">Zarejestruj się</string>
     <string name="action_confirm_registration">Potwierdź rejestrację</string>
+    <string name="action_confirm_pass_change">Potwierdź zmianę hasła</string>
     <string name="register_email">Email</string>
     <string name="activity_add_your_rating">Dodaj opinię</string>
     <string name="checkbox_restaurant_owner">Jestem właścicielem restauracji</string>
-    <string name="cancel">Anuluj</string>
-
-
+    <string name="password_changed">Hasło zostało zmienione</string>
+    <string name="password_not_changed">Hasło nie zostało zmienione, spróbuj ponownie</string>
+    <string name="old_pass_incorrect">Stare hasło jest niepoprawne</string>
+    <string name="opened">Otwarte</string>
+    <string name="closed">Zamknięte</string>
+    <string name="show_in_google_maps">Pokaż w Mapach Google</string>
+    <string name="distance_about_kilometers">Około %d kilometrów</string>
+    <string name="find_city">Znajdź lokalizację</string>
+    <string name="nearest_me">Lub w odległości</string>
+    <string name="restaurants_in_city">Znajdź restaurację w mieście:</string>
+    <string name="action_settings">Ustawienia:</string>
+    <string name="permission_allowed">Uprawnienie przyznano</string>
+    <string name="location_denied">Localizacja zabroniona, aby to zmienić kliknij tutaj</string>
+    <string name="location_not_allowed">Nie pozwoliles na lokalizację</string>
+    <string name="photo">Zdjęcie</string>
     <string name="error_invalid_email">Proszę podać poprawny adres email</string>
     <string name="error_invalid_password">Hasło jest za krótkie</string>
     <string name="error_incorrect_password">Hasło nie spełnia wymagań</string>
     <string name="error_different_passwords">Hasła różnią się</string>
     <string name="error_field_is_required">Pole jest wymagane</string>
     <string name="action_sign_in_short">Sign in</string>
-
-
 </resources>
