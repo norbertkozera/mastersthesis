@@ -24,16 +24,16 @@ open class BaseMenuActivity : BaseActivity() {
         return true
     }
 
-    override fun onBackPressed() {
-        flag++
-        if (flag < 2) {
-            Toast.makeText(this, getString(R.string.back_again_logout), Toast.LENGTH_SHORT).show()
-        } else {
-            firebaseLogOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
-    }
+//    override fun onBackPressed() {
+//        flag++
+//        if (flag < 2) {
+//            Toast.makeText(this, getString(R.string.back_again_logout), Toast.LENGTH_SHORT).show()
+//        } else {
+//            firebaseLogOut()
+//            startActivity(Intent(this, LoginActivity::class.java))
+//            finish()
+//        }
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

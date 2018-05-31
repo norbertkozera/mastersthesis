@@ -10,15 +10,8 @@
     <string name="facebook_client_token" translatable="false">10f17b21fc4b3a40561f66a94b0c68ef</string>
     <string name="google_places_api_key" translatable="false">AIzaSyAny_oMpGWlwG0Mfwcieb0aWZQovIya7_0</string>
 
-    <string name="app_label">Restaurants</string>
+    <string name="app_label">Master Thesis</string>
     <string name="app_name">Master Thesis</string>
-    <string name="activity_register_title">Zarejestruj</string>
-    <string name="activity_add_a_restaurant_title">Zarejestruj</string>
-    <string name="activity_find_your_city_title">Zarejestruj</string>
-    <string name="activity_info_about_restaurant_title">Zarejestruj</string>
-    <string name="activity_login_title">Zarejestruj</string>
-    <string name="activity_restaurant_list_title">Zarejestruj</string>
-    <string name="activity_restaurant_manager_title">Zarejestruj</string>
     <string name="error_invalid_credentials">Błędne dane logowania</string>
     <string name="error_upload_avatar">Problem z ładowaniem zdjęcia profilowego</string>
     <string name="could_not_logout">Opracja wylogowanie się nie powiodła, spróbuj ponownie</string>
@@ -63,7 +56,7 @@
     <string name="opened">Otwarte</string>
     <string name="closed">Zamknięte</string>
     <string name="show_in_google_maps">Pokaż w Mapach Google</string>
-    <string name="distance_about_kilometers">Około %d kilometrów</string>
+    <string name="distance_about_kilometers">Około %s kilometrów</string>
     <string name="find_city">Znajdź lokalizację</string>
     <string name="nearest_me">Lub w odległości</string>
     <string name="restaurants_in_city">Znajdź restaurację w mieście:</string>

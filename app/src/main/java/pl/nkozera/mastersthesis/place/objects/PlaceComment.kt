@@ -4,7 +4,7 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
-package pl.nkozera.mastersthesis.place
+package pl.nkozera.mastersthesis.place.objects
 
 class PlaceComment(
         private val commentatorName: String,

@@ -99,7 +99,7 @@ class LoginActivity : BaseActivity() {
     private fun isLocationEnabled() {
         @IntDef when (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
             PackageManager.PERMISSION_DENIED -> actvity_login_location_denied.visibility = View.VISIBLE
-            else -> activity_find_city_location_denied.visibility = View.GONE
+                    //  else -> activity_find_city_location_denied.visibility = View.GONE
         }
     }
 

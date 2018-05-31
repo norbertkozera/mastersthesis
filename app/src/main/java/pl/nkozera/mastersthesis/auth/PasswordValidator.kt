@@ -11,7 +11,7 @@ import android.widget.EditText
 import pl.nkozera.mastersthesis.R
 
 
-class PasswordValidator(private val context: Context, vararg val fields: EditText) : FieldValidator() {
+class PasswordValidator(private val context: Context, private vararg val fields: EditText) : FieldValidator() {
 
     private var returnFlag: Boolean = true
 
@@ -34,7 +34,7 @@ class PasswordValidator(private val context: Context, vararg val fields: EditTex
     }
 
     private fun checkIfPasswordsAreTheSame() {
-        for (i in 1..fields.size - 1) {
+        for (i in 1 until fields.size) {
             if (returnFlag && !fields.get(i).text.toString().equals(fields.get(i - 1).text.toString())) {
                 fields.get(i).requestFocus()
                 fields.get(i).error = context.getString(R.string.error_different_passwords)

@@ -19,6 +19,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_place_details.*
+import pl.nkozera.mastersthesis.place.asynctasks.GenerateUrl
+import pl.nkozera.mastersthesis.place.asynctasks.GetPlaceDetailsAsyncTask
+import pl.nkozera.mastersthesis.place.asynctasks.OnTaskCompleted
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_INT
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_STRING
@@ -27,20 +30,22 @@ import pl.nkozera.mastersthesis.base.BaseValues.Companion.GOOGLE_MAPS_URL
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.HTML_TEL
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PLACE_ID
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.SPACE
-import pl.nkozera.mastersthesis.place.ApiRequest
-import pl.nkozera.mastersthesis.place.PlaceDetails
-import pl.nkozera.mastersthesis.place.PlacesList
+import pl.nkozera.mastersthesis.place.*
+import pl.nkozera.mastersthesis.place.objects.PlaceDetails
 
 
-class PlaceDetailsActivity : BaseMenuActivity() {
+class PlaceDetailsActivity : BaseMenuActivity(), OnTaskCompleted {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_place_details)
+        showProgressBar()
         val placeId = intent.getStringExtra(PARAM_PLACE_ID)
+        val url = GenerateUrl(this).findDetailsUrl(placeId)
+        GetPlaceDetailsAsyncTask(details, this).execute(url)
+    }
 
-        val details = PlacesList(this)
-        details.findDetails(placeId)
+    override fun onTaskCompleted() {
+        hideProgressBar(R.layout.activity_place_details)
         placeDetails = details.getCurrentPlaceDetails()
         applyDetails()
     }
@@ -145,8 +150,8 @@ class PlaceDetailsActivity : BaseMenuActivity() {
             }
         }
 
-        //setup photo preseting restaurant
-        val photoUrl = ApiRequest(this).placePhoto(restaurant_photo.layoutParams.width, restaurant_photo.layoutParams.height, placeDetails.getPhotoRef())
+        //setup photo presenting restaurant
+        val photoUrl = GenerateUrl(this).placePhoto(restaurant_photo.layoutParams.width, restaurant_photo.layoutParams.height, placeDetails.getPhotoRef())
         if (EMPTY_STRING != photoUrl) {
             Glide.with(this).load(photoUrl).into(restaurant_photo)
         }
@@ -208,4 +213,5 @@ class PlaceDetailsActivity : BaseMenuActivity() {
     }
 
     private lateinit var placeDetails: PlaceDetails
+    private var details = ChoosenPlaceDetails()
 }

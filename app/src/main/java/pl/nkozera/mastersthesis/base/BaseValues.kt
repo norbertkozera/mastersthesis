@@ -6,10 +6,9 @@
 
 package pl.nkozera.mastersthesis.base
 
-import android.util.ArrayMap
 import com.google.api.client.http.GenericUrl
-import pl.nkozera.mastersthesis.place.LocationCoordinates
-import pl.nkozera.mastersthesis.place.PlaceDetails
+import pl.nkozera.mastersthesis.location.LocationCoordinates
+import pl.nkozera.mastersthesis.place.objects.PlaceDetails
 
 class BaseValues {
     companion object {
@@ -24,7 +23,7 @@ class BaseValues {
         const val HTML_TEL = "tel:"
 
 
-        const val PARAM_PLACE_ID = "placeId"
+        const val PARAM_PLACE_ID = "placeid"
         const val PARAM_LONGITUDE = "longitude"
         const val PARAM_LONGITUDE_SHORT = "lng"
         const val PARAM_LATITUDE = "latitude"

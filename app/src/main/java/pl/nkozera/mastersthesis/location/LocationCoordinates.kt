@@ -1,10 +1,11 @@
 /*
- * Master Thesis project
+ * Master Thiesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
-package pl.nkozera.mastersthesis.place
+
+package pl.nkozera.mastersthesis.location
 
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
 

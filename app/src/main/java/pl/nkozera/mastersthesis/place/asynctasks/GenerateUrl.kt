@@ -1,14 +1,15 @@
 /*
- * Master Thesis project
+ * Master Thiesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
-package pl.nkozera.mastersthesis.place
+
+package pl.nkozera.mastersthesis.place.asynctasks
 
 import android.content.Context
-import android.os.StrictMode
 import android.util.ArrayMap
+import android.widget.Toast
 import com.google.api.client.http.GenericUrl
 import com.google.api.client.http.HttpRequest
 import com.google.api.client.http.HttpRequestFactory
@@ -30,11 +31,13 @@ import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_TYPES
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.PHOTO_GENERIC_URL
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.SPACE
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.TEXTSEARCH_GENERIC_URL
+import pl.nkozera.mastersthesis.location.LocationCoordinates
 
 
-class ApiRequest(context: Context) {
+class GenerateUrl(val context: Context) {
 
-    fun findInCity(city: String, nextPageToken: String): String {
+
+    private fun findInCity(city: String, nextPageToken: String): String {
         val params = ArrayMap<String, String>()
         params[PARAM_QUERY] = "$PARAM_PLACE_TYPE-${cityReplacement(city)}"
         params[PARAM_TYPES] = PARAM_PLACE_TYPE
@@ -42,10 +45,10 @@ class ApiRequest(context: Context) {
             params[PARAM_PAGETOKEN] = nextPageToken
         }
 
-        return stringResponse(request(TEXTSEARCH_GENERIC_URL, params))
+        return requestUrl(request(TEXTSEARCH_GENERIC_URL, params))
     }
 
-    fun findNear(location: LocationCoordinates, distance: String, nextPageToken: String): String {
+    private fun findNear(location: LocationCoordinates, distance: String, nextPageToken: String): String {
         val params = ArrayMap<String, String>()
         params[PARAM_LOCATION] = location.toString()
         params[PARAM_RADIUS] = distance
@@ -54,15 +57,9 @@ class ApiRequest(context: Context) {
             params[PARAM_PAGETOKEN] = nextPageToken
         }
 
-        return stringResponse(request(TEXTSEARCH_GENERIC_URL, params))
+        return requestUrl(request(TEXTSEARCH_GENERIC_URL, params))
     }
 
-    fun placeDetails(placeId: String): String {
-        val params = ArrayMap<String, String>()
-        params[PARAM_PLACE_ID] = placeId
-
-        return stringResponse(request(DETAILS_GENERIC_URL, params))
-    }
 
     fun placePhoto(width: Int, heigth: Int, photoReference: String): String {
         val params = ArrayMap<String, String>()
@@ -72,10 +69,8 @@ class ApiRequest(context: Context) {
         return requestUrl(request(PHOTO_GENERIC_URL, params))
     }
 
-    private fun request(url: GenericUrl, parameters: Map<String, String>): HttpRequest? {
+    private fun request(url: GenericUrl, parameters: Map<String, String>): HttpRequest {
 
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
         val httpRequestFactory: HttpRequestFactory = NetHttpTransport().createRequestFactory()
         val request = httpRequestFactory.buildGetRequest(url)
         request.url[PARAM_KEY] = API_KEY
@@ -85,13 +80,6 @@ class ApiRequest(context: Context) {
         return request
     }
 
-    private fun stringResponse(request: HttpRequest?): String {
-        return try {
-            request!!.execute().parseAsString()
-        } catch (e: Exception) {
-            EMPTY_STRING
-        }
-    }
 
     private fun requestUrl(request: HttpRequest?): String {
         return try {
@@ -103,6 +91,35 @@ class ApiRequest(context: Context) {
 
     private fun cityReplacement(city: String): String {
         return city.replace(SPACE, "-")
+    }
+
+
+    fun findDetailsUrl(placeId: String): String {
+
+        val params = ArrayMap<String, String>()
+        params[PARAM_PLACE_ID] = placeId
+        return requestUrl(request(DETAILS_GENERIC_URL, params))
+
+
+    }
+
+    fun findPlacesUrl(location: LocationCoordinates, distance: String, city: String, nextPageToken: String): String {
+        when {
+            !distance.isEmpty() -> {
+                if (location.isEmpty()) {
+                    Toast.makeText(context, context.getString(R.string.location_not_allowed), Toast.LENGTH_LONG).show()
+                } else {
+                    return findNear(location, distance, nextPageToken)
+                }
+            }
+            !city.isEmpty() -> {
+                return findInCity(city, nextPageToken)
+            }
+            else -> {
+                Toast.makeText(context, context.getString(R.string.error_no_search_data), Toast.LENGTH_SHORT).show()
+            }
+        }
+        return ""
     }
 
     private val API_KEY = context.getString(R.string.google_places_api_key)
