@@ -1,5 +1,5 @@
 /*
- * Master Thiesis project
+ * Master Thesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
@@ -14,7 +14,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat
+import android.support.annotation.IntDef
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -34,12 +34,16 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import kotlinx.android.synthetic.main.activity_find_your_city.*
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_user_profile.*
 import pl.nkozera.mastersthesis.auth.EmailValidator
 import pl.nkozera.mastersthesis.auth.FieldValidator
 import pl.nkozera.mastersthesis.auth.PasswordValidator
 import pl.nkozera.mastersthesis.base.BaseActivity
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.FIREBASE_AVATARS_PATH
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_EMAIL
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PUBLIC_PROFILE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.UNUSED_PARAMETER
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -48,15 +52,10 @@ import java.security.SecureRandom
 
 
 class LoginActivity : BaseActivity() {
-    private lateinit var mGoogleSignInCLient: GoogleSignInClient
-    private lateinit var googleSignInOptions: GoogleSignInOptions
-    private val RC_SIGN_IN: Int = 1
-    private val GET_FROM_GALLERY: Int = 2
-    private val ASK_FOR_PERMISSTIONS: Int = 3
-    private lateinit var mCallbackManager: CallbackManager
-    private var avatarUrl: Uri = Uri.EMPTY
-    val content = R.layout.activity_login
 
+    //TODO Refactor this calss
+    //TODO 1) Move autheticvation to dedicated class
+    //TODO 2) Refactor programmable layout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +63,8 @@ class LoginActivity : BaseActivity() {
 
 //        Ask for permission
 
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), ASK_FOR_PERMISSTIONS)
+        askForPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        isLocationEnabled()
 
 //        Google login
 
@@ -78,7 +78,7 @@ class LoginActivity : BaseActivity() {
         mCallbackManager = CallbackManager.Factory.create()
         val facebookButton = findViewById<View>(R.id.facebook_register_button) as LoginButton
 
-        facebookButton.setReadPermissions("email", "public_profile")
+        facebookButton.setReadPermissions(PARAM_EMAIL, PARAM_PUBLIC_PROFILE)
         facebookButton.registerCallback(mCallbackManager, object : FacebookCallback<LoginResult> {
             override fun onCancel() {
                 loginManager.logOut()
@@ -94,6 +94,13 @@ class LoginActivity : BaseActivity() {
                 handleFacebookAccessToken(result.accessToken)
             }
         })
+    }
+
+    private fun isLocationEnabled() {
+        @IntDef when (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            PackageManager.PERMISSION_DENIED -> actvity_login_location_denied.visibility = View.VISIBLE
+                    //  else -> activity_find_city_location_denied.visibility = View.GONE
+        }
     }
 
     public override fun onStart() {
@@ -116,29 +123,8 @@ class LoginActivity : BaseActivity() {
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            ASK_FOR_PERMISSTIONS -> {
-
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-//                    finish()
-//                    startActivity(intent)
-//                    return
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show()
-                }
-//                return
-            }
-        }// other 'case' lines to check for other
-        // permissions this app might request
+    fun askForLocation(@Suppress(UNUSED_PARAMETER) view: View) {
+        askForPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
     private fun updateUI(user: FirebaseUser?) {
@@ -162,7 +148,7 @@ class LoginActivity : BaseActivity() {
         emailTextViewParams.removeRule(RelativeLayout.ALIGN_PARENT_TOP)
 
         view.layoutParams = emailSignUpButtonParams
-        email_register.text = "Anuluj"
+        email_register.text = getString(R.string.cancel)
         email_register.setOnClickListener { cancelRegistration(view, emailSignUpButtonParams, emailTextViewParams) }
 
         retype_password.visibility = View.VISIBLE
@@ -188,7 +174,7 @@ class LoginActivity : BaseActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    fun firebaseAuthAnonymusly(@Suppress("UNUSED_PARAMETER") view: View) {
+    fun firebaseAuthAnonymusly(@Suppress(UNUSED_PARAMETER) view: View) {
         showProgressBar()
         mAuth.signInAnonymously()
                 .addOnCompleteListener(this) {
@@ -199,16 +185,16 @@ class LoginActivity : BaseActivity() {
                 }
     }
 
-    fun confirmSignUp(@Suppress("UNUSED_PARAMETER") view: View) {
+    fun confirmSignUp(@Suppress(UNUSED_PARAMETER) view: View) {
         val userNameNotEmpty = FieldValidator().checkIfFieldsAreNotEmpty(this, displayName)
         val emailIsCorrect = EmailValidator(this, email).validate()
         val passwordIsCorrect = PasswordValidator(this, password, retype_password).validate()
         if (userNameNotEmpty && emailIsCorrect && passwordIsCorrect) {
-            firebaseRegisteWithPassword(displayName.text.toString(), email.text.toString(), password.text.toString())
+            firebaseRegisterWithPassword(displayName.text.toString(), email.text.toString(), password.text.toString())
         }
     }
 
-    fun emailSignInOnClick(@Suppress("UNUSED_PARAMETER") view: View) {
+    fun emailSignInOnClick(@Suppress(UNUSED_PARAMETER) view: View) {
         val emailIsCorrect = EmailValidator(this, email).validate()
         val passwordIsCorrect = PasswordValidator(this, password).validate()
 
@@ -236,8 +222,7 @@ class LoginActivity : BaseActivity() {
         email_register.setOnClickListener { emailRegisterOnClick(view) }
     }
 
-    @Suppress("UNUSED_PARAMETER") //param is needed
-    fun loadPhotoFromGallery(view: View) {
+    fun loadPhotoFromGallery(@Suppress(UNUSED_PARAMETER) view: View) {
         startActivityForResult(Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY)
     }
 
@@ -263,7 +248,7 @@ class LoginActivity : BaseActivity() {
         try {
             bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
             val imgName = SecureRandom().nextLong()
-            val imageRef = storageRef.child("avatars/$imgName")
+            val imageRef = storageRef.child(FIREBASE_AVATARS_PATH + imgName)
 
             val baos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -271,14 +256,14 @@ class LoginActivity : BaseActivity() {
             imageRef.putBytes(bytes).addOnFailureListener {
                 hideAvatarProgressBar(false)
             }.addOnSuccessListener {
-                val url: Uri = it?.downloadUrl as Uri
+                val url: Uri = it?.downloadUrl as Uri //FIXME this is working but deprecated
                 Glide.with(this).load(url).into(loaded_avatar)
                 avatarUrl = url
                 hideAvatarProgressBar(true)
             }
         } catch (e: Exception) {
             when (e) {
-                //TODO Log it
+            //FIXME Log it
                 is FileNotFoundException -> print("")
                 is IOException -> print("")
             }
@@ -298,7 +283,7 @@ class LoginActivity : BaseActivity() {
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         showProgressBar()
-//      TODO  => if user sign in as Facebook user, then sign in as Google user Firebase will overwrite user account, otherwise not
+//      FIXME  => if user sign in as Facebook user, then sign in as Google user Firebase will overwrite user account, otherwise not
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this) {
                     when {
@@ -308,9 +293,8 @@ class LoginActivity : BaseActivity() {
                 }
     }
 
-    private fun firebaseRegisteWithPassword(userName: String, email: String, password: String) {
+    private fun firebaseRegisterWithPassword(userName: String, email: String, password: String) {
         showProgressBar()
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) {
                     when {
@@ -348,7 +332,7 @@ class LoginActivity : BaseActivity() {
             else -> getString(R.string.error_firebase_other)
         }
 
-        makeToast(toastMsg)
+        Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
     }
 
 
@@ -371,11 +355,18 @@ class LoginActivity : BaseActivity() {
                 loaded_avatar.visibility = View.INVISIBLE
                 avatar_button.visibility = View.VISIBLE
                 email_register_account_button.isClickable = true
-                makeToast(getString(R.string.error_invalid_credentials))
+                Toast.makeText(this, getString(R.string.error_invalid_credentials), Toast.LENGTH_SHORT).show()
             }
         }
 
     }
 
+    private lateinit var mGoogleSignInCLient: GoogleSignInClient
+    private lateinit var googleSignInOptions: GoogleSignInOptions
+    private val RC_SIGN_IN: Int = 1
+    private val GET_FROM_GALLERY: Int = 2
+    private lateinit var mCallbackManager: CallbackManager
+    private var avatarUrl: Uri = Uri.EMPTY
+    val content = R.layout.activity_login
 }
 

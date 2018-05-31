@@ -4,14 +4,13 @@
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
-package pl.nkozera.mastersthesis.place
 
-import android.net.Uri
+package pl.nkozera.mastersthesis.place.objects
+
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_LOCATION_COORDINATES
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_STRING
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_URI
-import java.net.URI
+import pl.nkozera.mastersthesis.location.LocationCoordinates
 
 class PlaceDetails(
         private val placeId: String,
@@ -55,7 +54,7 @@ class PlaceDetails(
     }
 
     fun getPhoneNumber(): String {
-        return phoneNumber.replace(" ", "")
+        return phoneNumber
     }
 
     fun getWebsite(): String {

@@ -1,5 +1,5 @@
 /*
- * Master Thiesis project
+ * Master Thesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
@@ -24,6 +24,11 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment
 import com.google.android.gms.location.places.ui.PlaceSelectionListener
 import kotlinx.android.synthetic.main.activity_find_your_city.*
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_CITY
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_DISTANCE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_LATITUDE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_LONGITUDE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.UNUSED_PARAMETER
 import java.util.*
 
 
@@ -32,29 +37,26 @@ class FindCityActivity : BaseMenuActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_your_city)
-        showDistanceLayout()
+        showDistanceDialog()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         currentCity()
         initializeFragment()
     }
 
-    private fun showDistanceLayout() {
-        @IntDef when (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                PackageManager.PERMISSION_GRANTED -> distance_layout.visibility = View.VISIBLE
-            }
-    }
 
-    fun lookForRestaurants(@Suppress("UNUSED_PARAMETER") view: View) {
-
+    fun lookForRestaurants(@Suppress(UNUSED_PARAMETER) view: View) {
         val findRestaurants = Intent(this, RestaurantListActivity::class.java)
-        findRestaurants.putExtra("city", city)
-        findRestaurants.putExtra("distance", distance.text.toString())
-        findRestaurants.putExtra("latitude", latitude)
-        findRestaurants.putExtra("longitude", longitude)
+        findRestaurants.putExtra(PARAM_CITY, city)
+        findRestaurants.putExtra(PARAM_DISTANCE, distance.text.toString())
+        findRestaurants.putExtra(PARAM_LATITUDE, latitude)
+        findRestaurants.putExtra(PARAM_LONGITUDE, longitude)
         showProgressBar()
         startActivity(findRestaurants)
         finish()
+    }
 
+    fun askForLocation(@Suppress(UNUSED_PARAMETER) view: View) {
+        askForPermission()
     }
 
     private fun initializeFragment() {
@@ -70,6 +72,20 @@ class FindCityActivity : BaseMenuActivity() {
             }
 
         })
+    }
+
+
+    private fun showDistanceDialog() {
+        @IntDef when (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            PackageManager.PERMISSION_GRANTED -> {
+                distance_layout.visibility = View.VISIBLE
+                activity_find_city_location_denied.visibility = View.GONE
+            }
+            else -> {
+                activity_find_city_location_denied.visibility = View.VISIBLE
+                distance_layout.visibility = View.GONE
+            }
+        }
     }
 
     private fun currentCity() {

@@ -1,5 +1,5 @@
 /*
- * Master Thiesis project
+ * Master Thesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
@@ -12,57 +12,89 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
-import pl.nkozera.mastersthesis.place.Distance
-import pl.nkozera.mastersthesis.place.LocationCoordinates
-import pl.nkozera.mastersthesis.place.Place
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_STRING
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_CITY
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_DISTANCE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_LATITUDE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_LONGITUDE
+import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PLACE_ID
+import pl.nkozera.mastersthesis.location.Distance
+import pl.nkozera.mastersthesis.location.LocationCoordinates
 import pl.nkozera.mastersthesis.place.PlacesList
+import pl.nkozera.mastersthesis.place.asynctasks.GenerateUrl
+import pl.nkozera.mastersthesis.place.asynctasks.GetPlacesAsyncTask
+import pl.nkozera.mastersthesis.place.asynctasks.OnTaskCompleted
+import pl.nkozera.mastersthesis.place.objects.Place
+import java.util.*
 
 
-class RestaurantListActivity : BaseMenuActivity() {
+class RestaurantListActivity : BaseMenuActivity(), OnTaskCompleted {
 
-
-    private lateinit var places: PlacesList
-    private lateinit var placesList: List<Place>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showProgressBar()
-        places = PlacesList(this)
+
+        //  testTestView.text = "START"
         API_KEY = getString(R.string.google_places_api_key)
-        distance = intent.getStringExtra("distance")
-        city = intent.getStringExtra("city")
-        location = LocationCoordinates(intent.getDoubleExtra("latitude", 0.0), intent.getDoubleExtra("longitude", 0.0))
-        findPlaces()
-        hideProgressBar(R.layout.activity_restaurant_list)
-        printPlaces()
+        distance = intent.getStringExtra(PARAM_DISTANCE)
+        city = intent.getStringExtra(PARAM_CITY)
+        location = LocationCoordinates(intent.getDoubleExtra(PARAM_LATITUDE, DEFAULT_DOUBLE), intent.getDoubleExtra(PARAM_LONGITUDE, DEFAULT_DOUBLE))
+        GetPlacesAsyncTask(places, true, this).execute(GenerateUrl(this).findPlacesUrl(location, distance, city, EMPTY_STRING))
 
     }
 
-    public override fun onStart() {
-        super.onStart()
+    private fun getPlaces() {
 
+    }
+
+
+    override fun onTaskCompleted() {
+        placesList.addAll(filterList(places.getPlaces()))
+        if (EMPTY_STRING != places.getNextPageToken()) {
+            GetPlacesAsyncTask(places, false, this).execute(GenerateUrl(this).findPlacesUrl(location, distance, city, places.getNextPageToken()))
+        } else {
+            hideProgressBar(R.layout.activity_restaurant_list)
+            printPlaces()
+        }
+
+
+    }
+
+    private fun filterList(places: LinkedList<Place>): List<Place> {
+        return if (distance.isEmpty()) {
+            places
+        } else {
+            val retList = LinkedList<Place>()
+            for (place in places) {
+                if (Distance().getDistance(location, place.getLocation()) <= (distance.toDouble() / 1000)) {
+                    retList.add(place)
+                }
+            }
+            retList
+        }
     }
 
     private fun printPlaces() {
-        placesList = places.getPlaces()
-
-//        val restaurantListProgress = findViewById<View>(R.id.restaurantList_progress) as ProgressBar
-//        restaurantListProgress.visibility = View.GONE
 
         val inflater = LayoutInflater.from(this)
-        val v = inflater.inflate(R.layout.activity_restaurant_list, null)
+        val v = inflater.inflate(R.layout.activity_restaurant_list, null) //FIXME Do not use null ViewGroup
 
         val rv = v.findViewById(R.id.restaurant_list) as LinearLayout
 
         for (i in 0 until placesList.size) {
-            val place = placesList.get(i)
+            val place = placesList[i]
 
             val rl = RelativeLayout(this)
             rl.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-            rl.background = resources.getDrawable(R.drawable.custom_background)
+            rl.background = resources.getDrawable(R.drawable.custom_background, theme)
             val rlParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
             rlParams.height = resources.getDimensionPixelSize(R.dimen.restaurant_list_element_height)
             rl.layoutParams = rlParams
@@ -80,7 +112,7 @@ class RestaurantListActivity : BaseMenuActivity() {
 
 
             val tvDistance = TextView(this)
-            tvDistance.text = "Około ${Distance().getDistance(location, place.getLocation())} kilometrów"
+            tvDistance.text = getString(R.string.distance_about_kilometers, Distance().getDistance(location, place.getLocation()).toString())
             tvDistance.textSize = resources.getDimension(R.dimen.restaurant_list_others)
             tvDistance.id = View.generateViewId()
             val tvDistanceParams = RelativeLayout.LayoutParams(R.dimen.restaurant_list_width_location, RelativeLayout.LayoutParams.WRAP_CONTENT)
@@ -91,12 +123,12 @@ class RestaurantListActivity : BaseMenuActivity() {
 
             val tvOpenedNow = TextView(this)
             val openedNowString = place.getOpenedNow()
-            val openedNowMessage = if ("".equals(openedNowString)) {
-                "Skontaktuj sie z knajpa"
+            val openedNowMessage = if (EMPTY_STRING == openedNowString) {
+                EMPTY_STRING
             } else {
                 when (openedNowString.toBoolean()) {
-                    true -> "OTWARTE!"
-                    false -> "ZAMKNIĘTE!"
+                    true -> getString(R.string.opened)
+                    false -> getString(R.string.closed)
                 }
             }
             tvOpenedNow.text = openedNowMessage
@@ -110,7 +142,7 @@ class RestaurantListActivity : BaseMenuActivity() {
 
             val iwIcon = ImageView(this)
             iwIcon.id = View.generateViewId()
-            val iwIconParams = RelativeLayout.LayoutParams(100, 100)
+            val iwIconParams = RelativeLayout.LayoutParams(100, 100) //FiXME change to dimmens
             iwIconParams.addRule(RelativeLayout.BELOW, tvPlaceName.id)
             iwIconParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT)
             iwIcon.layoutParams = iwIconParams
@@ -132,49 +164,20 @@ class RestaurantListActivity : BaseMenuActivity() {
 
 
         setContentView(v)
-
-        print("")
     }
 
     private fun onClick(i: Int) {
         val placeDetailsActivity = Intent(this, PlaceDetailsActivity::class.java)
-        placeDetailsActivity.putExtra("placeId", placesList[i].getPlaceId())
+        placeDetailsActivity.putExtra(PARAM_PLACE_ID, placesList[i].getPlaceId())
         showProgressBar()
         startActivity(placeDetailsActivity)
         finish()
-        //flush
     }
-
-    private fun findPlaces() {
-        places = PlacesList(this)
-
-        when {
-            !distance.isEmpty() -> {
-                if (location.isEmpty()) {
-                    Toast.makeText(this, "Nie pozwoliles na lokalizację", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, FindCityActivity::class.java))
-                    finish()
-                } else {
-                    places.findPlaces(location, distance)
-                }
-            }
-            !city.isEmpty() -> {
-                places.findPlaces(city)
-            }
-            else -> {
-                makeToast(getString(R.string.error_no_search_data))
-                startActivity(Intent(this, FindCityActivity::class.java))
-                finish()
-            }
-        }
-
-    }
-
 
     private lateinit var API_KEY: String
     private lateinit var distance: String
     private lateinit var city: String
     private lateinit var location: LocationCoordinates
-    private var url = StringBuilder()
-
+    private var places = PlacesList()
+    private var placesList = LinkedList<Place>()
 }

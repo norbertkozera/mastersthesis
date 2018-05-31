@@ -3,12 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <!--
+      ~ Master Thesis project
+      ~ All rights reserved
+      ~ Created by Norbert Kozera <nkozera@gmail.com>
+      -->
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/rl1">
+        android:orientation="vertical">
 
 
         <TextView
@@ -26,18 +31,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView"
-            android:layout_marginTop="16dp"
-            android:layout_centerHorizontal="true"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp" />
 
     </RelativeLayout>
 
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/distance_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/distance_layout"
         android:layout_below="@id/rl1"
+        android:orientation="vertical"
         android:visibility="gone">
 
         <TextView
@@ -47,8 +52,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:text="@string/nearest_me"
-            />
+            android:text="@string/nearest_me" />
 
         <EditText
             android:id="@+id/distance"
@@ -60,9 +64,7 @@
             android:ems="10"
             android:hint="@string/m_from_me"
             android:inputType="number"
-            android:textAlignment="center"
-            />
-
+            android:textAlignment="center" />
 
 
     </RelativeLayout>
@@ -71,10 +73,23 @@
         android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:onClick="lookForRestaurants"
-        android:text="@string/search"
         android:layout_below="@+id/distance_layout"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        />
+        android:onClick="lookForRestaurants"
+        android:text="@string/search" />
+
+
+    <TextView
+        android:id="@+id/activity_find_city_location_denied"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:onClick="askForLocation"
+        android:text="@string/location_denied"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_20_sp"
+        android:visibility="gone" />
 </RelativeLayout>

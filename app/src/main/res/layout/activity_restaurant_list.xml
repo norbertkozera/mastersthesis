@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-  ~ Master Thiesis project
-  ~ All rights reserved
-  ~ Created by Norbert Kozera <nkozera@gmail.com>
-  -->
-
-<!--
-  ~ Master Thiesis project
-  ~ All rights reserved
-  ~ Created by Norbert Kozera <nkozera@gmail.com>
-  -->
-
-<!--
-  ~ Master Thiesis project
+  ~ Master Thesis project
   ~ All rights reserved
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
@@ -23,14 +11,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--<ProgressBar-->
-    <!--android:id="@+id/restaurantList_progress"-->
-    <!--style="@android:style/Widget.ProgressBar.Small"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:visibility="visible" />-->
 
     <ScrollView
         android:id="@+id/scroll_restaurants"
@@ -42,7 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible" />
+            android:visibility="visible" >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/testTestView"/>
+
+        </LinearLayout>
 
     </ScrollView>
 
