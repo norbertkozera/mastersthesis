@@ -14,9 +14,7 @@ import java.util.*
 
 //not a real cache but will help with development
 class PlacesCache {
-
     companion object {
-        private var placesInCity = ArrayMap<String, LinkedList<Place>>()
 
         fun addPlacesInCityToCache(cityName: String, places: LinkedList<Place>) {
             if (placesInCity[cityName] == null) {
@@ -28,14 +26,19 @@ class PlacesCache {
             return placesInCity[cityName]
         }
 
-
-        private var placesInLocation = ArrayMap<LocationCoordinates, ArrayMap<String, LinkedList<Place>>>()
-
         fun addPlacesInLocation(location: LocationCoordinates, distance: String, places: LinkedList<Place>) {
-            if (placesInLocation[location] == null) {
+            val locationPlaces = placesInLocation[location]
+            if (locationPlaces == null) {
                 val locations = ArrayMap<String, LinkedList<Place>>()
                 locations[distance] = places
                 placesInLocation[location] = locations
+            } else {
+                if(locationPlaces[distance] == null ) {
+                    val locations = ArrayMap<String, LinkedList<Place>>()
+                    locations[distance] = places
+                    placesInLocation[location] = locations
+                }
+
             }
         }
 
@@ -56,5 +59,10 @@ class PlacesCache {
 
             return places
         }
+
+
+        private var placesInCity = ArrayMap<String, LinkedList<Place>>()
+        private var placesInLocation = ArrayMap<LocationCoordinates, ArrayMap<String, LinkedList<Place>>>()
     }
+
 }
