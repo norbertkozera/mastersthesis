@@ -27,6 +27,7 @@ import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_LONGITUDE
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PLACE_ID
 import pl.nkozera.mastersthesis.location.Distance
 import pl.nkozera.mastersthesis.location.LocationCoordinates
+import pl.nkozera.mastersthesis.place.PlacesCache
 import pl.nkozera.mastersthesis.place.PlacesList
 import pl.nkozera.mastersthesis.place.asynctasks.GenerateUrl
 import pl.nkozera.mastersthesis.place.asynctasks.GetPlacesAsyncTask
@@ -41,18 +42,28 @@ class RestaurantListActivity : BaseMenuActivity(), OnTaskCompleted {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showProgressBar()
-
-        //  testTestView.text = "START"
         API_KEY = getString(R.string.google_places_api_key)
         distance = intent.getStringExtra(PARAM_DISTANCE)
         city = intent.getStringExtra(PARAM_CITY)
         location = LocationCoordinates(intent.getDoubleExtra(PARAM_LATITUDE, DEFAULT_DOUBLE), intent.getDoubleExtra(PARAM_LONGITUDE, DEFAULT_DOUBLE))
-        GetPlacesAsyncTask(places, true, this).execute(GenerateUrl(this).findPlacesUrl(location, distance, city, EMPTY_STRING))
-
-    }
-
-    private fun getPlaces() {
-
+        val placesFromCache = PlacesCache.getPlacesInCityFromCache(city)
+        if (!distance.isEmpty()) {
+            val placesInLocation = PlacesCache.getPlacesInLocation(location, distance)
+            when {
+                placesInLocation!!.isNotEmpty() -> {
+                    placesList.addAll(placesInLocation)
+                    hideProgressBar(R.layout.activity_restaurant_list)
+                    printPlaces()
+                }
+                else -> GetPlacesAsyncTask(places, true, this).execute(GenerateUrl(this).findPlacesUrl(location, distance, city, EMPTY_STRING))
+            }
+        } else if (placesFromCache != null) {
+            placesList.addAll(placesFromCache)
+            hideProgressBar(R.layout.activity_restaurant_list)
+            printPlaces()
+        } else {
+            GetPlacesAsyncTask(places, true, this).execute(GenerateUrl(this).findPlacesUrl(location, distance, city, EMPTY_STRING))
+        }
     }
 
 
@@ -61,6 +72,11 @@ class RestaurantListActivity : BaseMenuActivity(), OnTaskCompleted {
         if (EMPTY_STRING != places.getNextPageToken()) {
             GetPlacesAsyncTask(places, false, this).execute(GenerateUrl(this).findPlacesUrl(location, distance, city, places.getNextPageToken()))
         } else {
+            if (distance.isEmpty()) {
+                PlacesCache.addPlacesInCityToCache(city, placesList)
+            } else {
+                PlacesCache.addPlacesInLocation(location, distance, placesList)
+            }
             hideProgressBar(R.layout.activity_restaurant_list)
             printPlaces()
         }
