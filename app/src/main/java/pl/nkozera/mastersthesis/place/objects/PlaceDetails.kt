@@ -7,6 +7,7 @@
 
 package pl.nkozera.mastersthesis.place.objects
 
+import pl.nkozera.mastersthesis.base.BaseValues
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_DOUBLE
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_LOCATION_COORDINATES
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_STRING
@@ -22,7 +23,7 @@ class PlaceDetails(
         private val website: String,
         private val openedNow: String,
         private val rating: Double,
-        private val comments: List<PlaceComment>) {
+        private var comments: List<PlaceComment>) {
 
 
     fun getPlaceId(): String {
@@ -63,6 +64,16 @@ class PlaceDetails(
 
     fun getComments(): List<PlaceComment> {
         return comments
+    }
+
+    fun updateComments(placeComment: PlaceComment) {
+
+        val list: MutableList<PlaceComment> = mutableListOf()
+        list.add(placeComment)
+        list.addAll(comments)
+
+        comments = list
+
     }
 
     companion object {

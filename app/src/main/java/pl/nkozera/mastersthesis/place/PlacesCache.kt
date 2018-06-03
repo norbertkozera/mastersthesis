@@ -24,6 +24,7 @@ class PlacesCache {
 
         fun getPlacesInCityFromCache(cityName: String): LinkedList<Place>? {
             return placesInCity[cityName]
+           // return null
         }
 
         fun addPlacesInLocation(location: LocationCoordinates, distance: String, places: LinkedList<Place>) {
@@ -58,6 +59,7 @@ class PlacesCache {
             }
 
             return places
+           // return LinkedList<Place>()
         }
 
 

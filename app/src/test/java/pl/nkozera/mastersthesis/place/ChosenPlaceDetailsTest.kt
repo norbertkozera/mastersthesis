@@ -1,349 +1,43 @@
 /*
- * Master Thesis project
+ * Master Thiesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
 
-package pl.nkozera.mastersthesis
+package pl.nkozera.mastersthesis.place
 
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
-import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import kotlinx.android.synthetic.main.activity_place_details.*
-import pl.nkozera.mastersthesis.base.BaseMenuActivity
+import org.junit.Before
+import org.junit.Test
+
+import org.junit.Assert.*
 import pl.nkozera.mastersthesis.base.BaseValues
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_INT
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.EMPTY_STRING
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.GOOGLE_MAPS_DIRECT_TO
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.GOOGLE_MAPS_URL
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.HTML_TEL
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_AUTHOR_NAME
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_COMMENTS
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_PLACE_ID
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.PARAM_RATING
-import pl.nkozera.mastersthesis.base.BaseValues.Companion.SPACE
-import pl.nkozera.mastersthesis.place.ChosenPlaceDetails
-import pl.nkozera.mastersthesis.place.asynctasks.GenerateUrl
-import pl.nkozera.mastersthesis.place.asynctasks.GetPlaceDetailsAsyncTask
-import pl.nkozera.mastersthesis.place.asynctasks.OnTaskCompleted
-import pl.nkozera.mastersthesis.place.objects.PlaceComment
-import pl.nkozera.mastersthesis.place.objects.PlaceDetails
-import java.text.DecimalFormat
+
+class ChosenPlaceDetailsTest {
 
 
-class PlaceDetailsActivity : BaseMenuActivity(), OnTaskCompleted {
+    private lateinit var placeDetails: ChosenPlaceDetails
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        showProgressBar()
-        val placeId = intent.getStringExtra(PARAM_PLACE_ID)
-        val url = GenerateUrl(this).findDetailsUrl(placeId)
-        GetPlaceDetailsAsyncTask(details, this).execute(url)
-        ratingTextView = TextView(this)
+    @Before
+    fun init() {
+        placeDetails = ChosenPlaceDetails()
     }
 
-    private fun updateInformation(values: Any) {
-        when (values) {
-            is HashMap<*, *> -> {
 
-                for (value in values) {
-                    val hashMap = value.value as java.util.HashMap<*, *>
-                    try {
-                        updateRating(hashMap[BaseValues.PARAM_RATING].toString().toDouble())
-                        updateComments(hashMap)
-                        //  run()
-                    } catch (e: Exception) {
-
-                    }
-                }
-            }
-            else -> {
-
-            }
-        }
-
-
+    @Test
+    fun isCorrect() {
+        placeDetails.createPlaceDetails(prepareObject().get(BaseValues.PARAM_RESULT))
+        assertTrue(placeDetails.getCurrentPlaceDetails().getOpenedNow() == "false")
     }
 
-    private fun updateComments(value: java.util.HashMap<*, *>) {
-        placeDetails.updateComments(PlaceComment(
-                value[PARAM_AUTHOR_NAME].toString(),
-                value[PARAM_COMMENTS].toString(),
-                "",
-                "",
-                value[PARAM_RATING].toString().toDouble()
-
-        ))
-
-        Toast.makeText(this, getString(R.string.added_comment), Toast.LENGTH_SHORT).show()
+    @Test
+    fun isIncorrect() {
+        placeDetails.createPlaceDetails(prepareObject().get(BaseValues.PARAM_RESULT))
+        assertFalse(placeDetails.getCurrentPlaceDetails().getOpenedNow() == "true")
     }
 
-    private fun updateRating(value: Double) {
-        placeRating += value
-        placeRating /= 2
-        placeRating = DecimalFormat("#.##").format(placeRating).replace(",", ".").toDouble()
-        ratingTextView.text = placeRating.toString()
-
-
-    }
-
-    var apply = true
-    lateinit var ratingTextView: TextView
-
-    fun addRating(view: View) {
-        place_details_layout.visibility = View.GONE
-        add_rating.visibility = View.VISIBLE
-    }
-
-    fun addToFav(@Suppress(BaseValues.UNUSED_PARAMETER) view: View) {
-        this.mDatabase.child("favourites").child(currentUser.uid).child(placeDetails.getPlaceId()).setValue(placeDetails.getPlaceName())
-        Toast.makeText(this, getString(R.string.added), Toast.LENGTH_SHORT).show()
-    }
-
-    fun confirmRating(view: View) {
-
-        val rating = findViewById<View>(R.id.rating_radios) as RadioGroup
-        val checked = rating.checkedRadioButtonId
-        var selectedButton: RadioButton
-
-
-        val comment = findViewById<View>(R.id.comment_text) as EditText
-        val commentText = comment.text
-
-        when {
-            commentText.isEmpty() -> Toast.makeText(this, "napisz komentarz", Toast.LENGTH_LONG).show()
-            checked == -1 -> Toast.makeText(this, "oceń restaurację", Toast.LENGTH_LONG).show()
-            else -> {
-                selectedButton = findViewById<View>(checked) as RadioButton
-                mRestaurantRef.child(currentUser.uid).child(BaseValues.PARAM_AUTHOR_NAME).setValue(currentUser.displayName)
-                mRestaurantRef.child(currentUser.uid).child(BaseValues.PARAM_RATING).setValue(selectedButton.text.toString().toDouble())
-                mRestaurantRef.child(currentUser.uid).child(BaseValues.PARAM_COMMENTS).setValue(commentText.toString())
-            }
-        }
-        place_details_layout.visibility = View.VISIBLE
-        add_rating.visibility = View.GONE
-    }
-
-    fun cancelRating(view: View) {
-        place_details_layout.visibility = View.VISIBLE
-        add_rating.visibility = View.GONE
-    }
-
-    override fun onTaskCompleted() {
-        //details.createPlaceDetails(prepareObject().get(BaseValues.PARAM_RESULT))
-        currentUser = mAuth.currentUser!!
-        placeDetails = details.getCurrentPlaceDetails()
-        placeRating = placeDetails.getRating()
-        mRestaurantRef = mRestaurantsRef.child(placeDetails.getPlaceId())
-        mRestaurantRef.addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-                placeDetails = details.getCurrentPlaceDetails()
-            }
-
-            override fun onDataChange(p0: DataSnapshot?) {
-                val value = p0?.value
-                placeDetails = details.getCurrentPlaceDetails()
-                if (value != null) {
-                    updateInformation(value)
-                }
-                applyDetails(apply)
-            }
-        })
-    }
-
-    private fun applyDetails(apply: Boolean) {
-        if (apply) {
-            //setup average place rating view
-
-
-            val inflater = LayoutInflater.from(this)
-            val activityPlaceDetails = inflater.inflate(R.layout.activity_place_details, null) //FIXME Do not use null as ViewGroup
-            val ratingLinearLayout = activityPlaceDetails.findViewById(R.id.rating) as LinearLayout
-            for (i in 1..5) {
-                val starsImageView = ImageView(this)
-                starsImageView.id = View.generateViewId()
-                val iwIconParams = LinearLayout.LayoutParams(resources.getDimension(R.dimen.place_details_star).toInt(), resources.getDimension(R.dimen.place_details_star).toInt())
-                starsImageView.layoutParams = iwIconParams
-
-                when {
-                    i <= placeRating -> starsImageView.setImageDrawable(getDrawable(R.drawable.star128))
-                    i - 0.7 < placeRating && i - 0.3 > placeRating -> starsImageView.setImageDrawable(getDrawable(R.drawable.star128_half))
-                    else -> starsImageView.setImageDrawable(getDrawable(R.drawable.star128_emptyf))
-                }
-
-                ratingLinearLayout.addView(starsImageView)
-            }
-
-            ratingTextView = TextView(this)
-            ratingTextView.text = placeRating.toString()
-            ratingTextView.textSize = resources.getDimension(R.dimen.place_details_rating_text)
-            ratingTextView.id = View.generateViewId()
-            val twRatingParams = RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-            twRatingParams.setMargins(resources.getDimension(R.dimen.place_details_rating_text_margin).toInt(), DEFAULT_INT, DEFAULT_INT, DEFAULT_INT)
-            ratingTextView.layoutParams = twRatingParams
-
-            ratingLinearLayout.addView(ratingTextView)
-
-
-            //setup place comments view
-            val comments = placeDetails.getComments()
-            val commentsLinearLayout = activityPlaceDetails.findViewById(R.id.place_details_comments_layout) as LinearLayout
-            for (i in 0 until comments.size) {
-                val comment = comments[i]
-
-                val commentatorNameAndRatingRelativeLayout = RelativeLayout(this)
-                commentatorNameAndRatingRelativeLayout.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                commentatorNameAndRatingRelativeLayout.background = resources.getDrawable(R.drawable.custom_background_top, theme)
-
-                val commentatorAndRatingCurrentCommentLinearLayout = LinearLayout(this)
-                val commentatorAndRatingCurrentCommentLinearLayoutParameters = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                commentatorAndRatingCurrentCommentLinearLayout.gravity = Gravity.CENTER
-                commentatorAndRatingCurrentCommentLinearLayout.id = View.generateViewId()
-                commentatorAndRatingCurrentCommentLinearLayout.layoutParams = commentatorAndRatingCurrentCommentLinearLayoutParameters
-
-                val cmmentatorNameTextView = TextView(this)
-                cmmentatorNameTextView.text = comment.getCommentatorName()
-                cmmentatorNameTextView.textSize = resources.getDimension(R.dimen.place_details_rating_text)
-
-                commentatorAndRatingCurrentCommentLinearLayout.addView(cmmentatorNameTextView)
-
-                val commentatorRatingStarTextView = ImageView(this)
-                val commentatorRatingStarTextViewParameters = LinearLayout.LayoutParams(resources.getDimension(R.dimen.place_details_star).toInt(), resources.getDimension(R.dimen.place_details_star).toInt())
-                commentatorRatingStarTextViewParameters.gravity = Gravity.END
-                commentatorRatingStarTextViewParameters.setMargins(resources.getDimension(R.dimen.place_details_rating_comment_margin).toInt(), DEFAULT_INT, DEFAULT_INT, DEFAULT_INT)
-                commentatorRatingStarTextView.layoutParams = commentatorRatingStarTextViewParameters
-                commentatorRatingStarTextView.setImageDrawable(getDrawable(R.drawable.star128))
-
-                commentatorAndRatingCurrentCommentLinearLayout.addView(commentatorRatingStarTextView)
-
-                val commentatorRatingTextView = TextView(this)
-                commentatorRatingTextView.text = comment.getRating().toString()
-                commentatorRatingTextView.textSize = resources.getDimension(R.dimen.place_details_rating_text)
-
-                commentatorAndRatingCurrentCommentLinearLayout.addView(commentatorRatingTextView)
-                commentatorNameAndRatingRelativeLayout.addView(commentatorAndRatingCurrentCommentLinearLayout)
-
-
-                val tvCommentText = TextView(this)
-                tvCommentText.text = comment.getComment()
-                tvCommentText.textSize = resources.getDimension(R.dimen.restaurant_list_others)
-
-                val tvDistanceParams = RelativeLayout.LayoutParams(R.dimen.restaurant_list_width_location, RelativeLayout.LayoutParams.WRAP_CONTENT)
-                tvDistanceParams.addRule(RelativeLayout.ALIGN_PARENT_END)
-                tvDistanceParams.addRule(RelativeLayout.BELOW, commentatorAndRatingCurrentCommentLinearLayout.id)
-                tvCommentText.layoutParams = tvDistanceParams
-
-                commentatorNameAndRatingRelativeLayout.addView(tvCommentText)
-                commentsLinearLayout.addView(commentatorNameAndRatingRelativeLayout)
-
-            }
-
-            setContentView(activityPlaceDetails)
-
-
-            //setup place name
-            place_name.text = placeDetails.getPlaceName()
-
-            //setup info if place is now opened
-            places_details_opened_now.text = if (EMPTY_STRING == placeDetails.getOpenedNow()) {
-                places_details_opened_now.visibility = View.INVISIBLE
-                EMPTY_STRING
-            } else {
-                places_details_opened_now.visibility = View.VISIBLE
-                when (placeDetails.getOpenedNow().toBoolean()) {
-                    true -> getString(R.string.opened).toUpperCase()
-                    false -> getString(R.string.closed).toUpperCase()
-                }
-            }
-
-            //setup photo presenting restaurant
-            val photoUrl = GenerateUrl(this).placePhoto(restaurant_photo.layoutParams.width, restaurant_photo.layoutParams.height, placeDetails.getPhotoRef())
-            if (EMPTY_STRING != photoUrl) {
-                Glide.with(this).load(photoUrl).into(restaurant_photo)
-            }
-
-            //setup place address and click listener for opening google maps
-            places_details_address.text = if (EMPTY_STRING == placeDetails.getAddress()) {
-                places_details_address.visibility = View.VISIBLE
-                getString(R.string.show_in_google_maps)
-
-            } else {
-                places_details_address.visibility = View.VISIBLE
-                placeDetails.getAddress()
-            }
-
-            places_details_address.setOnClickListener {
-                val uri = GOOGLE_MAPS_URL + GOOGLE_MAPS_DIRECT_TO + placeDetails.getLocation().toString()
-                val intent = Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri))
-                startActivity(intent)
-            }
-
-            //setup place phone number and click listener for opening calling interface
-            places_details_phone.text = if (EMPTY_STRING == placeDetails.getPhoneNumber()) {
-                places_details_address.visibility = View.GONE
-                EMPTY_STRING
-            } else {
-//            @IntDef when (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
-//                PackageManager.PERMISSION_GRANTED -> places_details_phone.setOnClickListener {
-//
-//                    val callIntent = Intent(Intent.ACTION_CALL)
-//                    callIntent.data = Uri.parse("tel:${placeDetails.getPhoneNumber()}")
-//                    startActivity(callIntent)
-//                }
-//            }
-
-                //WORKAROUND FOR NO NEED OF CALL PERMISSION
-                //and for not starting call automatically
-                places_details_phone.setOnClickListener {
-                    val uri = HTML_TEL + placeDetails.getPhoneNumber().replace(SPACE, EMPTY_STRING)
-                    val intent = Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri))
-                    startActivity(intent)
-                }
-
-                places_details_address.visibility = View.VISIBLE
-                placeDetails.getPhoneNumber()
-            }
-
-            print("")
-
-            //setup place webpage and click listener for opening in browser
-            places_details_website.text = if (EMPTY_STRING.equals(placeDetails.getWebsite())) {
-                places_details_website.visibility = View.GONE
-                EMPTY_STRING
-            } else {
-                places_details_website.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(placeDetails.getWebsite()))
-                    startActivity(intent)
-                }
-                places_details_website.visibility = View.VISIBLE
-                placeDetails.getWebsite()
-            }
-            this.apply = false
-        }
-    }
-
-    private var placeDetails = PlaceDetails.emptyPlace()
-    private var details = ChosenPlaceDetails()
-    private lateinit var currentUser: FirebaseUser
-    private val mDatabase = FirebaseDatabase.getInstance().reference
-    private val mRestaurantsRef = this.mDatabase.child("restaurant")
-    private lateinit var mRestaurantRef: DatabaseReference
-    private lateinit var mFavRef: DatabaseReference
-    private lateinit var mRestaurantCommentsRef: DatabaseReference
-    private var placeRating: Double = BaseValues.DEFAULT_DOUBLE
-
-
-///FIXME ONLY FOR TEST
 
     fun prepareObject(): JsonObject {
         val parser = JsonParser()
@@ -648,4 +342,5 @@ class PlaceDetailsActivity : BaseMenuActivity(), OnTaskCompleted {
             "   },\n" +
             "   \"status\" : \"OK\"\n" +
             "}"
+
 }

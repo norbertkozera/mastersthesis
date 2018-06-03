@@ -67,4 +67,6 @@
     <string name="error_field_is_required">Pole jest wymagane</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="cancel">Anuluj</string>
+    <string name="added">Dodano</string>
+    <string name="added_comment">Dodano! Komentarz będzie widoczny po odświeżeniu widoku</string>
 </resources>
