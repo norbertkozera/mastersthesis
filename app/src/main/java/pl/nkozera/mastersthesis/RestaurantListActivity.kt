@@ -50,24 +50,24 @@ class RestaurantListActivity : BaseMenuActivity(), OnTaskCompleted {
         city = intent.getStringExtra(PARAM_CITY)
         location = LocationCoordinates(intent.getDoubleExtra(PARAM_LATITUDE, DEFAULT_DOUBLE), intent.getDoubleExtra(PARAM_LONGITUDE, DEFAULT_DOUBLE))
         val placesFromCache = PlacesCache.getPlacesInCityFromCache(city)
-//        if (!distance.isEmpty()) {
-//            val placesInLocation = PlacesCache.getPlacesInLocation(location, distance)
-//            when {
-//                placesInLocation!!.isNotEmpty() -> {
-//                    placesList.addAll(placesInLocation)
-//                    hideProgressBar(R.layout.activity_restaurant_list)
-//                    printPlaces()
-//                }
-//                else -> GetPlacesAsyncTask(places, true, this).execute(GenerateUrl(this).findPlacesUrl(location, distance, city, EMPTY_STRING))
-//            }
-//        } else if (placesFromCache != null) {
-//            placesList.addAll(placesFromCache)
-//            hideProgressBar(R.layout.activity_restaurant_list)
-//            printPlaces()
-//        } else {
-        val url = GenerateUrl (this).findPlacesUrl(location, distance, city, EMPTY_STRING);
-        GetPlacesAsyncTask(places, true, this).execute(url)
-//        }
+        if (!distance.isEmpty()) {
+            val placesInLocation = PlacesCache.getPlacesInLocation(location, distance)
+            when {
+                placesInLocation!!.isNotEmpty() -> {
+                    placesList.addAll(placesInLocation)
+                    hideProgressBar(R.layout.activity_restaurant_list)
+                    printPlaces()
+                }
+                else -> GetPlacesAsyncTask(places, true, this).execute(GenerateUrl(this).findPlacesUrl(location, distance, city, EMPTY_STRING))
+            }
+        } else if (placesFromCache != null) {
+            placesList.addAll(placesFromCache)
+            hideProgressBar(R.layout.activity_restaurant_list)
+            printPlaces()
+        } else {
+            val url = GenerateUrl(this).findPlacesUrl(location, distance, city, EMPTY_STRING);
+            GetPlacesAsyncTask(places, true, this).execute(url)
+        }
     }
 
 
@@ -190,6 +190,10 @@ class RestaurantListActivity : BaseMenuActivity(), OnTaskCompleted {
     private fun onClick(i: Int) {
         val placeDetailsActivity = Intent(this, PlaceDetailsActivity::class.java)
         placeDetailsActivity.putExtra(PARAM_PLACE_ID, placesList[i].getPlaceId())
+        placeDetailsActivity.putExtra(PARAM_CITY, city)
+        placeDetailsActivity.putExtra(PARAM_DISTANCE, intent.getStringExtra(PARAM_DISTANCE))
+        placeDetailsActivity.putExtra(PARAM_LATITUDE, intent.getDoubleExtra(PARAM_LATITUDE, DEFAULT_DOUBLE))
+        placeDetailsActivity.putExtra(PARAM_LONGITUDE, intent.getDoubleExtra(PARAM_LONGITUDE, DEFAULT_DOUBLE))
         showProgressBar()
         startActivity(placeDetailsActivity)
         finish()
@@ -203,11 +207,7 @@ class RestaurantListActivity : BaseMenuActivity(), OnTaskCompleted {
     private var placesList = LinkedList<Place>()
 
 
-
-
-
 //FIXME ONLY FOR TEST
-
 
 
     fun prepareArray(): JsonArray {

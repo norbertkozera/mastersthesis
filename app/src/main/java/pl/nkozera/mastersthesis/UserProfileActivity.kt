@@ -9,6 +9,7 @@ package pl.nkozera.mastersthesis
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.View.generateViewId
 import android.widget.RelativeLayout
@@ -43,7 +44,7 @@ class UserProfileActivity : BaseMenuActivity() {
 
     private fun fav() {
         val mFavRef = mRestaurantsRef.child(mAuth.currentUser!!.uid)
-        mFavRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        mFavRef.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError?) {
 
             }
@@ -62,6 +63,9 @@ class UserProfileActivity : BaseMenuActivity() {
         var i =0
         when (p0) {
             is HashMap<*, *> -> {
+                if(p0.size>0){
+                    fav_text.visibility = View.VISIBLE
+                }
                 for (favourite in p0) {
                     try {
 
@@ -97,6 +101,7 @@ class UserProfileActivity : BaseMenuActivity() {
 
 
     }
+
 
     fun logout(@Suppress(UNUSED_PARAMETER) view: View) {
         firebaseLogOut()

@@ -9,17 +9,16 @@ package pl.nkozera.mastersthesis
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import kotlinx.android.synthetic.main.activity_find_your_city.*
 import kotlinx.android.synthetic.main.activity_place_details.*
+import pl.nkozera.mastersthesis.R.id.results
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
 import pl.nkozera.mastersthesis.base.BaseValues
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_INT
@@ -331,6 +330,43 @@ class PlaceDetailsActivity : BaseMenuActivity(), OnTaskCompleted {
             this.apply = false
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.profile -> {
+                startActivity(Intent(this, UserProfileActivity::class.java))
+                true
+            }
+            R.id.search -> {
+                startActivity(Intent(this, FindCityActivity::class.java))
+                true
+            }
+            R.id.results -> {
+
+                if(intent.getStringExtra(BaseValues.PARAM_CITY).isNullOrEmpty()){
+                    Toast.makeText(this, getString(R.string.prompt_no_res), Toast.LENGTH_SHORT).show()
+                    false
+                } else {
+
+                val findRestaurants = Intent(this, RestaurantListActivity::class.java)
+                findRestaurants.putExtra(BaseValues.PARAM_CITY, intent.getStringExtra(BaseValues.PARAM_CITY))
+                findRestaurants.putExtra(BaseValues.PARAM_DISTANCE, intent.getStringExtra(BaseValues.PARAM_DISTANCE))
+                findRestaurants.putExtra(BaseValues.PARAM_LATITUDE, intent.getDoubleExtra(BaseValues.PARAM_LATITUDE, BaseValues.DEFAULT_DOUBLE))
+                findRestaurants.putExtra(BaseValues.PARAM_LONGITUDE, intent.getDoubleExtra(BaseValues.PARAM_LONGITUDE, BaseValues.DEFAULT_DOUBLE))
+
+                showProgressBar()
+                startActivity(findRestaurants)
+                finish()
+                true
+            }}
+            R.id.menu_item_logout -> {
+                firebaseLogOut()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 
     private var placeDetails = PlaceDetails.emptyPlace()
     private var details = ChosenPlaceDetails()
