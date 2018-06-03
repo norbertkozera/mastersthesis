@@ -1,10 +1,16 @@
 <!--
+  ~ Master Thiesis project
+  ~ All rights reserved
+  ~ Created by Norbert Kozera <nkozera@gmail.com>
+  -->
+
+<!--
   ~ Master Thesis project
   ~ All rights reserved
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="facebook_app_id" translatable="false">315142325680843</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb315142325680843</string>
     <string name="facebook_client_token" translatable="false">10f17b21fc4b3a40561f66a94b0c68ef</string>
@@ -30,12 +36,12 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
     <string name="prompt_old_password">Stare hasło</string>
-    <string name="prompt_new_password">Nowe hasło</string>
+    <string name="prompt_new_password" tools:ignore="Typos">Nowe hasło</string>
     <string name="prompt_retype_new_password">Stare hasło</string>
     <string name="prompt_retypr_password">Wpisz hasło ponownie</string>
     <string name="prompt_user_name">Nazwa użytkownika</string>
     <string name="prompt_avatar">Zdjęcie\nprofilowe\n*nie wymagane</string>
-    <string name="type_address">Wprowadź adres</string>
+    <string name="type_address" tools:ignore="Typos">Wprowadź adres</string>
     <string name="action_logout">Wyloguj</string>
     <string name="or">Lub:</string>
     <string name="search">Szukaj</string>
@@ -68,11 +74,14 @@
     <string name="location_denied">Localizacja zabroniona, aby to zmienić kliknij tutaj</string>
     <string name="location_not_allowed">Nie pozwoliles na lokalizację</string>
     <string name="photo">Zdjęcie</string>
-    <string name="error_invalid_email">Proszę podać poprawny adres email</string>
+    <string name="error_invalid_email" tools:ignore="Typos">Proszę podać poprawny adres email</string>
     <string name="error_invalid_password">Hasło jest za krótkie</string>
     <string name="error_incorrect_password">Hasło nie spełnia wymagań</string>
     <string name="error_different_passwords">Hasła różnią się</string>
     <string name="error_field_is_required">Pole jest wymagane</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="fav">ULUBIONE</string>
+    <string name="cancel">Anuluj</string>
+    <string name="added">Dodano</string>
+    <string name="added_comment">Dodano! Komentarz będzie widoczny po odświeżeniu widoku</string>
 </resources>

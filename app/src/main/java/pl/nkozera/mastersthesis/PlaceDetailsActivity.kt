@@ -1,4 +1,10 @@
 /*
+ * Master Thiesis project
+ * All rights reserved
+ * Created by Norbert Kozera <nkozera@gmail.com>
+ */
+
+/*
  * Master Thesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
@@ -6,6 +12,7 @@
 
 package pl.nkozera.mastersthesis
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -16,9 +23,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import kotlinx.android.synthetic.main.activity_find_your_city.*
 import kotlinx.android.synthetic.main.activity_place_details.*
-import pl.nkozera.mastersthesis.R.id.results
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
 import pl.nkozera.mastersthesis.base.BaseValues
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.DEFAULT_INT
@@ -99,7 +104,7 @@ class PlaceDetailsActivity : BaseMenuActivity(), OnTaskCompleted {
     var apply = true
     lateinit var ratingTextView: TextView
 
-    fun addRating(view: View) {
+    fun addRating(@Suppress(BaseValues.UNUSED_PARAMETER) view: View) {
         place_details_layout.visibility = View.GONE
         add_rating.visibility = View.VISIBLE
     }
@@ -109,11 +114,11 @@ class PlaceDetailsActivity : BaseMenuActivity(), OnTaskCompleted {
         Toast.makeText(this, getString(R.string.added), Toast.LENGTH_SHORT).show()
     }
 
-    fun confirmRating(view: View) {
+    fun confirmRating(@Suppress(BaseValues.UNUSED_PARAMETER) view: View) {
 
         val rating = findViewById<View>(R.id.rating_radios) as RadioGroup
         val checked = rating.checkedRadioButtonId
-        var selectedButton: RadioButton
+        val selectedButton: RadioButton
 
 
         val comment = findViewById<View>(R.id.comment_text) as EditText
@@ -133,7 +138,7 @@ class PlaceDetailsActivity : BaseMenuActivity(), OnTaskCompleted {
         add_rating.visibility = View.GONE
     }
 
-    fun cancelRating(view: View) {
+    fun cancelRating(@Suppress(BaseValues.UNUSED_PARAMETER) view: View) {
         place_details_layout.visibility = View.VISIBLE
         add_rating.visibility = View.GONE
     }
@@ -160,6 +165,7 @@ class PlaceDetailsActivity : BaseMenuActivity(), OnTaskCompleted {
         })
     }
 
+    @SuppressLint("InflateParams")
     private fun applyDetails(apply: Boolean) {
         if (apply) {
             //setup average place rating view
