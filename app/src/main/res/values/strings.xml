@@ -71,4 +71,5 @@
     <string name="error_different_passwords">Hasła różnią się</string>
     <string name="error_field_is_required">Pole jest wymagane</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="fav">ULUBIONE</string>
 </resources>

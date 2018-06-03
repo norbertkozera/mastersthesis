@@ -6,17 +6,26 @@
 
 package pl.nkozera.mastersthesis
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.View.generateViewId
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_user_profile.*
 import pl.nkozera.mastersthesis.auth.PasswordValidator
 import pl.nkozera.mastersthesis.base.BaseMenuActivity
+import pl.nkozera.mastersthesis.base.BaseValues
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.PWD
 import pl.nkozera.mastersthesis.base.BaseValues.Companion.UNUSED_PARAMETER
 
@@ -27,6 +36,66 @@ class UserProfileActivity : BaseMenuActivity() {
         setContentView(R.layout.activity_user_profile)
         loadUserAvatar()
         loadUserData()
+        fav()
+
+    }
+
+
+    private fun fav() {
+        val mFavRef = mRestaurantsRef.child(mAuth.currentUser!!.uid)
+        mFavRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot?) {
+
+                if (p0 != null) {
+                    dupa(p0.value!!)
+                }
+
+            }
+        })
+    }
+
+    private fun dupa(p0: Any) {
+        var i =0
+        when (p0) {
+            is HashMap<*, *> -> {
+                for (favourite in p0) {
+                    try {
+
+                        val tv = TextView(this)
+                        tv.id = i
+                        tv.text = favourite.value.toString()
+                        tv.textSize = resources.getDimension(R.dimen.fav_list_name_size)
+
+                        if (i>0) {
+                            val tvParams = RelativeLayout.LayoutParams(R.dimen.restaurant_list_width_location, RelativeLayout.LayoutParams.WRAP_CONTENT)
+                            tvParams.addRule(RelativeLayout.BELOW, i- 1)
+                            tv.layoutParams = tvParams
+                        }
+                        tv.setOnClickListener {
+                            val placeDetailsActivity = Intent(this, PlaceDetailsActivity::class.java)
+                            placeDetailsActivity.putExtra(BaseValues.PARAM_PLACE_ID, favourite.key.toString())
+                            showProgressBar()
+                            startActivity(placeDetailsActivity)
+                            finish()
+                        }
+
+                        fav.addView(tv)
+
+
+                    } catch (e: Exception) {
+                    }
+                    i++
+                }
+            }
+            else -> {
+            }
+        }
+
+
     }
 
     fun logout(@Suppress(UNUSED_PARAMETER) view: View) {
@@ -98,4 +167,7 @@ class UserProfileActivity : BaseMenuActivity() {
 
     private var userAvatar: Uri? = null
     private var isPhotoLoaded = false
+    private val mDatabase = FirebaseDatabase.getInstance().reference
+    private val mRestaurantsRef = this.mDatabase.child("favourites")
+
 }
