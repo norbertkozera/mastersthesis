@@ -17,6 +17,8 @@
     <string name="could_not_logout">Opracja wylogowanie się nie powiodła, spróbuj ponownie</string>
     <string name="anonymus_user">Niezalogowany</string>
     <string name="user_profile">Profil użytkownika</string>
+    <string name="find_restaurant">Szukaj restauracji</string>
+    <string name="results">Wyniki wyszukiwania</string>
     <string name="error_accounts_duplicated">Konto o podanym adresie email już istnieje</string>
     <string name="error_firebase_auth_other">Wystąpił problem z logowaniem, prosimy spróbować później</string>
     <string name="error_firebase_other">Wystąpił problem z bazą danych, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
@@ -24,6 +26,7 @@
     <string name="error_no_search_data">Wprowadź dane wyszkiwania</string>
     <string name="error_other">Wystąpił niezidentyfikowany problem, spróbuj ponownie</string>
     <string name="back_again_logout">Wcisnij wstecz ponownie aby wylogować</string>
+    <string name="prompt_no_res">Nie mamy wyników wyszukiwania</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
     <string name="prompt_old_password">Stare hasło</string>

@@ -10,6 +10,7 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import pl.nkozera.mastersthesis.FindCityActivity
 import pl.nkozera.mastersthesis.LoginActivity
 import pl.nkozera.mastersthesis.R
 import pl.nkozera.mastersthesis.UserProfileActivity
@@ -40,6 +41,14 @@ open class BaseMenuActivity : BaseActivity() {
             R.id.profile -> {
                 startActivity(Intent(this, UserProfileActivity::class.java))
                 true
+            }
+            R.id.search -> {
+                startActivity(Intent(this, FindCityActivity::class.java))
+                true
+            }
+            R.id.results -> {
+                Toast.makeText(this, getString(R.string.prompt_no_res), Toast.LENGTH_SHORT).show()
+                false
             }
             R.id.menu_item_logout -> {
                 firebaseLogOut()

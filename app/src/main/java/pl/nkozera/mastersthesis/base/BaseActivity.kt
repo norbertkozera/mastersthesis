@@ -12,12 +12,14 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.Toast
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.annotations.NotNull
 import pl.nkozera.mastersthesis.LoginActivity
 import pl.nkozera.mastersthesis.R
@@ -45,7 +47,9 @@ open class BaseActivity : AppCompatActivity() {
         when (requestCode) {
             ASK_FOR_PERMISSIONS -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, getString(R.string.permission_allowed), Toast.LENGTH_SHORT).show()
+                    actvity_login_location_denied.visibility = View.GONE
+                } else if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_DENIED){
+                    actvity_login_location_denied.visibility = View.VISIBLE
                 }
             }
         }

@@ -15,6 +15,18 @@
         android:title="@string/user_profile"/>
 
     <item
+        android:id="@+id/search"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/find_restaurant" />
+    <item
+        android:id="@+id/results"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/results"
+        android:visible="true" />
+
+    <item
         android:id="@+id/menu_item_logout"
         android:orderInCategory="100"
         android:title="@string/action_logout"

@@ -92,7 +92,8 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="16dp"
                 android:textSize="20sp"
-                android:text="@string/fav"/>
+                android:text="@string/fav"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/fav"
