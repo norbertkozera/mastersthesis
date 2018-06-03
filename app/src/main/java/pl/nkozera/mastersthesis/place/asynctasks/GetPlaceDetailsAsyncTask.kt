@@ -11,7 +11,7 @@ import android.os.AsyncTask
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import pl.nkozera.mastersthesis.base.BaseValues
-import pl.nkozera.mastersthesis.place.ChoosenPlaceDetails
+import pl.nkozera.mastersthesis.place.ChosenPlaceDetails
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -19,7 +19,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class GetPlaceDetailsAsyncTask(
-        private val container: ChoosenPlaceDetails,
+        private val container: ChosenPlaceDetails,
         private val listener: OnTaskCompleted
 ) : AsyncTask<String, String, String>() {
 
@@ -72,7 +72,7 @@ class GetPlaceDetailsAsyncTask(
 
     private fun streamToString(inputStream: InputStream): String {
         val bufferReader = BufferedReader(InputStreamReader(inputStream))
-        var line: String
+        var line: String?
         var result = ""
 
         try {

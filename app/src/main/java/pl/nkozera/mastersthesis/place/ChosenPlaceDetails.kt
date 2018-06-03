@@ -29,7 +29,7 @@ import pl.nkozera.mastersthesis.place.objects.PlaceComment
 import pl.nkozera.mastersthesis.place.objects.PlaceDetails
 
 
-class ChoosenPlaceDetails : Common() {
+class ChosenPlaceDetails : Common() {
 
 
     fun getCurrentPlaceDetails(): PlaceDetails {
