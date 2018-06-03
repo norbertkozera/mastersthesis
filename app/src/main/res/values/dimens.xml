@@ -8,6 +8,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="restaurant_list_name_size">10sp</dimen>
+    <dimen name="fav_list_name_size">15sp</dimen>
     <dimen name="place_details_star">30dp</dimen>
     <dimen name="place_details_rating_text">10sp</dimen>
     <dimen name="place_details_rating_text_margin">50dp</dimen>
