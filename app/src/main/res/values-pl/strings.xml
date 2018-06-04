@@ -61,7 +61,7 @@
     <string name="restaurants_in_city">Znajdź restaurację w mieście:</string>
     <string name="action_settings">Ustawienia:</string>
     <string name="permission_allowed">Uprawnienie przyznano</string>
-    <string name="location_denied">Localizacja zabroniona, aby to zmienić kliknij tutaj</string>
+    <string name="location_denied">Lokalizacja zabroniona, aby to zmienić kliknij tutaj</string>
     <string name="location_not_allowed">Nie pozwoliles na lokalizację</string>
     <string name="photo">Zdjęcie</string>
     <string name="error_invalid_email">Proszę podać poprawny adres email</string>
