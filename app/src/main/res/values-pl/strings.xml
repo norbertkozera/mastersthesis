@@ -1,5 +1,5 @@
 <!--
-  ~ Master Thesis project
+  ~ Master Thiesis project
   ~ All rights reserved
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
@@ -7,11 +7,14 @@
 <resources>
     <string name="app_label">Praca magisterska</string>
     <string name="app_name">Praca magisterska</string>
+
     <string name="error_invalid_credentials">Błędne dane logowania</string>
     <string name="error_upload_avatar">Problem z ładowaniem zdjęcia profilowego</string>
     <string name="could_not_logout">Opracja wylogowanie się nie powiodła, spróbuj ponownie</string>
     <string name="anonymus_user">Niezalogowany</string>
     <string name="user_profile">Profil użytkownika</string>
+    <string name="find_restaurant">Szukaj restauracji</string>
+    <string name="results">Wyniki wyszukiwania</string>
     <string name="error_accounts_duplicated">Konto o podanym adresie email już istnieje</string>
     <string name="error_firebase_auth_other">Wystąpił problem z logowaniem, prosimy spróbować później</string>
     <string name="error_firebase_other">Wystąpił problem z bazą danych, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
@@ -19,6 +22,7 @@
     <string name="error_no_search_data">Wprowadź dane wyszkiwania</string>
     <string name="error_other">Wystąpił niezidentyfikowany problem, spróbuj ponownie</string>
     <string name="back_again_logout">Wcisnij wstecz ponownie aby wylogować</string>
+    <string name="prompt_no_res">Nie mamy wyników wyszukiwania</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Hasło</string>
     <string name="prompt_old_password">Stare hasło</string>
@@ -66,7 +70,9 @@
     <string name="error_different_passwords">Hasła różnią się</string>
     <string name="error_field_is_required">Pole jest wymagane</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="fav">ULUBIONE</string>
     <string name="cancel">Anuluj</string>
     <string name="added">Dodano</string>
     <string name="added_comment">Dodano! Komentarz będzie widoczny po odświeżeniu widoku</string>
 </resources>
+

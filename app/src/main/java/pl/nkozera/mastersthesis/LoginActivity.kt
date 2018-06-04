@@ -1,5 +1,5 @@
 /*
- * Master Thesis project
+ * Master Thiesis project
  * All rights reserved
  * Created by Norbert Kozera <nkozera@gmail.com>
  */
@@ -9,12 +9,10 @@ package pl.nkozera.mastersthesis
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.support.annotation.IntDef
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
@@ -34,7 +32,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
-import kotlinx.android.synthetic.main.activity_find_your_city.*
 import kotlinx.android.synthetic.main.activity_login.*
 import pl.nkozera.mastersthesis.auth.EmailValidator
 import pl.nkozera.mastersthesis.auth.FieldValidator
@@ -50,7 +47,7 @@ import java.io.IOException
 import java.lang.Exception
 import java.security.SecureRandom
 
-
+@SuppressWarnings("deprecation")
 class LoginActivity : BaseActivity() {
 
     //TODO Refactor this calss
@@ -234,6 +231,7 @@ class LoginActivity : BaseActivity() {
                 }
     }
 
+    @SuppressWarnings("deprecation")
     private fun handleUploadAvatar(data: Intent?) {
         showAvatarProgrssBar()
         val selectedImageUri: Uri = data?.data as Uri
@@ -249,7 +247,7 @@ class LoginActivity : BaseActivity() {
             imageRef.putBytes(bytes).addOnFailureListener {
                 hideAvatarProgressBar(false)
             }.addOnSuccessListener {
-                val url: Uri = it?.downloadUrl as Uri //FIXME this is working but deprecated
+                val url: Uri = @Suppress("deprecation") it?.downloadUrl as Uri //FIXME this is working but deprecated
                 Glide.with(this).load(url).into(loaded_avatar)
                 avatarUrl = url
                 hideAvatarProgressBar(true)

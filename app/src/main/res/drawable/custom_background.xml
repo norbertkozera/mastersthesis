@@ -4,18 +4,6 @@
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
 
-<!--
-  ~ Master Thesis project
-  ~ All rights reserved
-  ~ Created by Norbert Kozera <nkozera@gmail.com>
-  -->
-
-<!--
-  ~ Master Thesis project
-  ~ All rights reserved
-  ~ Created by Norbert Kozera <nkozera@gmail.com>
-  -->
-
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <corners android:radius="10dp" />

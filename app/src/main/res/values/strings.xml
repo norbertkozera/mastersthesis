@@ -1,10 +1,10 @@
 <!--
-  ~ Master Thesis project
+  ~ Master Thiesis project
   ~ All rights reserved
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="facebook_app_id" translatable="false">315142325680843</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb315142325680843</string>
     <string name="facebook_client_token" translatable="false">10f17b21fc4b3a40561f66a94b0c68ef</string>
@@ -12,67 +12,70 @@
 
     <string name="app_label">Master Thesis</string>
     <string name="app_name">Master Thesis</string>
-    <string name="error_invalid_credentials">Błędne dane logowania</string>
-    <string name="error_upload_avatar">Problem z ładowaniem zdjęcia profilowego</string>
-    <string name="could_not_logout">Opracja wylogowanie się nie powiodła, spróbuj ponownie</string>
-    <string name="anonymus_user">Niezalogowany</string>
-    <string name="user_profile">Profil użytkownika</string>
-    <string name="find_restaurant">Szukaj restauracji</string>
-    <string name="results">Wyniki wyszukiwania</string>
-    <string name="error_accounts_duplicated">Konto o podanym adresie email już istnieje</string>
-    <string name="error_firebase_auth_other">Wystąpił problem z logowaniem, prosimy spróbować później</string>
-    <string name="error_firebase_other">Wystąpił problem z bazą danych, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
-    <string name="error_search">Wystąpił problem z wyszukiwaniem, prosimy spróbować później, jeśli sytuacja się powtórzy prosimy o kontakt</string>
-    <string name="error_no_search_data">Wprowadź dane wyszkiwania</string>
-    <string name="error_other">Wystąpił niezidentyfikowany problem, spróbuj ponownie</string>
-    <string name="back_again_logout">Wcisnij wstecz ponownie aby wylogować</string>
-    <string name="prompt_no_res">Nie mamy wyników wyszukiwania</string>
+	<string name="error_invalid_credentials">Wrong login data</string>
+    <string name="error_upload_avatar">Problem loading profile picture</string>
+    <string name="could_not_logout">Logout was incorrect, try again</string>
+    <string name="anonymus_user">Not logged in</string>
+    <string name="user_profile">User profile</string>
+    <string name="find_restaurant">Find restaurant</string>
+    <string name="results">Search results</string>
+    <string name="error_accounts_duplicated">Account with goven e-mail does not exists</string>
+    <string name="error_firebase_auth_other">There was a problem with signing in, try again later</string>
+    <string name="error_firebase_other">There was a problem with database, try again</string>
+    <string name="error_search">There was a problem with searching, try again</string>
+    <string name="error_no_search_data">Provide search data</string>
+    <string name="error_other">There was unidentified problem, try again later</string>
+    <string name="back_again_logout">Press back again to logout</string>
+    <string name="prompt_no_res">There are no search results, try another search</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Hasło</string>
-    <string name="prompt_old_password">Stare hasło</string>
-    <string name="prompt_new_password">Nowe hasło</string>
-    <string name="prompt_retype_new_password">Stare hasło</string>
-    <string name="prompt_retypr_password">Wpisz hasło ponownie</string>
-    <string name="prompt_user_name">Nazwa użytkownika</string>
-    <string name="prompt_avatar">Zdjęcie\nprofilowe\n*nie wymagane</string>
-    <string name="type_address">Wprowadź adres</string>
-    <string name="action_logout">Wyloguj</string>
-    <string name="or">Lub:</string>
-    <string name="search">Szukaj</string>
-    <string name="m_from_me">metrów ode mnie</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_old_password">Old password</string>
+    <string name="prompt_new_password">New Password</string>
+    <string name="prompt_retype_new_password">Old password</string>
+    <string name="prompt_retypr_password">Type password again</string>
+    <string name="prompt_user_name">User name</string>
+    <string name="prompt_avatar">Profile\npicture\n*not required</string>
+    <string name="type_address">Provide address</string>
+    <string name="action_logout">Logout</string>
+    <string name="or">Or:</string>
+    <string name="search">Seatch</string>
+    <string name="m_from_me">meters from me</string>
     <string name="avatar">Avatar</string>
-    <string name="action_sign_in">Zaloguj się</string>
-    <string name="change_pass">Zmień hasło</string>
-    <string name="login_or_register">Zarejestruj się lub zaloguj</string>
-    <string name="action_sign_in_google">Zaloguj się używając konta Google</string>
-    <string name="action_continue_without_signing_in">Kontynuuj bez logowania</string>
-    <string name="action_upload_image">Załącz avatar</string>
-    <string name="action_register">Zarejestruj się</string>
-    <string name="action_confirm_registration">Potwierdź rejestrację</string>
-    <string name="action_confirm_pass_change">Potwierdź zmianę hasła</string>
-    <string name="register_email">Email</string>
-    <string name="activity_add_your_rating">Dodaj opinię</string>
-    <string name="checkbox_restaurant_owner">Jestem właścicielem restauracji</string>
-    <string name="password_changed">Hasło zostało zmienione</string>
-    <string name="password_not_changed">Hasło nie zostało zmienione, spróbuj ponownie</string>
-    <string name="old_pass_incorrect">Stare hasło jest niepoprawne</string>
-    <string name="opened">Otwarte</string>
-    <string name="closed">Zamknięte</string>
-    <string name="show_in_google_maps">Pokaż w Mapach Google</string>
-    <string name="distance_about_kilometers">Około %s kilometrów</string>
-    <string name="find_city">Znajdź lokalizację</string>
-    <string name="nearest_me">Lub w odległości</string>
-    <string name="restaurants_in_city">Znajdź restaurację w mieście:</string>
-    <string name="action_settings">Ustawienia:</string>
-    <string name="permission_allowed">Uprawnienie przyznano</string>
-    <string name="location_denied">Localizacja zabroniona, aby to zmienić kliknij tutaj</string>
-    <string name="location_not_allowed">Nie pozwoliles na lokalizację</string>
-    <string name="photo">Zdjęcie</string>
-    <string name="error_invalid_email">Proszę podać poprawny adres email</string>
-    <string name="error_invalid_password">Hasło jest za krótkie</string>
-    <string name="error_incorrect_password">Hasło nie spełnia wymagań</string>
-    <string name="error_different_passwords">Hasła różnią się</string>
-    <string name="error_field_is_required">Pole jest wymagane</string>
+    <string name="action_sign_in">Login</string>
+    <string name="change_pass">Change password</string>
+    <string name="login_or_register">Register or login</string>
+    <string name="action_sign_in_google">Login using Google Account</string>
+    <string name="action_continue_without_signing_in">Continue without login</string>
+    <string name="action_upload_image">Provide profile picture</string>
+    <string name="action_register">Register</string>
+    <string name="action_confirm_registration">Confirm registration</string>
+    <string name="action_confirm_pass_change">Confirm password change</string>
+    <string name="register_email">E-mail</string>
+    <string name="activity_add_your_rating">Add opinion</string>
+    <string name="checkbox_restaurant_owner">I'm an owner of restauyrant</string>
+    <string name="password_changed">Password has been changed</string>
+    <string name="password_not_changed">Password has not been changed try again</string>
+    <string name="old_pass_incorrect">old password is not Correct, try again</string>
+    <string name="opened">Opened</string>
+    <string name="closed">Closed</string>
+    <string name="show_in_google_maps">Show in google maps</string>
+    <string name="distance_about_kilometers">About %s kilometers</string>
+    <string name="find_city">Find location</string>
+    <string name="nearest_me">or in distance of</string>
+    <string name="restaurants_in_city">Find restaurant in city:</string>
+    <string name="action_settings">Settings:</string>
+    <string name="permission_allowed">Permision is allowed</string>
+    <string name="location_denied">Localization abored, click there to change it</string>
+    <string name="location_not_allowed">You did not allow localization</string>
+    <string name="photo">Picture</string>
+    <string name="error_invalid_email">Provide correct e-mail address</string>
+    <string name="error_invalid_password">Password is too short</string>
+    <string name="error_incorrect_password">Password is incorrect</string>
+    <string name="error_different_passwords">Passwords are different</string>
+    <string name="error_field_is_required">Field is required</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="fav">ULUBIONE</string>
+    <string name="fav">Favourites</string>
+    <string name="cancel">Cancel</string>
+    <string name="added">Added</string>
+    <string name="added_comment">Added! Comment will be threr when you referesh</string>
 </resources>
