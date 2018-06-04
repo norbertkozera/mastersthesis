@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ Master Thesis project
   ~ All rights reserved
-  ~ Created by Norbert Kozera <nkozera@gmail.com>
-  -->
-
+  ~ Created by Norbert Kozera <nkozera@gmail.com> -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.nkozera.mastersthesis">
 
