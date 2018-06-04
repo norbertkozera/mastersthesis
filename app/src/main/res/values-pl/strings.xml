@@ -4,15 +4,10 @@
   ~ Created by Norbert Kozera <nkozera@gmail.com>
   -->
 
-<!--
-  ~ Master Thesis project
-  ~ All rights reserved
-  ~ Created by Norbert Kozera <nkozera@gmail.com>
-  -->
-
 <resources>
     <string name="app_label">Praca magisterska</string>
     <string name="app_name">Praca magisterska</string>
+
     <string name="error_invalid_credentials">Błędne dane logowania</string>
     <string name="error_upload_avatar">Problem z ładowaniem zdjęcia profilowego</string>
     <string name="could_not_logout">Opracja wylogowanie się nie powiodła, spróbuj ponownie</string>
@@ -80,3 +75,4 @@
     <string name="added">Dodano</string>
     <string name="added_comment">Dodano! Komentarz będzie widoczny po odświeżeniu widoku</string>
 </resources>
+
